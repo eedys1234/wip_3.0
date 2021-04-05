@@ -14,6 +14,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
+
 }
 
 apply plugin: 'java'
@@ -24,6 +25,21 @@ apply plugin: 'io.spring.dependency-management'
 group 'org.wip.bool'
 version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
+
+
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources", "src/main/resources/profiles")
+        }
+    }
+}
+
+bootRun {
+    String activeProfile = System.properties['spring.profiles.active']
+    println "zone: ${activeProfile}"
+    systemProperty "spring.profiles.active", activeProfile
+}
 
 repositories {
     mavenCentral()
