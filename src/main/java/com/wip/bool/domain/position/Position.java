@@ -1,12 +1,13 @@
 package com.wip.bool.domain.position;
 
-import com.wip.bool.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +22,11 @@ public class Position {
     @Column(name = "position_name")
     private String positionName;
 
-    @OneToMany(mappedBy = "position")
-    private List<User> users = new ArrayList<>();
+//    @OneToMany(mappedBy = "position")
+//    private List<User> users = new ArrayList<>();
+
+    @Builder
+    public Position(String positionName) {
+        this.positionName = positionName;
+    }
 }
