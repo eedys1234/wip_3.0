@@ -40,12 +40,6 @@ public class User extends BaseEntity {
     @Column(name = "position_order")
     private int positionOrder;
 
-    @OneToMany
-    private List<BookMark> bookMarks = new ArrayList<>();
-
-    @OneToMany
-    private List<RecentSearch> recentSearches = new ArrayList<>();
-
     @OneToOne(fetch = FetchType.LAZY)
     private UserConfig userConfig;
 

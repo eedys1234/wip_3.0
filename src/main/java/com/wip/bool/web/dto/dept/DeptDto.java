@@ -1,11 +1,13 @@
 package com.wip.bool.web.dto.dept;
 
 import com.wip.bool.domain.dept.Dept;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+@Getter
 public class DeptDto {
 
     @Getter
@@ -21,6 +23,11 @@ public class DeptDto {
                     .deptName(deptName)
                     .build();
         }
+
+        @Builder
+        public DeptSaveRequest(String deptName) {
+            this.deptName = deptName;
+        }
     }
 
     @Getter
@@ -29,6 +36,11 @@ public class DeptDto {
 
         @NotBlank
         private String deptName;
+
+        @Builder
+        public DeptUpdateRequest(String deptName) {
+            this.deptName = deptName;
+        }
     }
 
     @Getter

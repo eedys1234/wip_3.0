@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class UserMusic {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_detail_id")
-    private List<SongDetail> songDetails = new ArrayList<>();
+    private SongDetail songDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_box_id")

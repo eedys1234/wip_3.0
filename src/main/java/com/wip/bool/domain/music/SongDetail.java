@@ -37,7 +37,7 @@ public class SongDetail extends BaseEntity {
     @JoinColumn(name = "words_master_id")
     private WordsMaster wordsMaster;
 
-    @OneToMany(mappedBy = "songDetail")
+    @OneToMany()
     private List<SongSheet> songSheets = new ArrayList<>();
 
     @Column(name = "music_key")

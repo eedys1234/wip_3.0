@@ -18,7 +18,7 @@ public class RecentSearch {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "song_detail_id")
+    @JoinColumn(name = "song_detail_id")
     private SongDetail songDetail;
 
     private LocalDateTime createDate;
