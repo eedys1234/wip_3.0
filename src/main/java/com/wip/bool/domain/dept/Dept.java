@@ -1,6 +1,7 @@
 package com.wip.bool.domain.dept;
 
 import com.wip.bool.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,11 @@ public class Dept {
     @Column(name = "dept_name")
     private String deptName;
 
-    @OneToMany(mappedBy = "dept")
-    private List<User> users = new ArrayList<>();
+//    @OneToMany(mappedBy = "dept")
+//    private List<User> users = new ArrayList<>();
+
+    @Builder
+    public Dept(String deptName) {
+        this.deptName = deptName;
+    }
 }
