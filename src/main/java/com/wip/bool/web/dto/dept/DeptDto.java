@@ -1,5 +1,6 @@
 package com.wip.bool.web.dto.dept;
 
+import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.dept.Dept;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,7 +45,7 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptResponse {
+    public static class DeptResponse implements CodeModel {
 
         private Long deptId;
 
@@ -55,5 +56,14 @@ public class DeptDto {
             this.deptName = dept.getDeptName();
         }
 
+        @Override
+        public Long getKey() {
+            return this.deptId;
+        }
+
+        @Override
+        public String getValue() {
+            return this.deptName;
+        }
     }
 }

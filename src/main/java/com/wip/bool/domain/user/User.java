@@ -4,14 +4,13 @@ import com.wip.bool.domain.cmmn.BaseEntity;
 import com.wip.bool.domain.dept.Dept;
 import com.wip.bool.domain.position.Position;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
-@NoArgsConstructor
 @Entity
 public class User extends BaseEntity {
 
@@ -40,9 +39,46 @@ public class User extends BaseEntity {
     @Column(name = "position_order")
     private int positionOrder;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserConfig userConfig;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<UserBox> musicBoxes = new ArrayList<>();
+
+    protected User() {
+    }
+
+    public static User createUser(Dept dept, Position position, Role role, UserConfig userConfig) {
+        User user = new User();
+        user.init(dept, position, role, userConfig);
+        return user;
+    }
+
+    public User updatePassword(String userPassword) {
+        if(!Objects.isNull(userPassword)) {
+            this.userPassword = userPassword;
+        }
+        return this;
+    }
+
+    public User updateDept(Dept dept) {
+        this.dept = dept;
+        return this;
+    }
+
+    public User updatePosition(Position position) {
+        this.position = position;
+        return this;
+    }
+
+    public void approve() {
+        this.role = Role.NOMARL;
+    }
+
+    private void init(Dept dept, Position position, Role role, UserConfig userConfig) {
+        this.dept = dept;
+        this.position = position;
+        this.role = role;
+        this.userConfig = userConfig;
+    }
 }

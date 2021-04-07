@@ -1,5 +1,6 @@
 package com.wip.bool.web.dto.position;
 
+import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.position.Position;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,16 +44,25 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionResponse {
+    public static class PositionResponse implements CodeModel {
 
-        private Long id;
+        private Long positionId;
 
         private String positionName;
 
         public PositionResponse(Position position) {
-            this.id = position.getId();
+            this.positionId = position.getId();
             this.positionName = position.getPositionName();
         }
 
+        @Override
+        public Long getKey() {
+            return this.positionId;
+        }
+
+        @Override
+        public String getValue() {
+            return this.positionName;
+        }
     }
 }
