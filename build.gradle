@@ -45,12 +45,20 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.projectlombok:lombok')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile group:'io.springfox', name:'springfox-swagger2',version: '2.9.2'
     compile group:'io.springfox', name:'springfox-swagger-ui',version: '2.9.2'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.2'
     compile('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

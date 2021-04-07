@@ -18,7 +18,6 @@ public class DeptDto {
         private String deptName;
 
         public Dept toEntity() {
-
             return Dept.builder()
                     .deptName(deptName)
                     .build();

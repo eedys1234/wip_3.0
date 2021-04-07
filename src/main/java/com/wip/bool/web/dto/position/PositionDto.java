@@ -1,6 +1,7 @@
 package com.wip.bool.web.dto.position;
 
 import com.wip.bool.domain.position.Position;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,11 @@ public class PositionDto {
                     .positionName(positionName)
                     .build();
         }
+
+        @Builder
+        public PositionSaveRequest(String positionName) {
+            this.positionName = positionName;
+        }
     }
 
     @Getter
@@ -28,6 +34,11 @@ public class PositionDto {
 
         @NotBlank
         private String positionName;
+
+        @Builder
+        public PositionUpdateRequest(String positionName) {
+            this.positionName = positionName;
+        }
     }
 
     @Getter
