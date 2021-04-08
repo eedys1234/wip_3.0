@@ -1,6 +1,7 @@
 package com.wip.bool.domain.user;
 
 import com.wip.bool.domain.cmmn.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class UserBox extends BaseEntity {
 
@@ -26,4 +27,19 @@ public class UserBox extends BaseEntity {
 
     @OneToMany(mappedBy = "userBox")
     private List<UserMusic> userMusics = new ArrayList<>();
+
+    public static UserBox createUserBox(User user, String userBoxName) {
+        UserBox userBox = new UserBox();
+        userBox.setUser(user);
+        userBox.updateUserBoxName(userBoxName);
+        return userBox;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void updateUserBoxName(String userBoxName) {
+        this.userBoxName = userBoxName;
+    }
 }

@@ -78,6 +78,10 @@ public class UserService {
         return userRepository.save(user).getId();
     }
 
+    public int delete(Long userId) {
+        return userRepository.delete(userId);
+    }
+
     @Transactional(readOnly = true)
     public List<UserDto.UserResponse> findAll() {
         return userRepository.findAll().stream().map(UserDto.UserResponse::new).collect(Collectors.toList());
@@ -85,10 +89,10 @@ public class UserService {
 
     private void duplicationUser(String userId) {
 
-//        User user = userRepository.findByUserId(userId);
-//
-//        if(!Objects.isNull(user)) {
-//            throw new IllegalStateException("");
-//        }
+        User user = userRepository.findByUserId(userId);
+
+        if(!Objects.isNull(user)) {
+            throw new IllegalStateException("");
+        }
     }
 }

@@ -6,11 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository{
+public class UserRepository {
 
     private final JPAQueryFactory queryFactory;
     private final EntityManager entityManager;
@@ -38,4 +39,17 @@ public class UserRepository{
                 .fetchOne();
     }
 
+    public int delete(Long id) {
+        User user = entityManager.find(User.class, id);
+        if(!Objects.isNull(user)) {
+            return delete(user);
+        }
+
+        return 0;
+    }
+
+    public int delete(User user) {
+        entityManager.remove(user);
+        return 1;
+    }
 }

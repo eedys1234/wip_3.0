@@ -1,0 +1,9 @@
+[INFO ] 2021-04-07 23:56:28.636 [main] DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2021-04-07 23:56:28.753 [main] DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2021-04-07 23:56:28.830 [main] ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2021-04-07 23:56:29.249 [main] CachingOperationNameGenerator - Generating unique operation named: addUsingPOST_1
+[INFO ] 2021-04-07 23:56:29.254 [main] CachingOperationNameGenerator - Generating unique operation named: findAllUsingGET_1
+[INFO ] 2021-04-07 23:56:29.270 [main] CachingOperationNameGenerator - Generating unique operation named: updateUsingPUT_1
+[INFO ] 2021-04-07 23:56:29.306 [main] Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2021-04-07 23:56:29.363 [main] TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2021-04-07 23:56:29.366 [main] Application - Started Application in 16.308 seconds (JVM running for 19.317)

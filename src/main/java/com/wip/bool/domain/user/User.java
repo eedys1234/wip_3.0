@@ -36,9 +36,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "position_order")
-    private int positionOrder;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserConfig userConfig;
 

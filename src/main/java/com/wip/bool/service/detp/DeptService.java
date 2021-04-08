@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class DeptService {
 
@@ -33,6 +33,7 @@ public class DeptService {
         return deptRepository.save(dept).getId();
     }
 
+    @Transactional(readOnly = true)
     public List<DeptDto.DeptResponse> findAll() {
 
         List<DeptDto.DeptResponse> list = null;
