@@ -1,4 +1,4 @@
-package com.wip.bool;
+package com.wip.bool.configure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

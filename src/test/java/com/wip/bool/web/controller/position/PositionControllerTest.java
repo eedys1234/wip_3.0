@@ -23,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @ActiveProfiles(value = "local")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PositionController {
+public class PositionControllerTest {
 
     @Autowired
     private PositionRepository positionRepository;
@@ -73,7 +73,7 @@ public class PositionController {
 
         String updatedPositionName = "부체장";
 
-        String url = "http://locallhost:" + port + "/api/v1/position/" + id;
+        String url = "http://localhost:" + port + "/api/v1/position/" + id;
         PositionDto.PositionUpdateRequest requestDto = PositionDto.PositionUpdateRequest.builder()
                                                                                         .positionName(positionName)
                                                                                         .build();

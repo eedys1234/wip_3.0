@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -27,16 +28,30 @@ public class UserRepository {
                 .fetchOne());
     }
 
+    public List<User> findAllByRole(Role role) {
+        return queryFactory.selectFrom(QUser.user)
+                .where(QUser.user.role.eq(role))
+                .fetch();
+    }
+
     public List<User> findAll() {
         return queryFactory.selectFrom(QUser.user)
                 .fetch();
     }
 
-    public User findByUserId(String userId) {
+    public Long login(String email, String userPassword) {
 
         return queryFactory.selectFrom(QUser.user)
-                .where(QUser.user.userId.eq(userId))
-                .fetchOne();
+                .where(QUser.user.email.eq(email)
+                        .and(QUser.user.userPassword.eq(userPassword)))
+                .fetchCount();
+    }
+
+    public Optional<User> findByEmail(String email) {
+
+        return Optional.ofNullable(queryFactory.selectFrom(QUser.user)
+                .where(QUser.user.email.eq(email))
+                .fetchOne());
     }
 
     public int delete(Long id) {

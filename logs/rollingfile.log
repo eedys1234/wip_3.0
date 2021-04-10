@@ -1,1 +1,5 @@
-[INFO ] 2021-04-09 00:00:15.703 [main] Application - The following profiles are active: local
+[WARN ] 2021-04-10 21:55:08.516 [Thread-6] SqlExceptionHelper - SQL Error: 90121, SQLState: 90121
+[ERROR] 2021-04-10 21:55:08.520 [Thread-6] SqlExceptionHelper - Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-199]
+[WARN ] 2021-04-10 21:55:08.521 [Thread-6] DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'entityManagerFactory': org.hibernate.exception.JDBCConnectionException: Unable to release JDBC Connection used for DDL execution
+[INFO ] 2021-04-10 21:55:08.522 [Thread-6] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-04-10 21:55:08.525 [Thread-6] HikariDataSource - HikariPool-1 - Shutdown completed.

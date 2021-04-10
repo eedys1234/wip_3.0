@@ -1,4 +1,4 @@
-package com.wip.bool;
+package com.wip.bool.configure;
 
 import com.wip.bool.domain.cmmn.CodeMapper;
 import com.wip.bool.domain.cmmn.CodeModel;

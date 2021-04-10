@@ -1,7 +1,6 @@
 package com.wip.bool.web.dto.user;
 
 import com.wip.bool.domain.user.User;
-import com.wip.bool.domain.user.UserBox;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +13,15 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor
-    public static class UserRegisterRequest {
+    public static class UserSaveRequest {
 
         @NotBlank
-        private String userId;
+        private String email;
 
         @NotBlank
         private String userPassword;
 
-        @NotBlank
-        private Long deptId;
-
-        @NotBlank
-        private Long positionId;
-
+        private String name;
     }
 
     @Getter
@@ -45,9 +39,22 @@ public class UserDto {
 
     @Getter
     @NoArgsConstructor
+    public static class UserLoginRequest {
+
+        @NotBlank
+        private String email;
+
+        @NotBlank
+        private String userPassword;
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class UserResponse {
 
-        private String userId;
+        private Long id;
+
+        private String email;
 
         private String role;
 
@@ -58,51 +65,11 @@ public class UserDto {
         private LocalDateTime createDate;
 
         public UserResponse(User user) {
-            this.userId = user.getUserId();
+            this.email = user.getEmail();
             this.role = user.getRole().toString();
             this.createDate = user.getCreateDate();
         }
     }
 
-    @Getter
-    @NoArgsConstructor
-    public static class UserConfigUpdateRequest {
 
-        private String fontSize;
-        private String viewType;
-        private String recvAlaram;
-
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class UserBoxSaveRequest {
-
-        private String userBoxName;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class UserBoxUpdateRequest {
-
-        private String userBoxName;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class UserBoxResponse {
-
-        private Long userBoxId;
-        private Long userId;
-        private String userBoxName;
-
-        public UserBoxResponse(UserBox userBox) {
-
-            this.userBoxId = userBox.getId();
-            this.userId = userBox.getUser().getId();
-            this.userBoxName = userBox.getUserBoxName();
-
-        }
-
-    }
 }

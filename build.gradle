@@ -55,6 +55,8 @@ dependencies {
     compile 'com.h2database:h2'
     compile "com.querydsl:querydsl-jpa"
     compile "com.querydsl:querydsl-core"
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
     annotationProcessor "jakarta.persistence:jakarta.persistence-api:2.2.3"
