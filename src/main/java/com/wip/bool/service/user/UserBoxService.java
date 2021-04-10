@@ -36,6 +36,7 @@ public class UserBoxService {
         UserBox userBox = userBoxRepository.findById(userBoxId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다."));
 
+        userBox.updateUserBoxName(requestDto.getUserBoxName());
         return userBoxRepository.save(userBox).getId();
     }
 

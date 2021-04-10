@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -29,4 +30,11 @@ public class Dept {
     public Dept(String deptName) {
         this.deptName = deptName;
     }
+
+    public void update(String deptName) {
+        if(!Objects.isNull(deptName)) {
+            this.deptName = deptName;
+        }
+    }
+
 }

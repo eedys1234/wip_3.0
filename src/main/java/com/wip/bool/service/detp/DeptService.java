@@ -30,23 +30,25 @@ public class DeptService {
         Dept dept = deptRepository.findById(deptId)
                 .orElseThrow(()-> new IllegalArgumentException("부서가 존재하지 않습니다. id = " + deptId));
 
+        dept.update(requestDto.getDeptName());
         return deptRepository.save(dept).getId();
     }
 
     @Transactional(readOnly = true)
     public List<DeptDto.DeptResponse> findAll() {
 
+        final String DEPT_KEY = "dept";
         List<DeptDto.DeptResponse> list = null;
 
-        if(Objects.isNull(codeMapper.get("dept"))) {
+        if(Objects.isNull(codeMapper.get(DEPT_KEY))) {
             list =  deptRepository.findAll().stream()
                                             .map(DeptDto.DeptResponse::new)
                                             .collect(Collectors.toList());
 
-            codeMapper.put("dept", list);
+            codeMapper.put(DEPT_KEY, list);
         }
         else {
-            list = (List<DeptDto.DeptResponse>) codeMapper.get("dept").get("dept");
+            list = (List<DeptDto.DeptResponse>) codeMapper.get(DEPT_KEY).get(DEPT_KEY);
         }
 
         return list;

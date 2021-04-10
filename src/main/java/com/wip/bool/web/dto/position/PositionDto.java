@@ -2,12 +2,14 @@ package com.wip.bool.web.dto.position;
 
 import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.position.Position;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PositionDto {
 
     @Getter

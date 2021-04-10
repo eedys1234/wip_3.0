@@ -1,6 +1,7 @@
 package com.wip.bool;
 
 import com.wip.bool.domain.cmmn.CodeMapper;
+import com.wip.bool.domain.cmmn.CodeModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public CodeMapper mapper() {
-        return new CodeMapper();
+    public CodeMapper<CodeModel> mapper() {
+        return new CodeMapper<>();
     }
 }

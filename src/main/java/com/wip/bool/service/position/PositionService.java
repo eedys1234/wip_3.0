@@ -31,25 +31,27 @@ public class PositionService {
         Position position = positionRepository.findById(positionId)
                 .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
 
+        position.update(requestDto.getPositionName());
         return position.getId();
     }
 
     @Transactional(readOnly = true)
     public List<PositionDto.PositionResponse> findAll() {
 
+        final String POSITION_KEY = "position";
         List<PositionDto.PositionResponse> list = null;
 
-        if(Objects.isNull(codeMapper.get("position"))) {
+        if(Objects.isNull(codeMapper.get(POSITION_KEY))) {
 
             list = positionRepository.findAll().stream()
                     .map(PositionDto.PositionResponse::new)
                     .collect(Collectors.toList());
 
-            codeMapper.put("position", list);
+            codeMapper.put(POSITION_KEY, list);
 
         }
         else {
-            list = (List<PositionDto.PositionResponse>) codeMapper.get("position").get("position");
+            list = (List<PositionDto.PositionResponse>) codeMapper.get(POSITION_KEY).get(POSITION_KEY);
         }
 
         return list;

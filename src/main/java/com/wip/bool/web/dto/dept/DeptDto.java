@@ -2,13 +2,14 @@ package com.wip.bool.web.dto.dept;
 
 import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.dept.Dept;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeptDto {
 
     @Getter

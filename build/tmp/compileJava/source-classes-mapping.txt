@@ -37,12 +37,18 @@ com/wip/bool/domain/user/QBookMark.java
  com.wip.bool.domain.user.QBookMark
 com/wip/bool/domain/user/QRecentSearch.java
  com.wip.bool.domain.user.QRecentSearch
+com/wip/bool/domain/user/UserMusicRepository.java
+ com.wip.bool.domain.user.UserMusicRepository
 com/wip/bool/service/user/UserService.java
  com.wip.bool.service.user.UserService
+com/wip/bool/service/user/UserConfigService.java
+ com.wip.bool.service.user.UserConfigService
 com/wip/bool/domain/bible/WordsMaster.java
  com.wip.bool.domain.bible.WordsMaster
 com/wip/bool/QuerydslConfiguration.java
  com.wip.bool.QuerydslConfiguration
+com/wip/bool/domain/user/UserBoxRepository.java
+ com.wip.bool.domain.user.UserBoxRepository
 com/wip/bool/domain/user/QUserBox.java
  com.wip.bool.domain.user.QUserBox
 com/wip/bool/domain/user/QUser.java
@@ -53,6 +59,10 @@ com/wip/bool/web/controller/dept/DeptController.java
  com.wip.bool.web.controller.dept.DeptController
 com/wip/bool/domain/position/PositionRepository.java
  com.wip.bool.domain.position.PositionRepository
+com/wip/bool/domain/user/UserConfigRepository.java
+ com.wip.bool.domain.user.UserConfigRepository
+com/wip/bool/service/user/UserBoxService.java
+ com.wip.bool.service.user.UserBoxService
 com/wip/bool/domain/user/RecentSearch.java
  com.wip.bool.domain.user.RecentSearch
 com/wip/bool/domain/position/Position.java
@@ -102,6 +112,10 @@ com/wip/bool/domain/board/Notice.java
  com.wip.bool.domain.board.Notice
 com/wip/bool/web/dto/user/UserDto.java
  com.wip.bool.web.dto.user.UserDto
+ com.wip.bool.web.dto.user.UserDto$UserBoxResponse
+ com.wip.bool.web.dto.user.UserDto$UserBoxSaveRequest
+ com.wip.bool.web.dto.user.UserDto$UserBoxUpdateRequest
+ com.wip.bool.web.dto.user.UserDto$UserConfigUpdateRequest
  com.wip.bool.web.dto.user.UserDto$UserRegisterRequest
  com.wip.bool.web.dto.user.UserDto$UserResponse
  com.wip.bool.web.dto.user.UserDto$UserUpdateRequest

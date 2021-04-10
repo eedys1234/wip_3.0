@@ -1,5 +1,6 @@
 package com.wip.bool.domain.music;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class GuitarCode {
 
@@ -19,7 +20,7 @@ public class GuitarCode {
     private Long id;
 
     @Column(name = "guitar_code")
-    private String guitarCode;
+    private String code;
 
     @Column(name = "guitar_order")
     private int guitarOrder;

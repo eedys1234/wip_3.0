@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,6 +41,8 @@ public class UserBox extends BaseEntity {
     }
 
     public void updateUserBoxName(String userBoxName) {
-        this.userBoxName = userBoxName;
+        if(!Objects.isNull(userBoxName)) {
+            this.userBoxName = userBoxName;
+        }
     }
 }

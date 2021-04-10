@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -28,5 +29,12 @@ public class Position {
     @Builder
     public Position(String positionName) {
         this.positionName = positionName;
+    }
+
+    public void update(String positionName) {
+
+        if(!Objects.isNull(positionName)) {
+            this.positionName = positionName;
+        }
     }
 }
