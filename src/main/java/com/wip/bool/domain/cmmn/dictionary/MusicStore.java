@@ -23,14 +23,14 @@ public class MusicStore {
         Trie suffixTrie = suffix.get(digit);
 
         if(Objects.isNull(prefixTrie)) {
-            prefixTrie = new Trie();
+            prefixTrie = new TrieSong();
         }
 
         prefixTrie.insert(words);
         prefix.put(digit, prefixTrie);
 
         if(Objects.isNull(suffixTrie)) {
-            suffixTrie = new Trie();
+            suffixTrie = new TrieSong();
         }
 
         suffixTrie.insert(new StringBuilder(words).reverse().toString());

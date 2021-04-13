@@ -10,7 +10,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class TrieNode {
 
-    private Map<String, TrieNode> childNode = new HashMap<>();
+    private Map<String, TrieNode> childNodes = new HashMap<>();
     private boolean isLastString;
     private String name;
 

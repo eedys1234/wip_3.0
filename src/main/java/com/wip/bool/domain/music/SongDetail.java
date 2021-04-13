@@ -24,7 +24,7 @@ public class SongDetail extends BaseEntity {
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String lyics;
+    private String lyrics;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code_key")
@@ -44,6 +44,6 @@ public class SongDetail extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private SongMP3 songMP3;
 
-    @Column(name = "music_key")
-    private String musicKey;
+//    @Column(name = "music_key")
+//    private String musicKey;
 }
