@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "song_detail")
 public class SongDetail extends BaseEntity {
 
     @Id
@@ -37,8 +38,11 @@ public class SongDetail extends BaseEntity {
     @JoinColumn(name = "words_master_id")
     private WordsMaster wordsMaster;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "songDetail")
     private List<SongSheet> songSheets = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private SongMP3 songMP3;
 
     @Column(name = "music_key")
     private String musicKey;

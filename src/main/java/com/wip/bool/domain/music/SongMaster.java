@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "song_master")
 public class SongMaster {
 
     @Id
@@ -22,6 +23,9 @@ public class SongMaster {
 
     @Column(name = "code_name", length = 50, nullable = false)
     private String codeName;
+
+    @Column(name = "code_order")
+    private int codeOrder;
 
     @OneToMany(mappedBy = "songMaster")
     List<SongDetail> songDetails = new ArrayList<>();

@@ -77,7 +77,7 @@ public class UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
         return userRepository.save(user).getId();
     }
 
-    public int delete(Long userId) {
+    public Long delete(Long userId) {
         return userRepository.delete(userId);
     }
 

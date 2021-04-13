@@ -43,7 +43,8 @@ public class UserRepository {
 
         return queryFactory.selectFrom(QUser.user)
                 .where(QUser.user.email.eq(email)
-                        .and(QUser.user.userPassword.eq(userPassword)))
+                        .and(QUser.user.userPassword.eq(userPassword))
+                        .and(QUser.user.role.eq(Role.NOMARL).or(QUser.user.role.eq(Role.ADMIN))))
                 .fetchCount();
     }
 
@@ -54,17 +55,17 @@ public class UserRepository {
                 .fetchOne());
     }
 
-    public int delete(Long id) {
+    public Long delete(Long id) {
         User user = entityManager.find(User.class, id);
         if(!Objects.isNull(user)) {
             return delete(user);
         }
 
-        return 0;
+        return 0L;
     }
 
-    public int delete(User user) {
+    public Long delete(User user) {
         entityManager.remove(user);
-        return 1;
+        return 1L;
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "song_sheet")
 public class SongSheet extends BaseEntity {
 
     @Id
@@ -17,4 +18,8 @@ public class SongSheet extends BaseEntity {
 
     @Column(name = "sheet_order")
     private int sheetOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_detail_id")
+    private SongDetail songDetail;
 }
