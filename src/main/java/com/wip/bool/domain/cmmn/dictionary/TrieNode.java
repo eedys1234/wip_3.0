@@ -10,15 +10,16 @@ import java.util.Map;
 @NoArgsConstructor
 public class TrieNode {
 
-    private Map<String, TrieNode> childNodes = new HashMap<>();
-    private boolean isLastString;
+    private Map<Character, TrieNode> childNodes = new HashMap<>();
+    private boolean isLastChar;
     private String name;
 
-    public TrieNode(String name) {
-        this.name = name;
+
+    public void setLastChar(boolean isLastChar) {
+        this.isLastChar = isLastChar;
     }
 
-    public void setLastString(boolean isLastString) {
-        this.isLastString = isLastString;
+    public void setName(String name) {
+        this.name = name;
     }
 }

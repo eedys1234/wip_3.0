@@ -2,8 +2,9 @@ package com.wip.bool.domain.cmmn.dictionary;
 
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 검색을 위한 Store
@@ -11,30 +12,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class MusicStore {
 
-    private final Map<Integer, Trie> prefix = new ConcurrentHashMap<>();
-    private final Map<Integer, Trie> suffix = new ConcurrentHashMap<>();
-    private int max = 0;
+    private final TrieSong prefix = new TrieSong();
+    private final TrieSong suffix = new TrieSong();
 
-    public boolean insert(int digit, String words) {
+    public MusicStore() {
 
-        max = Math.max(max, digit);
+    }
 
-        Trie prefixTrie = prefix.get(digit);
-        Trie suffixTrie = suffix.get(digit);
+    public boolean insert(String words) {
 
-        if(Objects.isNull(prefixTrie)) {
-            prefixTrie = new TrieSong();
-        }
-
-        prefixTrie.insert(words);
-        prefix.put(digit, prefixTrie);
-
-        if(Objects.isNull(suffixTrie)) {
-            suffixTrie = new TrieSong();
-        }
-
-        suffixTrie.insert(new StringBuilder(words).reverse().toString());
-        suffix.put(digit, suffixTrie);
+        String reserveWords = new StringBuilder(words).reverse().toString();
+        prefix.insert(words);
+        suffix.insert(reserveWords);
 
         return true;
     }
@@ -42,39 +31,25 @@ public class MusicStore {
     public Set<String> find(String words) {
 
         Set<String> findList = new HashSet<>();
-        int len = words.length();
-
-        if(len > max) {
-            return Collections.EMPTY_SET;
-        }
-
-        StringBuilder prefixSB = new StringBuilder();
-        StringBuilder suffixSB = new StringBuilder();
-
-        prefixSB.append(words);
-        suffixSB.append(words);
-
-        for(int i=len;i<=max;i++) {
-            findList.addAll(prefix.get(i).containWords(prefixSB.toString()));
-            findList.addAll(suffix.get(i).containWords(suffixSB.reverse().toString()));
-            prefixSB.append("?");
-            suffixSB.append("?");
-        }
+        String reserveWords = new StringBuilder(words).reverse().toString();
+        findList.addAll(prefix.containWords(words));
+        findList.addAll(suffix.containWords(reserveWords)
+                .stream()
+                .map(entity -> new StringBuilder(entity).reverse().toString())
+                .collect(Collectors.toList()));
 
         return findList;
     }
 
     public boolean delete(String words) {
 
-        int len = words.length();
-
-        if(prefix.get(len).contains(words)) {
-            prefix.get(len).delete(words);
+        if(prefix.contains(words)) {
+            prefix.delete(words);
         }
 
         StringBuilder sb = new StringBuilder(words).reverse();
-        if(suffix.get(len).contains(sb.toString())) {
-            suffix.get(len).delete(sb.toString());
+        if(suffix.contains(sb.toString())) {
+            suffix.delete(sb.toString());
         }
 
         return true;
