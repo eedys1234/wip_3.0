@@ -5,10 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,4 +21,6 @@ public class SongMP3 extends BaseEntity {
 
     private int miliDuration;
 
+    @Column(name = "mp3_path")
+    private String mp3Path;
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,6 +20,10 @@ public class SongMasterRepository {
     public SongMaster save(SongMaster songMaster) {
         entityManager.persist(songMaster);
         return songMaster;
+    }
+
+    public Optional<SongMaster> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(SongMaster.class, id));
     }
 
     public List<SongMaster> findAll(String order) {

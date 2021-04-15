@@ -16,6 +16,9 @@ public class SongSheet extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "sheet_path")
+    private String sheetPath;
+
     @Column(name = "sheet_order")
     private int sheetOrder;
 

@@ -2,8 +2,10 @@ package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.cmmn.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -43,6 +45,43 @@ public class SongDetail extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     private SongMP3 songMP3;
+
+    public static SongDetail createSongDetail(String title, String lyrics, SongMaster songMaster, GuitarCode guitarCode,
+                                              WordsMaster wordsMaster) {
+
+        SongDetail songDetail = new SongDetail();
+        songDetail.updateTitle(title);
+        songDetail.updateLyrics(lyrics);
+        songDetail.updateSongMaster(songMaster);
+        songDetail.updateGuitarCode(guitarCode);
+        songDetail.updateWordsMaster(wordsMaster);
+
+        return songDetail;
+    }
+
+    public void updateTitle(String title) {
+        if(!StringUtils.isEmpty(title)) {
+            this.title = title;
+        }
+    }
+
+    public void updateLyrics(String lyrics) {
+        if(!StringUtils.isEmpty(lyrics)) {
+            this.lyrics = lyrics;
+        }
+    }
+
+    public void updateSongMaster(SongMaster songMaster) {
+        this.songMaster = songMaster;
+    }
+
+    public void updateGuitarCode(GuitarCode guitarCode) {
+        this.guitarCode = guitarCode;
+    }
+
+    public void updateWordsMaster(WordsMaster wordsMaster) {
+        this.wordsMaster = wordsMaster;
+    }
 
 //    @Column(name = "music_key")
 //    private String musicKey;

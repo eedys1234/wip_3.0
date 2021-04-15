@@ -2,22 +2,26 @@ package com.wip.bool.web.dto.position;
 
 import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.position.Position;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionSaveRequest {
+    public static class PositionBase {
 
         @NotBlank
-        private String positionName;
+        protected String positionName;
+
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class PositionSaveRequest extends PositionBase {
 
         public Position toEntity() {
             return Position.builder()
@@ -33,10 +37,7 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionUpdateRequest {
-
-        @NotBlank
-        private String positionName;
+    public static class PositionUpdateRequest extends PositionBase {
 
         @Builder
         public PositionUpdateRequest(String positionName) {
@@ -46,11 +47,9 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionResponse implements CodeModel {
+    public static class PositionResponse extends PositionBase implements CodeModel {
 
         private Long positionId;
-
-        private String positionName;
 
         public PositionResponse(Position position) {
             this.positionId = position.getId();
