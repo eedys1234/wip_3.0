@@ -1,3 +1,7 @@
 # Project exclude paths
 /.gradle/
 .idea
+.class
+generated
+application-oauth.properties
+application-jwt.properties

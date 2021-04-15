@@ -1,5 +1,6 @@
 package com.wip.bool.web.dto.dept;
 
+import com.wip.bool.domain.cmmn.CodeModel;
 import com.wip.bool.domain.dept.Dept;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,18 +8,22 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
 public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptSaveRequest {
+    public static class DeptBase {
 
         @NotBlank
-        private String deptName;
+        protected String deptName;
+
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class DeptSaveRequest extends DeptBase {
 
         public Dept toEntity() {
-
             return Dept.builder()
                     .deptName(deptName)
                     .build();
@@ -32,10 +37,7 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptUpdateRequest {
-
-        @NotBlank
-        private String deptName;
+    public static class DeptUpdateRequest extends DeptBase {
 
         @Builder
         public DeptUpdateRequest(String deptName) {
@@ -45,16 +47,23 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptResponse {
+    public static class DeptResponse extends DeptBase implements CodeModel {
 
         private Long deptId;
-
-        private String deptName;
 
         public DeptResponse(Dept dept) {
             this.deptId = dept.getId();
             this.deptName = dept.getDeptName();
         }
 
+        @Override
+        public Long getKey() {
+            return this.deptId;
+        }
+
+        @Override
+        public String getValue() {
+            return this.deptName;
+        }
     }
 }

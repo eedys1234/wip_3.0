@@ -9,12 +9,20 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "song_sheet")
 public class SongSheet extends BaseEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column(name = "sheet_path")
+    private String sheetPath;
+
     @Column(name = "sheet_order")
     private int sheetOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_detail_id")
+    private SongDetail songDetail;
 }

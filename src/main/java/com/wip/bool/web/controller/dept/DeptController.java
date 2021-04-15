@@ -41,7 +41,13 @@ public class DeptController {
     }
 
     @PutMapping(value = "/dept/{id}")
-    public ResponseEntity<Long> update(@PathVariable("id") Long deptId , DeptDto.DeptUpdateRequest requestDto) {
+    public ResponseEntity<Long> update(@PathVariable("id") Long deptId,
+                                       @RequestBody @Valid DeptDto.DeptUpdateRequest requestDto,
+                                       Errors errors) {
+        if(errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return new ResponseEntity<>(deptService.update(deptId, requestDto), HttpStatus.OK);
     }
 }

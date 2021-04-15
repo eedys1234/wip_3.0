@@ -1,16 +1,15 @@
 package com.wip.bool.domain.music;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "guitar_code")
 public class GuitarCode {
 
     @Id
@@ -19,7 +18,7 @@ public class GuitarCode {
     private Long id;
 
     @Column(name = "guitar_code")
-    private String guitarCode;
+    private String code;
 
     @Column(name = "guitar_order")
     private int guitarOrder;

@@ -17,8 +17,9 @@ import java.util.ArrayList;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private final String VERSION = "v1";
-    private final String TITLE = "WIP API ";
+    private static final String VERSION = "v1";
+    private static final String TITLE = "WIP API ";
+    private static final String URL = "www.bool.wip.com";
 
     @Bean
     public Docket api() {
@@ -37,10 +38,10 @@ public class SwaggerConfig {
             title,
             "Swagger create Api docs",
             version,
-            "www.bool.wip.com",
-            new Contact("Contact Me", "www.bool.wip.com", "eedys123@gmail.com"),
+                URL,
+            new Contact("Contact Me", URL, "eedys123@gmail.com"),
             "License",
-            "www.bool.wip.com",
+            URL,
             new ArrayList<>()
         );
     }
