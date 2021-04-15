@@ -1,13 +1,15 @@
 package com.wip.bool.web.controller.search;
 
-import com.wip.bool.domain.cmmn.dictionary.MusicStore;
+import com.wip.bool.domain.cmmn.dictionary.SearchStore;
+import com.wip.bool.domain.cmmn.dictionary.kmp.KMPStore;
+import com.wip.bool.domain.cmmn.dictionary.standard.Initializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -19,7 +21,7 @@ public class SearchTest {
     @Test
     public void Trie_테스트() throws Exception {
 
-        MusicStore store = new MusicStore();
+        SearchStore store = new KMPStore(new Initializer());
         store.insert("희망이 다가왔어요");
         store.insert("하나님이 용서하심과 같이 하라");
         store.insert("하나님의 전신갑주");
@@ -27,8 +29,8 @@ public class SearchTest {
         store.insert("이 복음은 하나님의 능력이라");
         store.insert("이 복음은 하나님의 능력이라 하나님");
 
-        Set<String> songs = store.find("하나님");
+        List<String> songs = store.findWords("ㅎㄴㄴ");
         System.out.println(songs);
-        assertThat(songs.size()).isEqualTo(4);
+        assertThat(songs.size()).isEqualTo(5);
     }
 }
