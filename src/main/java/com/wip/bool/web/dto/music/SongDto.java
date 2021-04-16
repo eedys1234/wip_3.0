@@ -39,7 +39,17 @@ public class SongDto {
 
     @Getter
     @NoArgsConstructor
-    public static class SongDetailUpdateRequest extends SongDetailBase {
+    public static class SongDetailUpdateRequest {
+
+        private String title;
+
+        private String lyrics;
+
+        private Long codeKey;
+
+        private Long guitarCodeKey;
+
+        private Long wordsMasterKey;
 
     }
 

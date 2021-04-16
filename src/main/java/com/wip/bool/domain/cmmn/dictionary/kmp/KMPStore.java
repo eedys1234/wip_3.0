@@ -3,10 +3,12 @@ package com.wip.bool.domain.cmmn.dictionary.kmp;
 import com.wip.bool.domain.cmmn.dictionary.SearchStore;
 import com.wip.bool.domain.cmmn.dictionary.standard.Originer;
 import com.wip.bool.domain.cmmn.dictionary.standard.Standard;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component(value = "kmpStore")
 public class KMPStore implements SearchStore {
 
     private List<KMP> store = new ArrayList<>();

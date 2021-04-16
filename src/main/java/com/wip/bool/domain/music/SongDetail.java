@@ -2,7 +2,6 @@ package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.cmmn.BaseEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -60,27 +59,33 @@ public class SongDetail extends BaseEntity {
     }
 
     public void updateTitle(String title) {
-        if(!StringUtils.isEmpty(title)) {
+        if(!StringUtils.isEmpty(title) && this.title != title) {
             this.title = title;
         }
     }
 
     public void updateLyrics(String lyrics) {
-        if(!StringUtils.isEmpty(lyrics)) {
+        if(this.lyrics != lyrics) {
             this.lyrics = lyrics;
         }
     }
 
     public void updateSongMaster(SongMaster songMaster) {
-        this.songMaster = songMaster;
+        if(this.songMaster != songMaster) {
+            this.songMaster = songMaster;
+        }
     }
 
     public void updateGuitarCode(GuitarCode guitarCode) {
-        this.guitarCode = guitarCode;
+        if(this.guitarCode != guitarCode) {
+            this.guitarCode = guitarCode;
+        }
     }
 
     public void updateWordsMaster(WordsMaster wordsMaster) {
-        this.wordsMaster = wordsMaster;
+        if(this.wordsMaster != wordsMaster) {
+            this.wordsMaster = wordsMaster;
+        }
     }
 
 //    @Column(name = "music_key")

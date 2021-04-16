@@ -21,7 +21,7 @@ public class SongSheetRepository {
         return songSheet;
     }
 
-    public List<SongSheet> findBySongDetailId(SongDetail songDetail) {
+    public List<SongSheet> findBySongDetail(SongDetail songDetail) {
         return queryFactory.selectFrom(QSongSheet.songSheet)
                 .where(QSongSheet.songSheet.songDetail.eq(songDetail))
                 .fetch();

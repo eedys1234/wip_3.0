@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * 검색을 위한 Store(자동완성 가능)
  */
-@Component
+@Component(value = "trieStore")
 public class TrieStore implements SearchStore {
 
     private final Trie prefix = new Trie();
