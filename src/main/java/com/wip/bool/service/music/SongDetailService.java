@@ -3,6 +3,7 @@ package com.wip.bool.service.music;
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
 import com.wip.bool.domain.cmmn.file.FileManager;
+import com.wip.bool.domain.cmmn.retry.Retry;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDto;
 import lombok.RequiredArgsConstructor;
@@ -87,33 +88,50 @@ public class SongDetailService {
         return songDetailRepository.save(songDetail).getId();
     }
 
+    @Transactional
     public Long delete(Long songDetailId) {
+
+        boolean isDeleteSheet = true;
+        boolean isDeleteMP3 = true;
 
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
 
         List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail);
 
-        //TODO : 람다식 안에 있는 로직을 함수로 분리시키는건 ???
-        boolean isDelete = songSheets.stream().allMatch(sheet -> {
-            try {
-                return FileManager.delete(filePath, sheet.getSheetPath());
-            } catch (IOException e) {
-                log.error(String.format("파일 삭제 실패 : [ %s ]", filePath + sheet.getSheetPath()));
-            }
-            return false;
-        });
+        songDetailRepository.delete(songDetail);
 
-        if(isDelete) {
-            return delete(songDetail);
+        if(songSheets.size() > 0) {
+            isDeleteSheet = songSheets.stream().allMatch(this::deleteSheet);
+            if(!isDeleteSheet) throw new IllegalStateException("악보 삭제가 실패했습니다.");
+        }
+
+        if(isDeleteSheet && isDeleteMP3) {
+            return 1L;
         }
 
         return -1L;
     }
 
-    @Transactional
-    private Long delete(SongDetail songDetail) {
-        return songDetailRepository.delete(songDetail);
+    private boolean deleteSheet(SongSheet sheets) {
+
+        boolean isDelete = false;
+        final int MAX = 5;
+        int count = 1;
+        Retry retry = new Retry();
+
+        while(count++ <= MAX){
+            try {
+                isDelete = FileManager.delete(filePath, sheets.getSheetPath());
+                return isDelete;
+            } catch (IOException e) {
+                log.info("%d [파일 삭제 실패] : %s", count, FileManager.getsFileDirectory(sheets.getSheetPath()));
+                retry.sleep(100 * count);
+            }
+        }
+
+        return false;
     }
+
 
 }

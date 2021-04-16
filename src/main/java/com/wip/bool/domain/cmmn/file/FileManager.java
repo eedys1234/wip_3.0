@@ -63,7 +63,7 @@ public class FileManager {
         return Files.deleteIfExists(Paths.get(filePath + getsFileDirectory(fileName)));
     }
 
-    private static String getsFileDirectory(String fileName) {
+    public static String getsFileDirectory(String fileName) {
         return String.format("%s/%s/%s/%s", fileName.charAt(0), fileName.charAt(1), fileName.charAt(2), fileName);
     }
 
