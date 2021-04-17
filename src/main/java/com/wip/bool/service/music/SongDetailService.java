@@ -2,6 +2,7 @@ package com.wip.bool.service.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
+import com.wip.bool.domain.cmmn.page.CustomPageRequest;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -111,6 +113,34 @@ public class SongDetailService {
         }
 
         return 1L;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SongDetailDto.SongDetailResponse> gets(SongDetailDto.SongDetailsRequest requestDto,
+                                                       int size, int page) {
+
+        CustomPageRequest pageRequest = CustomPageRequest.builder()
+                .size(size)
+                .page(page)
+                .build();
+
+        SongMaster songMaster = null;
+        if(!Objects.isNull(requestDto.getSongMasterId())) {
+            songMaster = songMasterRepository.findById(requestDto.getSongMasterId())
+                    .orElseThrow(() -> new IllegalArgumentException());
+        }
+
+        SortType sortType = SortType.valueOf(requestDto.getSortType());
+        OrderType orderType = OrderType.valueOf(requestDto.getOrder());
+
+        if(Objects.isNull(sortType) || Objects.isNull(orderType)) {
+            throw new IllegalArgumentException();
+        }
+
+        return songDetailRepository.findAll(songMaster, sortType, orderType, pageRequest.of())
+                .stream()
+                .map(SongDetailDto.SongDetailResponse::new)
+                .collect(Collectors.toList());
     }
 
 

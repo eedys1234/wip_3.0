@@ -1,10 +1,13 @@
 package com.wip.bool.domain.cmmn.page;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 @Getter
+@NoArgsConstructor
 public class CustomPageRequest {
 
     private final int DEFAULT_SIZE = 10;
@@ -13,6 +16,12 @@ public class CustomPageRequest {
     private int size;
     private int page;
     private Sort.Direction direction;
+
+    @Builder
+    public CustomPageRequest(int page, int size) {
+        this.page = page;
+        this.size = size;
+    }
 
     public void setPage(int page) {
         this.page = page;
@@ -27,6 +36,6 @@ public class CustomPageRequest {
     }
 
     public PageRequest of() {
-        return PageRequest.of(this.page, this.size, this.direction);
+        return PageRequest.of(this.page, this.size);
     }
 }

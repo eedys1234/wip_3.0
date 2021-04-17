@@ -25,7 +25,7 @@ public class SongSheetService {
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
 
-        SongSheet songSheet = SongSheet.createSongSheet(songDetail, songDetail.getSongSheets().size());
+        SongSheet songSheet = SongSheet.createSongSheet(songDetail, songDetail.getSongSheets().size() + 1);
 
         songSheetRepository.save(songSheet);
 

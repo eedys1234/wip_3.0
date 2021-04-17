@@ -1,5 +1,6 @@
 package com.wip.bool.web.dto.music;
 
+import com.wip.bool.domain.music.SongDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -55,16 +56,37 @@ public class SongDetailDto {
 
     @Getter
     @NoArgsConstructor
-    public static class SongDetailResponse extends SongDetailBase {
+    public static class SongDetailsRequest {
+
+        private Long songMasterId;
+        private String order;
+        private String sortType;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class SongDetailResponse {
 
         private Long id;
 
-        private String sheetPath;
+        private String title;
 
-        private String mp3Path;
+        private String codeKey;
+
+        private String guitarCodeKey;
 
         private LocalDateTime createDate;
 
         private LocalDateTime modifyDate;
+
+        public SongDetailResponse(SongDetail songDetail) {
+            this.id = songDetail.getId();;
+            this.title = songDetail.getTitle();
+            this.codeKey = songDetail.getSongMaster().getCodeKey();
+            this.guitarCodeKey = songDetail.getGuitarCode().getCode();
+            this.createDate = songDetail.getCreateDate();
+            this.modifyDate = songDetail.getModifyDate();
+        }
+
     }
 }

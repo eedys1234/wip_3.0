@@ -26,12 +26,22 @@ public class SongMasterRepository {
         return Optional.ofNullable(entityManager.find(SongMaster.class, id));
     }
 
+    public Long delete(SongMaster songMaster) {
+        entityManager.remove(songMaster);
+        return 1L;
+    }
+
     public List<SongMaster> findAll(String order) {
 
         return queryFactory.selectFrom(QSongMaster.songMaster)
                 .orderBy(codeOrder(order))
                 .fetch();
 
+    }
+
+    public Long findAllCount() {
+        return queryFactory.selectFrom(QSongMaster.songMaster)
+                .fetchCount();
     }
 
     private OrderSpecifier codeOrder(String order) {
