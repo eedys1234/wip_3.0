@@ -2,8 +2,6 @@ package com.wip.bool.service.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
-import com.wip.bool.domain.cmmn.file.FileManager;
-import com.wip.bool.domain.cmmn.retry.Retry;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDto;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,7 +99,7 @@ public class SongDetailService {
         songDetailRepository.delete(songDetail);
 
         if(songSheets.size() > 0) {
-            isDeleteSheet = songSheets.stream().allMatch(this::deleteSheet);
+            isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(filePath));
             if(!isDeleteSheet) throw new IllegalStateException("악보 삭제가 실패했습니다.");
         }
 
@@ -111,26 +108,6 @@ public class SongDetailService {
         }
 
         return -1L;
-    }
-
-    private boolean deleteSheet(SongSheet sheets) {
-
-        boolean isDelete = false;
-        final int MAX = 5;
-        int count = 1;
-        Retry retry = new Retry();
-
-        while(count++ <= MAX){
-            try {
-                isDelete = FileManager.delete(filePath, sheets.getSheetPath());
-                return isDelete;
-            } catch (IOException e) {
-                log.info("%d [파일 삭제 실패] : %s", count, FileManager.getsFileDirectory(sheets.getSheetPath()));
-                retry.sleep(100 * count);
-            }
-        }
-
-        return false;
     }
 
 
