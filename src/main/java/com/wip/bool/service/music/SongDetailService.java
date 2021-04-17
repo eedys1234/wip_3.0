@@ -3,7 +3,7 @@ package com.wip.bool.service.music;
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
 import com.wip.bool.domain.music.*;
-import com.wip.bool.web.dto.music.SongDto;
+import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +27,10 @@ public class SongDetailService {
     private final GuitarCodeRepository guitarCodeRepository;
     private final WordsMasterRepository wordsMasterRepository;
     private final SongSheetRepository songSheetRepository;
+    private final SongMP3Repository songMP3Repository;
 
     @Transactional
-    public Long save(SongDto.SongDetailSaveRequest requestDto) {
+    public Long save(SongDetailDto.SongDetailSaveRequest requestDto) {
 
         SongMaster songMaster = songMasterRepository.findById(requestDto.getCodeKey())
                 .orElseThrow(() -> new IllegalArgumentException("code key가 존재하지 않습니다. "));
@@ -47,7 +48,7 @@ public class SongDetailService {
     }
 
     @Transactional
-    public Long update(Long songDetailId, SongDto.SongDetailUpdateRequest requestDto) {
+    public Long update(Long songDetailId, SongDetailDto.SongDetailUpdateRequest requestDto) {
 
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
@@ -94,20 +95,22 @@ public class SongDetailService {
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
 
-        List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail);
-
         songDetailRepository.delete(songDetail);
+
+        List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail);
+        SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetail);
 
         if(songSheets.size() > 0) {
             isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(filePath));
-            if(!isDeleteSheet) throw new IllegalStateException("악보 삭제가 실패했습니다.");
+            if(!isDeleteSheet) throw new IllegalStateException("악보파일 삭제가 실패했습니다.");
         }
 
-        if(isDeleteSheet && isDeleteMP3) {
-            return 1L;
+        if(!Objects.isNull(songMP3)) {
+            isDeleteMP3 = songMP3.deleteMP3File(filePath);
+            if(!isDeleteMP3) throw new IllegalStateException("MP3파일 삭제가 실패했습니다.");
         }
 
-        return -1L;
+        return 1L;
     }
 
 

@@ -2,6 +2,7 @@ package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.cmmn.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "song_detail")
 public class SongDetail extends BaseEntity {
@@ -42,7 +43,7 @@ public class SongDetail extends BaseEntity {
     @OneToMany(mappedBy = "songDetail")
     private List<SongSheet> songSheets = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "songDetail", fetch = FetchType.LAZY)
     private SongMP3 songMP3;
 
     public static SongDetail createSongDetail(String title, String lyrics, SongMaster songMaster, GuitarCode guitarCode,
@@ -88,6 +89,4 @@ public class SongDetail extends BaseEntity {
         }
     }
 
-//    @Column(name = "music_key")
-//    private String musicKey;
 }

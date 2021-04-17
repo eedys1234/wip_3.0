@@ -47,7 +47,7 @@ public class FileManager {
         channel.close();
     }
 
-    public static void use(String filePath, String fileName, FileInterface<FileManager, IOException> block) throws IOException {
+    public static boolean use(String filePath, String fileName, FileInterface<FileManager, IOException> block) throws IOException {
 
         FileManager fileManager = new FileManager(filePath, getsFileDirectory(fileName));
 
@@ -56,6 +56,7 @@ public class FileManager {
         }
         finally {
             fileManager.close();
+            return true;
         }
     }
 
@@ -69,7 +70,7 @@ public class FileManager {
 
     @FunctionalInterface
     public interface FileInterface<T, V extends Throwable> {
-        void accept(T t);
+        void accept(T t) throws IOException;
     }
 
 
