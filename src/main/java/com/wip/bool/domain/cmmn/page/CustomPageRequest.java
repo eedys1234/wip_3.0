@@ -18,9 +18,11 @@ public class CustomPageRequest {
     private Sort.Direction direction;
 
     @Builder
-    public CustomPageRequest(int page, int size) {
+    public CustomPageRequest(int offset, int size) {
+        int page = calculatePage(offset, size);
         this.page = page;
         this.size = size;
+
     }
 
     public void setPage(int page) {
@@ -37,5 +39,9 @@ public class CustomPageRequest {
 
     public PageRequest of() {
         return PageRequest.of(this.page, this.size);
+    }
+
+    public int calculatePage(int offset, int size) {
+        return (offset / size) + 1;
     }
 }

@@ -54,4 +54,14 @@ public class SongMP3Service {
 
         return 1L;
     }
+
+    @Transactional(readOnly = true)
+    public byte[] getFile(Long songMP3Id) {
+
+        SongMP3 songMP3 = songMP3Repository.findById(songMP3Id)
+                .orElseThrow(() -> new IllegalArgumentException("MP3 파일이 존재하지 않습니다. id = " + songMP3Id));
+
+        return songMP3.getFile(filePath);
+    }
+
 }

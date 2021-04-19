@@ -39,6 +39,11 @@ public class SongMasterRepository {
 
     }
 
+    public List<SongMaster> findAll() {
+        return queryFactory.selectFrom(QSongMaster.songMaster)
+                .fetch();
+    }
+
     public Long findAllCount() {
         return queryFactory.selectFrom(QSongMaster.songMaster)
                 .fetchCount();

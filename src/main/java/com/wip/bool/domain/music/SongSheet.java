@@ -20,7 +20,8 @@ import java.util.UUID;
 public class SongSheet extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "song_sheet_id")
     private Long id;
 
     @Column(name = "sheet_path")

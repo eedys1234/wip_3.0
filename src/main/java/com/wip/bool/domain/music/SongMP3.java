@@ -17,6 +17,8 @@ import org.jaudiotagger.tag.TagException;
 import javax.persistence.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +29,7 @@ import java.util.UUID;
 public class SongMP3 extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_mp3_id")
     private Long id;
 
@@ -123,4 +125,17 @@ public class SongMP3 extends BaseEntity {
 
         return false;
     }
+
+    public byte[] getFile(String filePath) {
+
+        byte [] bytes = null;
+
+        try {
+            bytes = Files.readAllBytes(Paths.get(filePath + this.mp3Path + extType.getValue()));
+        } catch (IOException e) {
+            log.error(String.format("mp3 파일을 가져오지 못했습니다."));
+        }
+
+        return bytes;
+     }
 }

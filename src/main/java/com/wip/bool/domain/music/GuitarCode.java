@@ -23,4 +23,18 @@ public class GuitarCode {
     @Column(name = "guitar_order")
     private int guitarOrder;
 
+    public static GuitarCode createGuitarCode(String code, int guitarOrder) {
+        GuitarCode guitarCode = new GuitarCode();
+        guitarCode.updateCode(code);
+        guitarCode.updateGuitarOrder(guitarOrder);
+        return guitarCode;
+    }
+
+    public void updateCode(String code) {
+        this.code = code;
+    }
+
+    public void updateGuitarOrder(int guitarOrder) {
+        this.guitarOrder = guitarOrder;
+    }
 }

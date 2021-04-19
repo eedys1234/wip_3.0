@@ -85,7 +85,7 @@ public class SongDetailService {
         }
 
         //TODO : update 메소드만으로 업데이트 칠수 있을지 테스트 필요
-        return songDetailRepository.save(songDetail).getId();
+        return songDetail.getId();
     }
 
     @Transactional
@@ -117,17 +117,18 @@ public class SongDetailService {
 
     @Transactional(readOnly = true)
     public List<SongDetailDto.SongDetailResponse> gets(SongDetailDto.SongDetailsRequest requestDto,
-                                                       int size, int page) {
+                                                       int size, int offset) {
 
         CustomPageRequest pageRequest = CustomPageRequest.builder()
-                .size(size)
-                .page(page)
-                .build();
+                                                        .size(size)
+                                                        .offset(offset)
+                                                        .build();
 
         SongMaster songMaster = null;
         if(!Objects.isNull(requestDto.getSongMasterId())) {
             songMaster = songMasterRepository.findById(requestDto.getSongMasterId())
-                    .orElseThrow(() -> new IllegalArgumentException());
+                    .orElseThrow(() -> new IllegalArgumentException("해당 분류가 존재하지 않습니다. id = " +
+                            requestDto.getSongMasterId()));
         }
 
         SortType sortType = SortType.valueOf(requestDto.getSortType());
@@ -143,5 +144,12 @@ public class SongDetailService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public SongDetailDto.SongDetailResponse get(Long songDetailId) {
 
+        SongDetail songDetail = songDetailRepository.findById(songDetailId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+
+        return new SongDetailDto.SongDetailResponse(songDetail);
+    }
 }

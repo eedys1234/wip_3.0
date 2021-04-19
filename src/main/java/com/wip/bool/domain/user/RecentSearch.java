@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "recent_search")
 public class RecentSearch {
 
     @Id

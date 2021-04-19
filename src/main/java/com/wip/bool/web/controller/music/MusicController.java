@@ -19,8 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+
+//import org.springframework.security.crypto.codec.Base64;
 
 @RestController
 @RequestMapping(value = "/api/v1/music")
@@ -65,7 +68,7 @@ public class MusicController {
         return new ResponseEntity<>(songDetailService.delete(songDetailId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/song-detail")
+    @GetMapping(value = "/song-details")
     public ResponseEntity<List<SongDetailDto.SongDetailResponse>> gets(
             @Valid @RequestBody SongDetailDto.SongDetailsRequest requestDto,
             @RequestParam("size") int size,
@@ -74,23 +77,23 @@ public class MusicController {
         return new ResponseEntity<>(songDetailService.gets(requestDto, size, page), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/song-detail/{songDetailId}")
+    public ResponseEntity<SongDetailDto.SongDetailResponse> get(
+            @PathVariable("songDetailId") Long songDetailId) {
+
+        return new ResponseEntity<>(songDetailService.get(songDetailId), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/{songDetailId}/sheet")
     public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                      MultipartHttpServletRequest multipartHttpServletRequest,
-                                     UriComponentsBuilder uriComponentsBuilder) throws IOException,
-            NotFoundFileException {
+                                     UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException {
 
         final String NOT_FOUND_FILE_ERROR = "이미지 파일 null 오류";
 
-        if(Objects.isNull(multipartHttpServletRequest)) {
-            throw new NotFoundFileException(NOT_FOUND_FILE_ERROR);
-        }
-
-        MultipartFile multipartFile = multipartHttpServletRequest.getFile("imageFiles");
-
-        if(Objects.isNull(multipartFile)) {
-            throw new NotFoundFileException(NOT_FOUND_FILE_ERROR);
-        }
+        MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
+                .map(multipart -> multipart.getFile("imageFiles"))
+                .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
 
         Long id = songSheetService.save(songDetailId, multipartFile.getBytes());
 
@@ -116,15 +119,9 @@ public class MusicController {
 
         final String NOT_FOUND_FILE_ERROR = "MP3 파일 null 오류";
 
-        if(Objects.isNull(multipartHttpServletRequest)) {
-            throw new NotFoundFileException(NOT_FOUND_FILE_ERROR);
-        }
-
-        MultipartFile multipartFile = multipartHttpServletRequest.getFile("mp3Files");
-
-        if(Objects.isNull(multipartFile)) {
-            throw new NotFoundFileException(NOT_FOUND_FILE_ERROR);
-        }
+        MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
+                .map(multipart -> multipart.getFile("imageFiles"))
+                .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
 
         Long id = songMP3Service.save(songDetailId, multipartFile.getBytes());
 
@@ -139,6 +136,14 @@ public class MusicController {
                                               @PathVariable("songMP3Id") Long songMP3Id) {
 
         return new ResponseEntity<>(songMP3Service.delete(songMP3Id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{songDetailId}/mp3/{songMP3Id}")
+    public ResponseEntity<Object> getMP3File(@PathVariable("songDetailId") Long songDetailId,
+                                             @PathVariable("songMP3Id") Long songMP3Id) {
+
+        Base64.Encoder encoder = Base64.getEncoder();
+        return new ResponseEntity<>(encoder.encodeToString(songMP3Service.getFile(songMP3Id)), HttpStatus.OK);
     }
 
     @PostMapping(value = "/song-master")
@@ -160,7 +165,6 @@ public class MusicController {
 
     @DeleteMapping(value = "/song-master/{songMasterId}")
     public ResponseEntity<Long> deleteSongMaster(@PathVariable("songMasterId") Long songMasterId) {
-
 
         return new ResponseEntity<>(songMasterService.delete(songMasterId), HttpStatus.OK);
     }

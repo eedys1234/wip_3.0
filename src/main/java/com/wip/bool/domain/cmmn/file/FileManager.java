@@ -61,7 +61,10 @@ public class FileManager {
     }
 
     public static boolean delete(String filePath, String fileName) throws IOException {
-        return Files.deleteIfExists(Paths.get(filePath + getsFileDirectory(fileName)));
+        if(Files.exists(Paths.get(filePath + getsFileDirectory(fileName)))) {
+            return Files.deleteIfExists(Paths.get(filePath + getsFileDirectory(fileName)));
+        }
+        return true;
     }
 
     public static String getsFileDirectory(String fileName) {
