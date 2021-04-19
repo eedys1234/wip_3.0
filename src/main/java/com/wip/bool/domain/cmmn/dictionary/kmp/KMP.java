@@ -8,14 +8,16 @@ import java.util.List;
 @Getter
 public class KMP {
 
-    private String value;
+    private String orgValue;
+    private String newValue;
 
     public KMP() {
 
     }
 
     public KMP(String value) {
-        this.value = value;
+        this.orgValue = value;
+        this.newValue = value;
     }
 
     protected boolean contains(String keyword) {
@@ -26,7 +28,7 @@ public class KMP {
     protected List<Integer> search(String keyword) {
 
         List<Integer> list = new ArrayList<>();
-        int packageStringLen = value.length();
+        int packageStringLen = newValue.length();
         int keywordLen = keyword.length();
         int[] table = failureFunc(keyword);
         int j = 0;
@@ -34,14 +36,14 @@ public class KMP {
         for(int i=0;i<packageStringLen;i++)
         {
 
-            while(j > 0 && value.charAt(i) != keyword.charAt(j)) {
+            while(j > 0 && newValue.charAt(i) != keyword.charAt(j)) {
 
 
                 j = table[j - 1];
 
             }
 
-            if(value.charAt(i) == keyword.charAt(j)) {
+            if(newValue.charAt(i) == keyword.charAt(j)) {
 
                 //문자열을 모두 비교했을 때, 마지막까지 같다면
                 if(j == keywordLen - 1) {
@@ -61,7 +63,7 @@ public class KMP {
     }
 
     void setValue(String value) {
-        this.value = value;
+        this.newValue = value;
     }
 
     private int[] failureFunc(String keyword) {
@@ -81,7 +83,7 @@ public class KMP {
             }
         }
 
-        table = new int[value.length()];
+        table = new int[newValue.length()];
 
         return table;
     }

@@ -1,3 +1,7 @@
-[WARN ] 2021-04-18 23:40:26.797 [SpringContextShutdownHook] DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'entityManagerFactory': org.hibernate.exception.JDBCConnectionException: Unable to release JDBC Connection used for DDL execution
-[INFO ] 2021-04-18 23:40:26.802 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-04-18 23:40:26.805 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
+[INFO ] 2021-04-19 21:11:53.724 [main] CachingOperationNameGenerator - Generating unique operation named: updateUsingPUT_1
+[INFO ] 2021-04-19 21:11:53.764 [main] SearchTest - Started SearchTest in 17.71 seconds (JVM running for 23.651)
+[INFO ] 2021-04-19 21:11:54.327 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-04-19 21:11:54.332 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-04-19 21:11:54.333 [SpringContextShutdownHook] SchemaDropperImpl$DelayedDropActionImpl - HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+[INFO ] 2021-04-19 21:11:54.343 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-04-19 21:11:54.345 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.

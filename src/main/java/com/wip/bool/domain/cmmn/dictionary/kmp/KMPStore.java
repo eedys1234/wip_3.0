@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component(value = "kmpStore")
 public class KMPStore implements SearchStore {
@@ -31,7 +32,7 @@ public class KMPStore implements SearchStore {
     public boolean delete(String words) {
 
         for(KMP kmp : store) {
-            if(kmp.getValue().equals(words)) {
+            if(kmp.getOrgValue().equals(words)) {
                 return store.remove(kmp);
             }
         }
@@ -46,23 +47,17 @@ public class KMPStore implements SearchStore {
     @Override
     public List<String> findWords(String words) {
 
-        List<String> tempList = new ArrayList<>();
         String initWords = standard.getValue(words);
 
-          for(int i=0;i<store.size();i++)
-          {
-              KMP kmp = store.get(i);
-              String str = kmp.getValue();
-              kmp.setValue(standard.getValue(str));
-
-              if(kmp.contains(initWords)) {
-                  tempList.add(str);
-              }
-
-              kmp.setValue(str);
-          }
-
-          return tempList;
+        //TODO : 객체 생성에 대한 Resource 고려한 코드.....
+        return store.stream()
+                .map(kmp -> {
+                    kmp.setValue(standard.getValue(kmp.getOrgValue()));
+                    return kmp;
+                })
+                .filter(kmp -> kmp.contains(initWords))
+                .map(KMP::getOrgValue)
+                .collect(Collectors.toList());
     }
 
 }

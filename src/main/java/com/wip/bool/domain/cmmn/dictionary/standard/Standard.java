@@ -2,5 +2,5 @@ package com.wip.bool.domain.cmmn.dictionary.standard;
 
 public interface Standard {
 
-    public String getValue(String words);
+    String getValue(String words);
 }

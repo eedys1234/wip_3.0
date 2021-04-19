@@ -9,14 +9,6 @@ public class Initializer implements Standard {
     private static final char[] INITIAL_SOUND = {'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ',
             'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
 
-    private boolean matchingInitial(char c, char value) {
-        return isInitialSound(value) && isHangul(c) && getInitialSound(c) == value;
-    }
-
-    private boolean matchingCharacter(char c, char value) {
-        return !(isInitialSound(value) && isHangul(c)) && value == c;
-    }
-
     private boolean isInitialSound(char search) {
 
         for(char c : INITIAL_SOUND) {
