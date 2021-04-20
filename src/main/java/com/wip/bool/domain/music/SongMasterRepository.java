@@ -23,6 +23,9 @@ public class SongMasterRepository {
     }
 
     public Optional<SongMaster> findById(Long id) {
+//        return Optional.ofNullable(queryFactory.selectFrom(QSongMaster.songMaster)
+//                .where(QSongMaster.songMaster.id.eq(id))
+//                .fetchOne());
         return Optional.ofNullable(entityManager.find(SongMaster.class, id));
     }
 

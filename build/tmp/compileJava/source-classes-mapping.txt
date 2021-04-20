@@ -22,8 +22,6 @@ com/wip/bool/domain/music/SongDetail.java
  com.wip.bool.domain.music.SongDetail
 com/wip/bool/domain/user/QUserMusic.java
  com.wip.bool.domain.user.QUserMusic
-com/wip/bool/jwt/JwtTokenProvider.java
- com.wip.bool.jwt.JwtTokenProvider
 com/wip/bool/domain/cmmn/dictionary/standard/Standard.java
  com.wip.bool.domain.cmmn.dictionary.standard.Standard
 com/wip/bool/domain/dept/Dept.java
@@ -53,8 +51,6 @@ com/wip/bool/Application.java
  com.wip.bool.Application
 com/wip/bool/web/dto/music/SongDetailDto.java
  com.wip.bool.web.dto.music.SongDetailDto
- com.wip.bool.web.dto.music.SongDetailDto$SongDetailBase
- com.wip.bool.web.dto.music.SongDetailDto$SongDetailBase$SongDetailBaseBuilder
  com.wip.bool.web.dto.music.SongDetailDto$SongDetailResponse
  com.wip.bool.web.dto.music.SongDetailDto$SongDetailSaveRequest
  com.wip.bool.web.dto.music.SongDetailDto$SongDetailSaveRequest$SongDetailSaveRequestBuilder
@@ -76,8 +72,6 @@ com/wip/bool/domain/user/QRecentSearch.java
  com.wip.bool.domain.user.QRecentSearch
 com/wip/bool/domain/user/UserMusicRepository.java
  com.wip.bool.domain.user.UserMusicRepository
-com/wip/bool/service/user/UserService.java
- com.wip.bool.service.user.UserService
 com/wip/bool/web/dto/music/SongMasterDto.java
  com.wip.bool.web.dto.music.SongMasterDto
  com.wip.bool.web.dto.music.SongMasterDto$SongMasterBase
@@ -97,8 +91,6 @@ com/wip/bool/domain/cmmn/dictionary/SearchStore.java
  com.wip.bool.domain.cmmn.dictionary.SearchStore
 com/wip/bool/domain/user/UserBoxRepository.java
  com.wip.bool.domain.user.UserBoxRepository
-com/wip/bool/jwt/JwtAuthenticationFilter.java
- com.wip.bool.jwt.JwtAuthenticationFilter
 com/wip/bool/domain/user/QUserBox.java
  com.wip.bool.domain.user.QUserBox
 com/wip/bool/domain/cmmn/dictionary/standard/Originer.java
@@ -125,6 +117,7 @@ com/wip/bool/web/dto/user/UserBoxDto.java
  com.wip.bool.web.dto.user.UserBoxDto$UserBoxUpdateRequest
 com/wip/bool/domain/cmmn/retry/Retry.java
  com.wip.bool.domain.cmmn.retry.Retry
+ com.wip.bool.domain.cmmn.retry.Retry$loggable
 com/wip/bool/domain/position/PositionRepository.java
  com.wip.bool.domain.position.PositionRepository
 com/wip/bool/domain/user/UserConfigRepository.java
@@ -156,8 +149,6 @@ com/wip/bool/domain/user/UserRepository.java
  com.wip.bool.domain.user.UserRepository
 com/wip/bool/domain/user/UserMusic.java
  com.wip.bool.domain.user.UserMusic
-com/wip/bool/web/controller/user/UserController.java
- com.wip.bool.web.controller.user.UserController
 com/wip/bool/domain/user/User.java
  com.wip.bool.domain.user.User
 com/wip/bool/jwt/Cookies.java

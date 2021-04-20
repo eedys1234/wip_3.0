@@ -86,9 +86,8 @@ public class SongMP3 extends BaseEntity {
             try {
                 return FileManager.delete(filePath, this.mp3Path + extType.getValue());
             }catch (IOException e) {
-                log.error("%d [파일 삭제 실패] : %s", count, FileManager.getsFileDirectory(this.mp3Path + extType.getValue()));
+                log.error("{} [파일 삭제 실패] : {}", count, FileManager.getsFileDirectory(this.mp3Path + extType.getValue()));
                 retry.sleep(count * 100);
-
             }
         }
 

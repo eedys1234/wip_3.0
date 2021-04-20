@@ -77,7 +77,7 @@ public class SongSheet extends BaseEntity {
             try {
                 return FileManager.delete(filePath, this.sheetPath + extType.getValue());
             } catch (IOException e) {
-                log.error("%d [파일 삭제 실패] : %s", count,
+                log.error("{} [파일 삭제 실패] : {}", count,
                         FileManager.getsFileDirectory(this.sheetPath + extType.getValue()));
                 retry.sleep(count * 100);
             }

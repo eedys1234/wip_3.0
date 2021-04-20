@@ -1,0 +1,7 @@
+[INFO ] 2021-04-20 21:57:19.566 [main] JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+[INFO ] 2021-04-20 21:57:19.618 [main] LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[WARN ] 2021-04-20 21:57:20.773 [main] JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[INFO ] 2021-04-20 21:57:21.418 [main] ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-04-20 21:57:22.236 [main] Http11NioProtocol - Starting ProtocolHandler ["http-nio-auto-1"]
+[INFO ] 2021-04-20 21:57:22.275 [main] TomcatWebServer - Tomcat started on port(s): 51551 (http) with context path ''
+[INFO ] 2021-04-20 21:57:22.277 [main] MusicControllerTest - Started MusicControllerTest in 20.076 seconds (JVM running for 27.622)
