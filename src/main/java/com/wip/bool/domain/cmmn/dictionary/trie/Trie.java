@@ -55,7 +55,6 @@ public class Trie {
         {
             char character = words.charAt(i);
 
-//            if('%' == character) break;
             TrieNode node = thisNode.getChildNodes().get(character);
 
             if(Objects.isNull(node)) {
@@ -87,33 +86,6 @@ public class Trie {
 
         return tempList;
     }
-
-//    public List<String> containWords(String words, boolean isInitialSound) {
-//
-//        List<String> tempList = new ArrayList<>();
-//        TrieNode thisNode = this.rootNode;
-//        int len = words.length();
-//
-//        if(!isInitialSound) {
-//            return containWords(words);
-//        }
-//
-//        Stack<TrieNode> stack = new Stack<>();
-//        stack.push(thisNode);
-//        while(!stack.isEmpty()) {
-//            TrieNode node = stack.pop();
-//            if(node.isLastChar()) {
-//                if(node.getName().length() >= len) {
-//                    if(matching(node.getName(), words)) {
-//                        tempList.add(node.getName());
-//                    }
-//                }
-//            }
-//            stack.addAll(node.getChildNodes().values());
-//        }
-//
-//        return tempList;
-//    }
 
     public void delete(String words) {
         delete(this.rootNode, words, 0);

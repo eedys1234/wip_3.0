@@ -20,6 +20,7 @@ public class TrieStore implements SearchStore {
     public TrieStore() {
 
     }
+
     @Override
     public boolean insert(String words) {
 
@@ -42,7 +43,7 @@ public class TrieStore implements SearchStore {
                 .collect(Collectors.toList()));
 
         return findList.stream()
-                .sorted((String s1, String s2) -> s1.compareTo(s2))
+                .sorted()
                 .collect(Collectors.toList());
     }
 

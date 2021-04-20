@@ -1,23 +1,41 @@
 package com.wip.bool.web.dto.music;
 
+import com.wip.bool.domain.music.SongMaster;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 public class SongMasterDto {
 
     @Getter
-    public static class SongMasterBase {
+    @NoArgsConstructor
+    public static class SongMasterSaveRequest {
 
         @NotBlank
-        protected String codeName;
+        private String codeName;
     }
 
-    public static class SongMasterSaveRequest extends SongMasterBase {
+    @Getter
+    @NoArgsConstructor
+    public static class SongMasterUpdateRequest {
 
+        @NotBlank
+        private String codeName;
     }
 
-    public static class SongMasterUpdateRequest extends SongMasterBase {
+    @Getter
+    @NoArgsConstructor
+    public static class SongMasterResponse {
 
+        private Long id;
+        private String codeName;
+        private String codeKey;
+
+        public SongMasterResponse(SongMaster songMaster) {
+            this.id = songMaster.getId();
+            this.codeName = songMaster.getCodeName();
+            this.codeKey = songMaster.getCodeKey();
+        }
     }
 }

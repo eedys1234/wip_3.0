@@ -1,8 +1,10 @@
 package com.wip.bool.domain.music;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -24,15 +26,18 @@ public class SongDetailRepository {
         return songDetail;
     }
 
-    public List<SongDetail> findAll(SongMaster songMaster, SortType sortType,
-                                    OrderType order, PageRequest pageRequest) {
+    public List<SongDetailDto.SongDetailResponse> findAll(SongMaster songMaster, SortType sortType,
+                                         OrderType order, PageRequest pageRequest) {
 
-        return queryFactory.selectFrom(QSongDetail.songDetail)
+        return queryFactory.select(
+                Projections.constructor(SongDetailDto.SongDetailResponse.class,
+                QSongDetail.songDetail.id, QSongDetail.songDetail.title))
+                .from(QSongDetail.songDetail)
                 .where(songMasterEq(songMaster))
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
                 .orderBy(getOrder(sortType, order))
-                .fetchResults().getResults();
+                .fetch();
     }
 
     public Long delete(SongDetail songDetail) {
@@ -41,6 +46,7 @@ public class SongDetailRepository {
     }
 
     public Optional<SongDetail> findById(Long songDetailId) {
+        //TODO : BookMark, GuitarCode와 JOIN 해야함
         return Optional.ofNullable(entityManager.find(SongDetail.class, songDetailId));
     }
 

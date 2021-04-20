@@ -165,8 +165,12 @@ public class MusicController {
 
     @DeleteMapping(value = "/song-master/{songMasterId}")
     public ResponseEntity<Long> deleteSongMaster(@PathVariable("songMasterId") Long songMasterId) {
-
         return new ResponseEntity<>(songMasterService.delete(songMasterId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/song-masters")
+    public ResponseEntity<List<SongMasterDto.SongMasterResponse>> getsSongMaster() {
+        return new ResponseEntity<>(songMasterService.gets(), HttpStatus.OK);
     }
 
 

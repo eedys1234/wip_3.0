@@ -22,21 +22,21 @@ public class SongDetailDto {
         private String lyrics;
 
         @NotNull
-        private Long codeKey;
+        private Long codeId;
 
         @NotNull
-        private Long guitarCodeKey;
+        private Long guitarCodeId;
 
         @NotNull
-        private Long wordsMasterKey;
+        private Long wordsMasterId;
 
         @Builder
-        public SongDetailSaveRequest(String title, String lyrics, Long codeKey, Long guitarCodeKey, Long wordsMasterKey) {
+        public SongDetailSaveRequest(String title, String lyrics, Long codeId, Long guitarCodeId, Long wordsMasterId) {
             this.title = title;
             this.lyrics = lyrics;
-            this.codeKey = codeKey;
-            this.guitarCodeKey = guitarCodeKey;
-            this.wordsMasterKey = wordsMasterKey;
+            this.codeId = codeId;
+            this.guitarCodeId = guitarCodeId;
+            this.wordsMasterId = wordsMasterId;
         }
     }
 
@@ -48,11 +48,11 @@ public class SongDetailDto {
 
         private String lyrics;
 
-        private Long codeKey;
+        private Long codeId;
 
-        private Long guitarCodeKey;
+        private Long guitarCodeId;
 
-        private Long wordsMasterKey;
+        private Long wordsMasterId;
 
     }
 
@@ -73,19 +73,28 @@ public class SongDetailDto {
 
         private String title;
 
-        private Long codeKey;
+        private Long codeId;
 
-        private Long guitarCodeKey;
+        private Long guitarCodeId;
 
         private LocalDateTime createDate;
 
         private LocalDateTime modifyDate;
 
+        public SongDetailResponse(String title) {
+            this(null, title);
+        }
+
+        public SongDetailResponse(Long id, String title) {
+            this.id = id;
+            this.title = title;
+        }
+
         public SongDetailResponse(SongDetail songDetail) {
             this.id = songDetail.getId();;
             this.title = songDetail.getTitle();
-            this.codeKey = songDetail.getSongMaster().getId();
-            this.guitarCodeKey = songDetail.getGuitarCode().getId();
+            this.codeId = songDetail.getSongMaster().getId();
+            this.guitarCodeId = songDetail.getGuitarCode().getId();
             this.createDate = songDetail.getCreateDate();
             this.modifyDate = songDetail.getModifyDate();
         }

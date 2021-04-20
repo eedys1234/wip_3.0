@@ -76,9 +76,9 @@ public class MusicControllerTest {
         SongDetailDto.SongDetailSaveRequest requestDto = SongDetailDto.SongDetailSaveRequest.builder()
                 .title(title)
                 .lyrics(lyrics)
-                .codeKey(songMasters.get(0).getId())
-                .guitarCodeKey(guitarCodes.get(0).getId())
-                .wordsMasterKey(wordsMasters.get(0).getId())
+                .codeId(songMasters.get(0).getId())
+                .guitarCodeId(guitarCodes.get(0).getId())
+                .wordsMasterId(wordsMasters.get(0).getId())
                 .build();
 
         String url = "/api/v1/music/song-detail";

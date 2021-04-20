@@ -31,7 +31,8 @@ public class KMPStore implements SearchStore {
     @Override
     public boolean delete(String words) {
 
-        //TODO : remove 시 전체 배열을 모두 복사할 경우가 존재하여 이 때의 시간복잡도는 O(n^2)가 될 수 있으므로 filter를 이용하여 제거.
+        //TODO : remove 시 전체 배열을 모두 복사할 경우가 존재하여 이 때의 시간복잡도는 O(n^2)가 될 수 있으므로
+        // filter를 이용하여 제거.
         store = store.stream()
                 .filter(kmp -> !kmp.getOrgValue().equals(words))
                 .collect(Collectors.toList());
@@ -57,6 +58,7 @@ public class KMPStore implements SearchStore {
                 })
                 .filter(kmp -> kmp.contains(initWords))
                 .map(KMP::getOrgValue)
+                .sorted()
                 .collect(Collectors.toList());
     }
 

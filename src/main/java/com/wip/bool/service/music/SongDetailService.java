@@ -2,6 +2,8 @@ package com.wip.bool.service.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
+import com.wip.bool.domain.cmmn.CodeMapper;
+import com.wip.bool.domain.cmmn.dictionary.SearchStore;
 import com.wip.bool.domain.cmmn.page.CustomPageRequest;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDetailDto;
@@ -10,10 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +25,12 @@ import java.util.stream.Collectors;
 public class SongDetailService {
 
     @Value("spring.images.path")
-    private String filePath;
+    private String imageFilePath;
+
+    @Value("spring.mp3.path")
+    private String mp3FilePath;
+
+    private final CodeMapper codeMapper;
 
     private final SongDetailRepository songDetailRepository;
     private final SongMasterRepository songMasterRepository;
@@ -31,60 +39,50 @@ public class SongDetailService {
     private final SongSheetRepository songSheetRepository;
     private final SongMP3Repository songMP3Repository;
 
+    @Resource(name = "kmpStore")
+    private SearchStore searchStore;
+
     @Transactional
     public Long save(SongDetailDto.SongDetailSaveRequest requestDto) {
 
-        SongMaster songMaster = songMasterRepository.findById(requestDto.getCodeKey())
-                .orElseThrow(() -> new IllegalArgumentException("code key가 존재하지 않습니다. "));
+        SongMaster songMaster = selectedSongMaster(requestDto.getCodeId());
 
-        GuitarCode guitarCode = guitarCodeRepository.findById(requestDto.getGuitarCodeKey())
-                .orElseThrow(() -> new IllegalArgumentException("guitar code id가 존재하지 않습니다. "));
+        GuitarCode guitarCode = selectedGuitarCode(requestDto.getGuitarCodeId());
 
-        WordsMaster wordsMaster = wordsMasterRepository.findById(requestDto.getWordsMasterKey())
-                .orElseThrow(() -> new IllegalArgumentException("words master id가 존재하지 않습니다. "));
+        WordsMaster wordsMaster = selectedWordsMaster(requestDto.getWordsMasterId());
 
         SongDetail songDetail = SongDetail.createSongDetail(requestDto.getTitle(), requestDto.getLyrics(), songMaster,
                 guitarCode, wordsMaster);
 
-        return songDetailRepository.save(songDetail).getId();
+        Long id = songDetailRepository.save(songDetail).getId();
+
+        searchStore.insert(requestDto.getTitle());
+
+        return id;
     }
 
     @Transactional
     public Long update(Long songDetailId, SongDetailDto.SongDetailUpdateRequest requestDto) {
 
-        SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+        SongDetail songDetail = selectedSongDetail(songDetailId);
 
-        if(!Objects.isNull(requestDto.getCodeKey())) {
-            SongMaster songMaster = songMasterRepository.findById(requestDto.getCodeKey())
-                    .orElseThrow(() -> new IllegalArgumentException("code key가 존재하지 않습니다. "));
+        Optional.ofNullable(requestDto.getCodeId())
+                .ifPresent(codeId -> songDetail.updateSongMaster(selectedSongMaster(codeId)));
 
-            songDetail.updateSongMaster(songMaster);
-        }
+        Optional.ofNullable(requestDto.getGuitarCodeId())
+                .ifPresent(guitarCodeId -> songDetail.updateGuitarCode(selectedGuitarCode(guitarCodeId)));
 
-        if(!Objects.isNull(requestDto.getGuitarCodeKey())) {
-            GuitarCode guitarCode = guitarCodeRepository.findById(requestDto.getGuitarCodeKey())
-                    .orElseThrow(() -> new IllegalArgumentException("guitar code id가 존재하지 않습니다. "));
+        Optional.ofNullable(requestDto.getWordsMasterId())
+                .ifPresent(wordsMasterId -> songDetail.updateWordsMaster(selectedWordsMaster(wordsMasterId)));
 
-            songDetail.updateGuitarCode(guitarCode);
-        }
+        Optional.ofNullable(requestDto.getTitle()).ifPresent(title -> {
+            searchStore.delete(songDetail.getTitle());
+            songDetail.updateTitle(title);
+            searchStore.insert(songDetail.getTitle());
+        });
 
-        if(!Objects.isNull(requestDto.getWordsMasterKey())) {
-            WordsMaster wordsMaster = wordsMasterRepository.findById(requestDto.getWordsMasterKey())
-                    .orElseThrow(() -> new IllegalArgumentException("words master id가 존재하지 않습니다. "));
+        Optional.ofNullable(requestDto.getLyrics()).ifPresent(lyrics -> songDetail.updateLyrics(lyrics));
 
-            songDetail.updateWordsMaster(wordsMaster);
-        }
-
-        if(!StringUtils.isEmpty(requestDto.getTitle())) {
-            songDetail.updateTitle(requestDto.getTitle());
-        }
-
-        if(!StringUtils.isEmpty(requestDto.getLyrics())) {
-            songDetail.updateTitle(requestDto.getLyrics());
-        }
-
-        //TODO : update 메소드만으로 업데이트 칠수 있을지 테스트 필요
         return songDetail.getId();
     }
 
@@ -94,8 +92,7 @@ public class SongDetailService {
         boolean isDeleteSheet = true;
         boolean isDeleteMP3 = true;
 
-        SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+        SongDetail songDetail = selectedSongDetail(songDetailId);
 
         songDetailRepository.delete(songDetail);
 
@@ -103,14 +100,16 @@ public class SongDetailService {
         SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetail);
 
         if(songSheets.size() > 0) {
-            isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(filePath));
+            isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(imageFilePath));
             if(!isDeleteSheet) throw new IllegalStateException("악보파일 삭제가 실패했습니다.");
         }
 
         if(!Objects.isNull(songMP3)) {
-            isDeleteMP3 = songMP3.deleteMP3File(filePath);
+            isDeleteMP3 = songMP3.deleteMP3File(mp3FilePath);
             if(!isDeleteMP3) throw new IllegalStateException("MP3파일 삭제가 실패했습니다.");
         }
+
+        searchStore.delete(songDetail.getTitle());
 
         return 1L;
     }
@@ -126,9 +125,7 @@ public class SongDetailService {
 
         SongMaster songMaster = null;
         if(!Objects.isNull(requestDto.getSongMasterId())) {
-            songMaster = songMasterRepository.findById(requestDto.getSongMasterId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 분류가 존재하지 않습니다. id = " +
-                            requestDto.getSongMasterId()));
+            songMaster = selectedSongMaster(requestDto.getSongMasterId());
         }
 
         SortType sortType = SortType.valueOf(requestDto.getSortType());
@@ -138,18 +135,40 @@ public class SongDetailService {
             throw new IllegalArgumentException();
         }
 
-        return songDetailRepository.findAll(songMaster, sortType, orderType, pageRequest.of())
-                .stream()
-                .map(SongDetailDto.SongDetailResponse::new)
-                .collect(Collectors.toList());
+        return songDetailRepository.findAll(songMaster, sortType, orderType, pageRequest.of());
     }
 
     @Transactional(readOnly = true)
     public SongDetailDto.SongDetailResponse get(Long songDetailId) {
 
-        SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
-
+        SongDetail songDetail = selectedSongDetail(songDetailId);
         return new SongDetailDto.SongDetailResponse(songDetail);
+    }
+
+    public List<SongDetailDto.SongDetailResponse> getSearch(String keyword) {
+        return searchStore.findWords(keyword)
+                .stream()
+                .map(SongDetailDto.SongDetailResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    private SongDetail selectedSongDetail(Long songDetailId) {
+        return songDetailRepository.findById(songDetailId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+    }
+
+    private WordsMaster selectedWordsMaster(Long wordsMasterId) {
+        return wordsMasterRepository.findById(wordsMasterId)
+                .orElseThrow(() -> new IllegalArgumentException("words master id가 존재하지 않습니다. "));
+    }
+
+    private GuitarCode selectedGuitarCode(Long guitarCodeId) {
+        return guitarCodeRepository.findById(guitarCodeId)
+                .orElseThrow(() -> new IllegalArgumentException("guitar code id가 존재하지 않습니다. "));
+    }
+
+    private SongMaster selectedSongMaster(Long songMasterId) {
+        return  songMasterRepository.findById(songMasterId)
+                .orElseThrow(() -> new IllegalArgumentException("code key가 존재하지 않습니다. "));
     }
 }

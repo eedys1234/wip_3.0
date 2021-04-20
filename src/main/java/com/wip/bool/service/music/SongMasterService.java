@@ -1,5 +1,6 @@
 package com.wip.bool.service.music;
 
+import com.wip.bool.domain.cmmn.CodeMapper;
 import com.wip.bool.domain.music.SongMaster;
 import com.wip.bool.domain.music.SongMasterRepository;
 import com.wip.bool.web.dto.music.SongMasterDto;
@@ -7,11 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SongMasterService {
 
     private final SongMasterRepository songMasterRepository;
+
+    private final CodeMapper codeMapper;
+
+    private final String SONG_MASTER = "song_master";
 
     @Transactional
     public Long save(SongMasterDto.SongMasterSaveRequest requestDto) {
@@ -30,5 +38,12 @@ public class SongMasterService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 분류가 존재하지 않습니다. id = " + songMasterId));
 
         return songMasterRepository.delete(songMaster);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SongMasterDto.SongMasterResponse> gets() {
+        return songMasterRepository.findAll().stream()
+                .map(SongMasterDto.SongMasterResponse::new)
+                .collect(Collectors.toList());
     }
 }
