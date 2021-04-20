@@ -40,6 +40,12 @@ public class SongDetailRepository {
                 .fetch();
     }
 
+    public List<String> findAll() {
+        return queryFactory.select(QSongDetail.songDetail.title)
+                .from(QSongDetail.songDetail)
+                .fetch();
+    }
+
     public Long delete(SongDetail songDetail) {
         entityManager.remove(songDetail);
         return 1L;

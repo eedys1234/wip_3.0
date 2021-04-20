@@ -2,7 +2,6 @@ package com.wip.bool.service.music;
 
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
-import com.wip.bool.domain.cmmn.CodeMapper;
 import com.wip.bool.domain.cmmn.dictionary.SearchStore;
 import com.wip.bool.domain.cmmn.page.CustomPageRequest;
 import com.wip.bool.domain.music.*;
@@ -30,7 +29,8 @@ public class SongDetailService {
     @Value("spring.mp3.path")
     private String mp3FilePath;
 
-    private final CodeMapper codeMapper;
+    @Resource(name = "searchStoreProxy")
+    private SearchStore searchStore;
 
     private final SongDetailRepository songDetailRepository;
     private final SongMasterRepository songMasterRepository;
@@ -38,9 +38,6 @@ public class SongDetailService {
     private final WordsMasterRepository wordsMasterRepository;
     private final SongSheetRepository songSheetRepository;
     private final SongMP3Repository songMP3Repository;
-
-    @Resource(name = "kmpStore")
-    private SearchStore searchStore;
 
     @Transactional
     public Long save(SongDetailDto.SongDetailSaveRequest requestDto) {
