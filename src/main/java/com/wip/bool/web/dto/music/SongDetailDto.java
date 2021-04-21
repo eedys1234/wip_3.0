@@ -54,6 +54,15 @@ public class SongDetailDto {
 
         private Long wordsMasterId;
 
+        @Builder
+        public SongDetailUpdateRequest(String title, String lyrics, Long codeId, Long guitarCodeId, Long wordsMasterId) {
+
+            this.title = title;
+            this.lyrics = lyrics;
+            this.codeId = codeId;
+            this.guitarCodeId = guitarCodeId;
+            this.wordsMasterId = wordsMasterId;
+        }
     }
 
     @Getter

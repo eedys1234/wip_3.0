@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
 
 @Component(value = "searchStoreProxy")
 @RequiredArgsConstructor
 public class SearchStoreProxy implements SearchStore {
 
-    private final SearchStore searchStore;
+    @Resource(name = "kmpStore")
+    private SearchStore searchStore;
     private final SongDetailRepository songDetailRepository;
 
     @PostConstruct

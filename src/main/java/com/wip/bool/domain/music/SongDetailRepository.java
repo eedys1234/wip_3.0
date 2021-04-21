@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -27,15 +26,15 @@ public class SongDetailRepository {
     }
 
     public List<SongDetailDto.SongDetailResponse> findAll(SongMaster songMaster, SortType sortType,
-                                         OrderType order, PageRequest pageRequest) {
+                                         OrderType order, int offset, int size) {
 
         return queryFactory.select(
                 Projections.constructor(SongDetailDto.SongDetailResponse.class,
                 QSongDetail.songDetail.id, QSongDetail.songDetail.title))
                 .from(QSongDetail.songDetail)
                 .where(songMasterEq(songMaster))
-                .offset(pageRequest.getOffset())
-                .limit(pageRequest.getPageSize())
+                .offset(offset)
+                .limit(size)
                 .orderBy(getOrder(sortType, order))
                 .fetch();
     }

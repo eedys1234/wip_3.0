@@ -112,27 +112,27 @@ public class SongDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<SongDetailDto.SongDetailResponse> gets(SongDetailDto.SongDetailsRequest requestDto,
+    public List<SongDetailDto.SongDetailResponse> gets(Long songMasterId, String order, String sort,
                                                        int size, int offset) {
 
-        CustomPageRequest pageRequest = CustomPageRequest.builder()
-                                                        .size(size)
-                                                        .offset(offset)
-                                                        .build();
+//        CustomPageRequest pageRequest = CustomPageRequest.builder()
+//                                                        .size(size)
+//                                                        .offset(offset)
+//                                                        .build();
 
         SongMaster songMaster = null;
-        if(!Objects.isNull(requestDto.getSongMasterId())) {
-            songMaster = selectedSongMaster(requestDto.getSongMasterId());
+        if(songMasterId != 0 && !Objects.isNull(songMasterId)) {
+            songMaster = selectedSongMaster(songMasterId);
         }
 
-        SortType sortType = SortType.valueOf(requestDto.getSortType());
-        OrderType orderType = OrderType.valueOf(requestDto.getOrder());
+        SortType sortType = SortType.valueOf(sort.toUpperCase());
+        OrderType orderType = OrderType.valueOf(order.toUpperCase());
 
         if(Objects.isNull(sortType) || Objects.isNull(orderType)) {
             throw new IllegalArgumentException();
         }
 
-        return songDetailRepository.findAll(songMaster, sortType, orderType, pageRequest.of());
+        return songDetailRepository.findAll(songMaster, sortType, orderType, offset, size);
     }
 
     @Transactional(readOnly = true)
@@ -142,7 +142,7 @@ public class SongDetailService {
         return new SongDetailDto.SongDetailResponse(songDetail);
     }
 
-    public List<SongDetailDto.SongDetailResponse> getSearch(String keyword) {
+    public List<SongDetailDto.SongDetailResponse> search(String keyword) {
         return searchStore.findWords(keyword)
                 .stream()
                 .map(SongDetailDto.SongDetailResponse::new)

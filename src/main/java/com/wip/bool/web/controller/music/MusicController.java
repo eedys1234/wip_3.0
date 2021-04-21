@@ -23,8 +23,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-//import org.springframework.security.crypto.codec.Base64;
-
 @RestController
 @RequestMapping(value = "/api/v1/music")
 @RequiredArgsConstructor
@@ -51,7 +49,7 @@ public class MusicController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/song-detail/{id}")
+    @PutMapping(value = "/song-detail/{id:[\\d]+}")
     public ResponseEntity<Long> updateSongDetail(@Valid @RequestBody SongDetailDto.SongDetailUpdateRequest requestDto,
                                        @PathVariable("id") Long songDetailId,
                                        Errors errors) {
@@ -63,28 +61,36 @@ public class MusicController {
         return new ResponseEntity<>(songDetailService.update(songDetailId, requestDto), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/song-detail/{id}")
+    @DeleteMapping(value = "/song-detail/{id:[\\d]+}")
     public ResponseEntity<Long> deleteSongDetail(@PathVariable("id") Long songDetailId) {
         return new ResponseEntity<>(songDetailService.delete(songDetailId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/song-details")
     public ResponseEntity<List<SongDetailDto.SongDetailResponse>> gets(
-            @Valid @RequestBody SongDetailDto.SongDetailsRequest requestDto,
+            @RequestParam("codeId") Long songMasterId,
+            @RequestParam("order") String order,
+            @RequestParam("sort") String sort,
             @RequestParam("size") int size,
-            @RequestParam("page") int page) {
+            @RequestParam("offset") int offset) {
 
-        return new ResponseEntity<>(songDetailService.gets(requestDto, size, page), HttpStatus.OK);
+        return new ResponseEntity<>(songDetailService.gets(songMasterId, order, sort, size, offset), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/song-detail/{songDetailId}")
-    public ResponseEntity<SongDetailDto.SongDetailResponse> get(
-            @PathVariable("songDetailId") Long songDetailId) {
+    @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}")
+    public ResponseEntity<SongDetailDto.SongDetailResponse> get(@PathVariable("songDetailId") Long songDetailId) {
 
         return new ResponseEntity<>(songDetailService.get(songDetailId), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{songDetailId}/sheet")
+    @GetMapping(value = "/song-details/search")
+    public ResponseEntity<List<SongDetailDto.SongDetailResponse>> search(
+            @RequestParam("keyword") String keyword) {
+        return new ResponseEntity<>(songDetailService.search(keyword), HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet")
     public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                      MultipartHttpServletRequest multipartHttpServletRequest,
                                      UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException {
@@ -104,14 +110,14 @@ public class MusicController {
     }
 
 
-    @DeleteMapping(value = "/{songDetailId}/sheet/{songSheetId}")
+    @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet/{songSheetId:[\\d]+}")
     public ResponseEntity<Long> deleteSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                        @PathVariable("songSheetId") Long songSheetId)
     {
         return new ResponseEntity<>(songSheetService.delete(songSheetId), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{songDetailId}/mp3")
+    @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
     public ResponseEntity<Long> saveSongMP3(@PathVariable("songDetailId") Long songDetailId,
                                      MultipartHttpServletRequest multipartHttpServletRequest,
                                      UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException
@@ -131,14 +137,14 @@ public class MusicController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{songDetailId}/mp3/{songMP3Id}")
+    @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d+]}")
     public ResponseEntity<Long> deleteSongMP3(@PathVariable("songDetailId") Long songDetailId,
                                               @PathVariable("songMP3Id") Long songMP3Id) {
 
         return new ResponseEntity<>(songMP3Service.delete(songMP3Id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{songDetailId}/mp3/{songMP3Id}")
+    @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d]+}")
     public ResponseEntity<Object> getMP3File(@PathVariable("songDetailId") Long songDetailId,
                                              @PathVariable("songMP3Id") Long songMP3Id) {
 
@@ -163,7 +169,7 @@ public class MusicController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/song-master/{songMasterId}")
+    @DeleteMapping(value = "/song-master/{songMasterId:[\\d]+}")
     public ResponseEntity<Long> deleteSongMaster(@PathVariable("songMasterId") Long songMasterId) {
         return new ResponseEntity<>(songMasterService.delete(songMasterId), HttpStatus.OK);
     }
