@@ -3,6 +3,7 @@ package com.wip.bool.web.controller.music;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
+import com.wip.bool.domain.cmmn.dictionary.SearchStoreProxy;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDetailDto;
 import org.junit.Before;
@@ -52,6 +53,8 @@ public class MusicControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SearchStoreProxy searchStoreProxy;
 
     @Before
     public void begin() throws Exception {
@@ -273,6 +276,7 @@ public class MusicControllerTest {
         SongDetail songDetail = SongDetail.createSongDetail(title, lyrics, songMasters.get(0)
                 , guitarCodes.get(0), wordsMasters.get(0));
         songDetailRepository.save(songDetail);
+        searchStoreProxy.insert(title);
 
         String url = "/api/v1/music/song-details/search";
 
@@ -283,8 +287,8 @@ public class MusicControllerTest {
                 .params(param))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]").isString())
-                .andExpect(jsonPath("$[0]").value(title))
+                .andExpect(jsonPath("$[0]").exists())
+                .andExpect(jsonPath("$[0]['title']").value(title))
                 .andDo(print());
     }
 
