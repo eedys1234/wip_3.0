@@ -39,8 +39,6 @@ public class FileManager {
 
     public void write(byte[] bytes) throws IOException {
         byteBuffer = ByteBuffer.wrap(bytes);
-//        byteBuffer.put(bytes);
-//        byteBuffer.flip();
         channel.write(byteBuffer);
     }
 
@@ -87,7 +85,4 @@ public class FileManager {
     public interface FileInterface<T, V extends Throwable> {
         void accept(T t) throws IOException;
     }
-
-
-
 }
