@@ -3,7 +3,6 @@ package com.wip.bool.service.music;
 import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.domain.bible.WordsMasterRepository;
 import com.wip.bool.domain.cmmn.dictionary.SearchStore;
-import com.wip.bool.domain.cmmn.page.CustomPageRequest;
 import com.wip.bool.domain.music.*;
 import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +22,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SongDetailService {
 
-    @Value("spring.images.path")
+    @Value("${spring.images.path}")
     private String imageFilePath;
 
-    @Value("spring.mp3.path")
+    @Value("${spring.mp3.path}")
     private String mp3FilePath;
 
     @Resource(name = "searchStoreProxy")

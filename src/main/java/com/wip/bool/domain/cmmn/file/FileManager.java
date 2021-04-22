@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -25,6 +26,7 @@ public class FileManager {
     private String filePath;
     private String fileName;
 
+    private FileWriter fw;
     private Path path;
     private FileChannel channel;
     private ByteBuffer byteBuffer;
@@ -32,26 +34,40 @@ public class FileManager {
     private FileManager(String filePath, String fileName) throws IOException {
         this.filePath = filePath;
         this.fileName = fileName;
-        this.fileAbsolutePath = filePath + fileName;
-        path = Paths.get(this.fileAbsolutePath);
-        channel = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-        byteBuffer = ByteBuffer.allocate(1024);
+        this.fileAbsolutePath = String.join("/", filePath, fileName);
     }
 
     public void write(byte[] bytes) throws IOException {
-        channel.write(byteBuffer.put(bytes));
+        byteBuffer = ByteBuffer.wrap(bytes);
+//        byteBuffer.put(bytes);
+//        byteBuffer.flip();
+        channel.write(byteBuffer);
     }
 
     private void close() throws IOException {
-        byteBuffer.clear();
         channel.close();
+    }
+
+    private void createParentDirectory() throws IOException {
+        int index = this.fileAbsolutePath.lastIndexOf("/");
+
+        if(index > -1 && !Files.exists(Paths.get(this.fileAbsolutePath.substring(0, index)))) {
+            Files.createDirectories(Paths.get(this.fileAbsolutePath.substring(0, index)));
+        }
+    }
+
+    private void connect() throws IOException {
+        path = Paths.get(this.fileAbsolutePath);
+        channel = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
     }
 
     public static boolean use(String filePath, String fileName, FileInterface<FileManager, IOException> block) throws IOException {
 
-        FileManager fileManager = new FileManager(filePath, getsFileDirectory(fileName));
+        FileManager fileManager = new FileManager(filePath, fileName);
 
         try {
+            fileManager.createParentDirectory();
+            fileManager.connect();
             block.accept(fileManager);
         }
         finally {
@@ -61,14 +77,10 @@ public class FileManager {
     }
 
     public static boolean delete(String filePath, String fileName) throws IOException {
-        if(Files.exists(Paths.get(filePath + getsFileDirectory(fileName)))) {
-            return Files.deleteIfExists(Paths.get(filePath + getsFileDirectory(fileName)));
+        if(Files.exists(Paths.get(filePath, fileName))) {
+            return Files.deleteIfExists(Paths.get(filePath, fileName));
         }
         return true;
-    }
-
-    public static String getsFileDirectory(String fileName) {
-        return String.format("%s/%s/%s/%s", fileName.charAt(0), fileName.charAt(1), fileName.charAt(2), fileName);
     }
 
     @FunctionalInterface

@@ -62,6 +62,12 @@ sourceSets {
     }
 }
 
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 bootRun {
     String activeProfile = System.properties['spring.profiles.active']
     println "zone: ${activeProfile}"

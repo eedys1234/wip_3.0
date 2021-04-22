@@ -98,10 +98,10 @@ public class MusicController {
         final String NOT_FOUND_FILE_ERROR = "이미지 파일 null 오류";
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
-                .map(multipart -> multipart.getFile("imageFiles"))
+                .map(multipart -> multipart.getFile("imagesFile"))
                 .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
 
-        Long id = songSheetService.save(songDetailId, multipartFile.getBytes());
+        Long id = songSheetService.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -129,7 +129,7 @@ public class MusicController {
                 .map(multipart -> multipart.getFile("imageFiles"))
                 .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
 
-        Long id = songMP3Service.save(songDetailId, multipartFile.getBytes());
+        Long id = songMP3Service.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());

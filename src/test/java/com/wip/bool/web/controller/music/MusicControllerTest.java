@@ -10,9 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +38,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class MusicControllerTest {
+
+    @Value("${spring.images.path}")
+    private String imageFilePath;
+
+    @Value("${spring.mp3.path}")
+    private String mp3FilePath;
 
     @Autowired
     private MockMvc mockMvc;
@@ -295,6 +305,28 @@ public class MusicControllerTest {
     @Test
     public void 악보_추가() throws Exception {
 
+        String title = "우리에게 이 모든 선물을 주신 것은";
+        String lyrics = "에베소서 4:11-16 (14절 제외, 쉬운 ver)";
+
+        List<SongMaster> songMasters = songMasterRepository.findAll();
+        List<GuitarCode> guitarCodes = guitarCodeRepository.findAll();
+        List<WordsMaster> wordsMasters = wordsMasterRepository.findAll();
+
+        SongDetail songDetail = SongDetail.createSongDetail(title, lyrics, songMasters.get(0)
+                , guitarCodes.get(0), wordsMasters.get(0));
+        songDetailRepository.save(songDetail);
+
+        String url = "/api/v1/music/song-detail/" + songDetail.getId() + "/sheet";
+        String orgFileName = "test_01.png";
+
+        MockMultipartFile file = new MockMultipartFile("imagesFile", orgFileName,
+                MediaType.MULTIPART_FORM_DATA_VALUE,
+                Files.readAllBytes(FileSystems.getDefault().getPath("C://Users/이정환/Desktop/wip_test/images", "test_01.png")));
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart(url).file(file))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isNumber())
+                .andDo(print());
     }
 
     @Test

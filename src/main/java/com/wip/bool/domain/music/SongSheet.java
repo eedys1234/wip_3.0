@@ -24,43 +24,61 @@ public class SongSheet extends BaseEntity {
     @Column(name = "song_sheet_id")
     private Long id;
 
-    @Column(name = "sheet_path")
-    private String sheetPath;
+    @Column(name = "sheet_file_path")
+    private String sheetFilePath;
+
+    @Column(name = "sheet_org_file_name")
+    private String sheetOrgFileName;
+
+    @Column(name = "sheet_new_file_name")
+    private String sheetNewFileName;
 
     @Column(name = "sheet_order")
     private int sheetOrder;
+
+    private long size;
+
+    @Column(name = "sheet_file_ext")
+    private String sheetFileExt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_detail_id")
     private SongDetail songDetail;
 
     @Transient
-    private final int MAX = 5;
+    private static final int MAX = 5;
 
     @Transient
-    private FileExtType extType = FileExtType.PNG;
+    private FileExtType extType;
 
-    public static SongSheet createSongSheet(SongDetail songDetail, int sheetOrder) {
+    @Transient
+    private byte[] imagesFile;
+
+    public static SongSheet createSongSheet(SongDetail songDetail,String filePath, String orgFileName, byte[] imagesFile, int sheetOrder) {
         SongSheet songSheet = new SongSheet();
         songSheet.updateSheetOrder(sheetOrder);
         songSheet.updateSongDetail(songDetail);
         songSheet.updateSheetPath();
+        songSheet.updateOrgFileName(orgFileName);
+        songSheet.updateFileExt(FileExtType.PNG);
+        songSheet.updateImagesFile(imagesFile);
+        songSheet.updateFilePath(filePath);
         return songSheet;
     }
 
-    public boolean createSheetFile(String filePath, byte[] imageFiles) {
+    public boolean createSheetFile(String imagesFilePath) {
 
-        int count = 1;
+        int count = 0;
         Retry retry = new Retry();
 
-        while(count++ <= MAX) {
+        while(count++ < MAX) {
             try {
-                    return FileManager.use(filePath, this.sheetPath + extType.getValue(), fileManager -> {
-                        fileManager.write(imageFiles); });
+                    return FileManager.use(imagesFilePath, fileDirectory(this.sheetNewFileName) + extType.getValue(),
+                            fileManager -> fileManager.write(this.imagesFile));
 
             } catch (IOException e) {
-                log.error("%d [파일 생성 실패] : %s", count,
-                        FileManager.getsFileDirectory(this.sheetPath + extType.getValue()));
+                log.error("{} [파일 생성 실패] : {}/{}", count, imagesFilePath,
+                        fileDirectory(this.sheetNewFileName) + extType.getValue());
                 retry.sleep(count * 100);
             }
         }
@@ -68,22 +86,26 @@ public class SongSheet extends BaseEntity {
         return false;
     }
 
-    public boolean deleteSheetFile(String filePath) {
+    public boolean deleteSheetFile(String imagesFilePath) {
 
         int count = 1;
         Retry retry = new Retry();
 
         while(count++ <= MAX){
             try {
-                return FileManager.delete(filePath, this.sheetPath + extType.getValue());
+                return FileManager.delete(imagesFilePath, fileDirectory(this.sheetNewFileName) + extType.getValue());
             } catch (IOException e) {
                 log.error("{} [파일 삭제 실패] : {}", count,
-                        FileManager.getsFileDirectory(this.sheetPath + extType.getValue()));
+                        fileDirectory(this.sheetNewFileName) + extType.getValue());
                 retry.sleep(count * 100);
             }
         }
 
         return false;
+    }
+
+    private String fileDirectory(String fileName) {
+        return String.join("/", String.valueOf(fileName.charAt(0)), String.valueOf(fileName.charAt(1)), String.valueOf(fileName.charAt(2)), fileName);
     }
 
     public void updateSheetOrder(int sheetOrder) {
@@ -96,10 +118,27 @@ public class SongSheet extends BaseEntity {
     }
 
     public void updateSheetPath() {
-        this.sheetPath = UUID.randomUUID()
+        this.sheetNewFileName = UUID.randomUUID()
                 .toString()
                 .replace("-", "")
                 .toUpperCase();
     }
 
+    public void updateOrgFileName(String sheetOrgFileName) {
+        this.sheetOrgFileName = sheetOrgFileName;
+    }
+
+    public void updateFileExt(FileExtType extType) {
+        this.extType = extType;
+        this.sheetFileExt = extType.getValue().replace(".", "");
+    }
+
+    public void updateImagesFile(byte[] imagesFile) {
+        this.imagesFile = imagesFile;
+        this.size = imagesFile.length;
+    }
+
+    public void updateFilePath(String filePath) {
+        this.sheetFilePath = filePath;
+    }
 }
