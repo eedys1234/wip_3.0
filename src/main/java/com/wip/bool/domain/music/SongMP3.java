@@ -1,8 +1,9 @@
 package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.cmmn.BaseEntity;
-import com.wip.bool.domain.cmmn.file.FileManager;
+import com.wip.bool.domain.cmmn.file.FileNIOManager;
 import com.wip.bool.domain.cmmn.retry.Retry;
+import com.wip.bool.exception.handler.NotFoundFileException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,9 @@ public class SongMP3 extends BaseEntity {
 
     private int miliDuration;
 
+    @Column(name = "mp3_file_path")
+    private String mp3FilePath;
+
     @Column(name = "mp3_org_file_name")
     private String mp3OrgFileName;
 
@@ -62,14 +66,15 @@ public class SongMP3 extends BaseEntity {
     @Transient
     private byte[] mp3File;
 
-    public static SongMP3 createSongMP3(SongDetail songDetail, String mp3OrgFileName, byte[] mp3File) {
+    public static SongMP3 createSongMP3(SongDetail songDetail, String mp3FilePath, String mp3OrgFileName, byte[] mp3File) {
 
         SongMP3 songMP3 = new SongMP3();
         songMP3.updateMP3Path();
         songMP3.updateSongDetail(songDetail);
-        songMP3.updateMP3FileExt(FileExtType.MP4);
+        songMP3.updateMP3FileExt(mp3OrgFileName);
         songMP3.updateOrgFileName(mp3OrgFileName);
         songMP3.updateMP3File(mp3File);
+        songMP3.updateMP3FilePath(mp3FilePath);
         return songMP3;
     }
 
@@ -81,11 +86,11 @@ public class SongMP3 extends BaseEntity {
         while(count++ <= MAX) {
 
             try {
-                return FileManager.use(filePath, this.mp3NewFileName + extType.getValue(),
+                return FileNIOManager.use(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt,
                         fileManager -> fileManager.write(mp3File));
             }
             catch (IOException e) {
-                log.error("{} [파일 생성 실패] : {}", count, fileDirectory(this.mp3NewFileName) + extType.getValue());
+                log.error("{} [파일 생성 실패] : {}", count, createDirectory(this.mp3NewFileName) + mp3FileExt);
                 retry.sleep(count * 100);
             }
         }
@@ -99,9 +104,9 @@ public class SongMP3 extends BaseEntity {
 
         while(count++ <= MAX) {
             try {
-                return FileManager.delete(filePath, this.mp3NewFileName + extType.getValue());
-            }catch (IOException e) {
-                log.error("{} [파일 삭제 실패] : {}", count, fileDirectory(this.mp3NewFileName) + extType.getValue());
+                return FileNIOManager.delete(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
+            } catch (IOException e) {
+                log.error("{} [파일 삭제 실패] : {}", count, createDirectory(this.mp3NewFileName) + mp3FileExt);
                 retry.sleep(count * 100);
             }
         }
@@ -109,7 +114,7 @@ public class SongMP3 extends BaseEntity {
         return false;
     }
 
-    private String fileDirectory(String fileName) {
+    private String createDirectory(String fileName) {
         return String.join("/", String.valueOf(fileName.charAt(0)), String.valueOf(fileName.charAt(1)), String.valueOf(fileName.charAt(2)), fileName);
     }
 
@@ -124,9 +129,10 @@ public class SongMP3 extends BaseEntity {
         this.songDetail = songDetail;
     }
 
-    public void updateMP3FileExt(FileExtType extType) {
-        this.extType = extType;
-        this.mp3FileExt = extType.getValue().replace(".", "");
+    public void updateMP3FileExt(String mp3OrgFileName) {
+        this.extType = FileExtType.valueOf(mp3OrgFileName.substring(mp3OrgFileName.lastIndexOf('.') + 1)
+        .toUpperCase());
+        this.mp3FileExt = extType.getValue();
     }
 
     public void updateOrgFileName(String mp3OrgFileName) {
@@ -138,22 +144,28 @@ public class SongMP3 extends BaseEntity {
         this.size = mp3File.length;
     }
 
+    public void updateMP3FilePath(String mp3FilePath) {
+        this.mp3FilePath = mp3FilePath;
+    }
+
     public boolean updateMP3Info(String filePath) {
 
-        File file = new File(filePath + this.mp3NewFileName + extType.getValue());
-        if(file.exists() && file.isFile()) {
+        try {
+                Path path = FileSystems.getDefault().getPath(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
+                File file = path.toFile();
 
-            try{
+                if(file.exists()) {
 
-                MP3File mp3 = (MP3File)AudioFileIO.read(file);
-                this.duration = mp3.getAudioHeader().getTrackLength();
-                this.miliDuration = duration * 1000;
-                return true;
+                    MP3File mp3 = (MP3File) AudioFileIO.read(file);
+                    this.duration = mp3.getAudioHeader().getTrackLength();
+                    this.miliDuration = duration * 1000;
+                    return true;
+                }
+
             } catch (IOException | CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
-                log.error(String.format("mp3 파일의 정보를 가져오지 못했습니다. "));
+                log.error("mp3 파일의 정보를 가져오지 못했습니다. ");
                 return false;
             }
-        }
 
         return false;
     }
@@ -163,13 +175,13 @@ public class SongMP3 extends BaseEntity {
         byte [] bytes = null;
 
         try {
-            Path path = FileSystems.getDefault().getPath(filePath, this.mp3NewFileName + extType.getValue());
-            if(Files.exists(path)) {
+            Path path = FileSystems.getDefault().getPath(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
+            if(path.toFile().exists()) {
                 bytes = Files.readAllBytes(path);
             }
         } catch (IOException e) {
-            log.error(String.format("mp3 파일을 가져오지 못했습니다."));
-            throw new RuntimeException();
+            log.error("mp3 파일을 가져오지 못했습니다.");
+            throw new NotFoundFileException("mp3 파일을 가져오지 못했습니다.");
         }
 
         return bytes;

@@ -1,7 +1,7 @@
 package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.cmmn.BaseEntity;
-import com.wip.bool.domain.cmmn.file.FileManager;
+import com.wip.bool.domain.cmmn.file.FileNIOManager;
 import com.wip.bool.domain.cmmn.retry.Retry;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -60,7 +60,7 @@ public class SongSheet extends BaseEntity {
         songSheet.updateSongDetail(songDetail);
         songSheet.updateSheetPath();
         songSheet.updateOrgFileName(orgFileName);
-        songSheet.updateFileExt(FileExtType.PNG);
+        songSheet.updateFileExt(orgFileName);
         songSheet.updateImagesFile(imagesFile);
         songSheet.updateFilePath(filePath);
         return songSheet;
@@ -73,12 +73,12 @@ public class SongSheet extends BaseEntity {
 
         while(count++ < MAX) {
             try {
-                    return FileManager.use(imagesFilePath, fileDirectory(this.sheetNewFileName) + extType.getValue(),
+                    return FileNIOManager.use(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt,
                             fileManager -> fileManager.write(this.imagesFile));
 
             } catch (IOException e) {
                 log.error("{} [파일 생성 실패] : {}/{}", count, imagesFilePath,
-                        fileDirectory(this.sheetNewFileName) + extType.getValue());
+                        fileDirectory(this.sheetNewFileName) + sheetFileExt);
                 retry.sleep(count * 100);
             }
         }
@@ -93,10 +93,10 @@ public class SongSheet extends BaseEntity {
 
         while(count++ <= MAX){
             try {
-                return FileManager.delete(imagesFilePath, fileDirectory(this.sheetNewFileName) + extType.getValue());
+                return FileNIOManager.delete(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt);
             } catch (IOException e) {
                 log.error("{} [파일 삭제 실패] : {}", count,
-                        fileDirectory(this.sheetNewFileName) + extType.getValue());
+                        fileDirectory(this.sheetNewFileName) + sheetFileExt);
                 retry.sleep(count * 100);
             }
         }
@@ -128,9 +128,10 @@ public class SongSheet extends BaseEntity {
         this.sheetOrgFileName = sheetOrgFileName;
     }
 
-    public void updateFileExt(FileExtType extType) {
-        this.extType = extType;
-        this.sheetFileExt = extType.getValue().replace(".", "");
+    public void updateFileExt(String orgFileName) {
+        this.extType = FileExtType.valueOf(orgFileName.substring(orgFileName.lastIndexOf('.') + 1)
+            .toUpperCase());
+        this.sheetFileExt = extType.getValue();
     }
 
     public void updateImagesFile(byte[] imagesFile) {

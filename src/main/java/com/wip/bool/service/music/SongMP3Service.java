@@ -25,7 +25,7 @@ public class SongMP3Service {
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
 
-        SongMP3 songMP3 = SongMP3.createSongMP3(songDetail, orgFileName, mp3File);
+        SongMP3 songMP3 = SongMP3.createSongMP3(songDetail, mp3FilePath, orgFileName, mp3File);
 
         songMP3Repository.save(songMP3);
 
@@ -34,10 +34,12 @@ public class SongMP3Service {
         }
 
         if(!songMP3.updateMP3Info(mp3FilePath)) {
+            songMP3.deleteMP3File(mp3FilePath);
+
             throw new IllegalStateException("mp3 파일 생성이 실패했습니다.");
         }
 
-        return 1L;
+        return songMP3.getId();
     }
 
     @Transactional
