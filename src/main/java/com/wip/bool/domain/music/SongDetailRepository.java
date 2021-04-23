@@ -53,6 +53,10 @@ public class SongDetailRepository {
     public Optional<SongDetail> findById(Long songDetailId) {
         //TODO : BookMark, GuitarCode와 JOIN 해야함
         return Optional.ofNullable(entityManager.find(SongDetail.class, songDetailId));
+
+//        return queryFactory.select(QSongDetail.songDetail)
+//                .where(QSongDetail.songDetail.id.eq(songDetailId))
+//                .fetchOne();
     }
 
     //SongMaster

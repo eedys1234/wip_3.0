@@ -11,8 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 /**
- * File에 대한 CleanUP 클래스
- * File Channel을 blocking //
+ * 파일 NIO 클래스
  */
 @Getter
 @Slf4j
@@ -40,7 +39,7 @@ public class FileNIOManager extends FileManager {
         channel = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
     }
 
-    public static boolean use(String filePath, String fileName, FileInterface<FileNIOManager, IOException> block) throws IOException {
+    public static boolean use(String filePath, String fileName, FileInterface<FileManager, IOException> block) throws IOException {
 
         FileNIOManager fileManager = new FileNIOManager(filePath, fileName);
 

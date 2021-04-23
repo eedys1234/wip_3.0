@@ -1,9 +1,14 @@
 package com.wip.bool.domain.cmmn.file;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * 외부 Resource(File)에 대한 클린업 클래스
+ * File IO, NIO 등 입출력에 관하여 유연하게 대처하기 위한 추상클래스
+ */
 public abstract class FileManager {
 
     protected String fileAbsolutePath;
@@ -37,8 +42,15 @@ public abstract class FileManager {
         return true;
     }
 
+    public static <T> boolean use(String filePath, String fileName, Class<T> classType, FileInterface<FileManager, IOException> block)
+            throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        return (boolean) classType.getDeclaredMethod("use", String.class, String.class, FileInterface.class)
+        .invoke(null, filePath, fileName, block);
+    }
+
     @FunctionalInterface
-    public interface FileInterface<T, V extends Throwable> {
+    public interface FileInterface<T extends FileManager, V extends Throwable> {
         void accept(T t) throws IOException;
     }
 }
