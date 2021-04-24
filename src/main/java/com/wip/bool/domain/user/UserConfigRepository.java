@@ -12,6 +12,7 @@ import java.util.Optional;
 public class UserConfigRepository {
 
     private final EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public UserConfig save(UserConfig userConfig) {
