@@ -18,6 +18,11 @@ public class AppVersionDto {
         @NotBlank
         private String version;
 
+        public AppVersionSaveRequest(String name, String version) {
+            this.name = name;
+            this.version = version;
+        }
+
     }
 
     @Getter

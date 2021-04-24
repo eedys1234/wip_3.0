@@ -34,14 +34,17 @@ public class UserBoxService {
     public Long updateUserBox(Long userBoxId, UserBoxDto.UserBoxUpdateRequest requestDto) {
 
         UserBox userBox = userBoxRepository.findById(userBoxId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
 
         userBox.updateUserBoxName(requestDto.getUserBoxName());
         return userBoxRepository.save(userBox).getId();
     }
 
-    public int deleteUserBox(Long userBoxId) {
-        return userBoxRepository.delete(userBoxId);
+    public Long deleteUserBox(Long userBoxId) {
+        UserBox userBox = userBoxRepository.findById(userBoxId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
+
+        return userBoxRepository.delete(userBox);
     }
 
     @Transactional(readOnly = true)

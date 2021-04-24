@@ -2,7 +2,11 @@ com/wip/bool/web/controller/search/SearchTest.java
  com.wip.bool.web.controller.search.SearchTest
 com/wip/bool/web/controller/music/MusicControllerTest.java
  com.wip.bool.web.controller.music.MusicControllerTest
+com/wip/bool/web/controller/file/FileManagerTest.java
+ com.wip.bool.web.controller.file.FileManagerTest
 com/wip/bool/web/controller/position/PositionControllerTest.java
  com.wip.bool.web.controller.position.PositionControllerTest
+com/wip/bool/web/controller/app/AppVersionControllerTest.java
+ com.wip.bool.web.controller.app.AppVersionControllerTest
 com/wip/bool/web/controller/dept/DeptControllerTest.java
  com.wip.bool.web.controller.dept.DeptControllerTest
