@@ -12,6 +12,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static com.wip.bool.domain.music.QSongDetail.songDetail;
+import static com.wip.bool.domain.music.QGuitarCode.guitarCode;
+import static com.wip.bool.domain.user.QBookMark.bookMark;
+
 @Repository
 @RequiredArgsConstructor
 public class SongDetailRepository {
@@ -25,23 +29,24 @@ public class SongDetailRepository {
         return songDetail;
     }
 
-    public List<SongDetailDto.SongDetailResponse> findAll(SongMaster songMaster, SortType sortType,
+    public List<SongDetailDto.SongDetailSimpleResponse> findAll(SongMaster songMaster, SortType sortType,
                                          OrderType order, int offset, int size) {
 
         return queryFactory.select(
-                Projections.constructor(SongDetailDto.SongDetailResponse.class,
-                QSongDetail.songDetail.id, QSongDetail.songDetail.title))
-                .from(QSongDetail.songDetail)
+                Projections.constructor(SongDetailDto.SongDetailSimpleResponse.class,
+                songDetail.id, songDetail.title))
+                .from(songDetail)
+                .join(songDetail.guitarCode, guitarCode)
                 .where(songMasterEq(songMaster))
+                .orderBy(getOrder(sortType, order))
                 .offset(offset)
                 .limit(size)
-                .orderBy(getOrder(sortType, order))
                 .fetch();
     }
 
     public List<String> findAll() {
-        return queryFactory.select(QSongDetail.songDetail.title)
-                .from(QSongDetail.songDetail)
+        return queryFactory.select(songDetail.title)
+                .from(songDetail)
                 .fetch();
     }
 
@@ -51,17 +56,29 @@ public class SongDetailRepository {
     }
 
     public Optional<SongDetail> findById(Long songDetailId) {
-        //TODO : BookMark, GuitarCode와 JOIN 해야함
-        return Optional.ofNullable(entityManager.find(SongDetail.class, songDetailId));
+        return Optional.ofNullable(queryFactory
+                .selectFrom(songDetail)
+                .fetchOne());
+    }
 
-//        return queryFactory.select(QSongDetail.songDetail)
-//                .where(QSongDetail.songDetail.id.eq(songDetailId))
-//                .fetchOne();
+    public Optional<SongDetailDto.SongDetailResponse> findById(Long songDetailId, Long userId) {
+        //TODO : BookMark, GuitarCode와 JOIN 해야함
+
+        return Optional.ofNullable(
+                queryFactory.select(
+                        Projections.constructor(SongDetailDto.SongDetailResponse.class,
+                        songDetail, bookMark))
+                .from(songDetail)
+                .leftJoin(bookMark)
+                .on(bookMark.songDetail.eq(songDetail), bookMark.user.id.eq(userId))
+                .innerJoin(songDetail.guitarCode, guitarCode)
+                .fetchJoin()
+                .fetchOne());
     }
 
     //SongMaster
     private BooleanExpression songMasterEq(SongMaster songMaster) {
-        return songMaster != null ? QSongDetail.songDetail.songMaster.eq(songMaster) : null;
+        return songMaster != null ? songDetail.songMaster.eq(songMaster) : null;
     }
 
     private OrderSpecifier getOrder(SortType sortType, OrderType order) {
@@ -73,13 +90,13 @@ public class SongDetailRepository {
     }
 
     private OrderSpecifier titleOrder(OrderType order) {
-        return OrderType.ASC.equals(order) ? QSongDetail.songDetail.title.asc() :
-                QSongDetail.songDetail.title.desc();
+        return OrderType.ASC.equals(order) ? songDetail.title.asc() :
+                songDetail.title.desc();
     }
 
     private OrderSpecifier guitarCodeOrder(OrderType order) {
-        return OrderType.ASC.equals(order) ? QSongDetail.songDetail.guitarCode.guitarOrder.asc() :
-                QSongDetail.songDetail.guitarCode.guitarOrder.desc();
+        return OrderType.ASC.equals(order) ? songDetail.guitarCode.guitarOrder.asc() :
+                songDetail.guitarCode.guitarOrder.desc();
     }
 
 }

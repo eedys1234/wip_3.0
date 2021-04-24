@@ -1,6 +1,7 @@
 package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.cmmn.BaseEntity;
+import com.wip.bool.domain.cmmn.file.FileManager;
 import com.wip.bool.domain.cmmn.file.FileNIOManager;
 import com.wip.bool.domain.cmmn.retry.Retry;
 import com.wip.bool.exception.handler.NotFoundFileException;
@@ -18,6 +19,7 @@ import org.jaudiotagger.tag.TagException;
 import javax.persistence.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,10 +88,11 @@ public class SongMP3 extends BaseEntity {
         while(count++ <= MAX) {
 
             try {
-                return FileNIOManager.use(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt,
+                return FileManager.use(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt,
+                        FileNIOManager.class,
                         fileManager -> fileManager.write(mp3File));
             }
-            catch (IOException e) {
+            catch (IOException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 log.error("{} [파일 생성 실패] : {}", count, createDirectory(this.mp3NewFileName) + mp3FileExt);
                 retry.sleep(count * 100);
             }
@@ -104,7 +107,7 @@ public class SongMP3 extends BaseEntity {
 
         while(count++ <= MAX) {
             try {
-                return FileNIOManager.delete(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
+                return FileManager.delete(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
             } catch (IOException e) {
                 log.error("{} [파일 삭제 실패] : {}", count, createDirectory(this.mp3NewFileName) + mp3FileExt);
                 retry.sleep(count * 100);

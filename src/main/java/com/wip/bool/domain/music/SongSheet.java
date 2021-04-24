@@ -1,6 +1,7 @@
 package com.wip.bool.domain.music;
 
 import com.wip.bool.domain.cmmn.BaseEntity;
+import com.wip.bool.domain.cmmn.file.FileManager;
 import com.wip.bool.domain.cmmn.file.FileNIOManager;
 import com.wip.bool.domain.cmmn.retry.Retry;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 @Getter
@@ -73,10 +75,11 @@ public class SongSheet extends BaseEntity {
 
         while(count++ < MAX) {
             try {
-                    return FileNIOManager.use(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt,
+                    return FileManager.use(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt,
+                            FileNIOManager.class,
                             fileManager -> fileManager.write(this.imagesFile));
 
-            } catch (IOException e) {
+            } catch (IOException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 log.error("{} [파일 생성 실패] : {}/{}", count, imagesFilePath,
                         fileDirectory(this.sheetNewFileName) + sheetFileExt);
                 retry.sleep(count * 100);
@@ -93,7 +96,7 @@ public class SongSheet extends BaseEntity {
 
         while(count++ <= MAX){
             try {
-                return FileNIOManager.delete(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt);
+                return FileManager.delete(imagesFilePath, fileDirectory(this.sheetNewFileName) + sheetFileExt);
             } catch (IOException e) {
                 log.error("{} [파일 삭제 실패] : {}", count,
                         fileDirectory(this.sheetNewFileName) + sheetFileExt);

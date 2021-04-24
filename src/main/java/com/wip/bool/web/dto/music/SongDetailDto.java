@@ -1,6 +1,8 @@
 package com.wip.bool.web.dto.music;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wip.bool.domain.music.SongDetail;
+import com.wip.bool.domain.user.BookMark;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,6 +78,32 @@ public class SongDetailDto {
 
     @Getter
     @NoArgsConstructor
+    public static class SongDetailSimpleResponse {
+
+        private Long id;
+
+        private String title;
+
+        @JsonIgnore
+        private Long guitarCodeId;
+
+        public SongDetailSimpleResponse(String title) {
+            this(null, title);
+        }
+
+        public SongDetailSimpleResponse(Long id, String title) {
+            this(id, title, null);
+        }
+
+        public SongDetailSimpleResponse(Long id, String title, Long guitarCodeId) {
+            this.id = id;
+            this.title = title;
+            this.guitarCodeId = guitarCodeId;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class SongDetailResponse {
 
         private Long id;
@@ -86,18 +114,14 @@ public class SongDetailDto {
 
         private Long guitarCodeId;
 
+        private String guitarCode;
+
+        private Long bookmarkId;
+
         private LocalDateTime createDate;
 
         private LocalDateTime modifyDate;
 
-        public SongDetailResponse(String title) {
-            this(null, title);
-        }
-
-        public SongDetailResponse(Long id, String title) {
-            this.id = id;
-            this.title = title;
-        }
 
         public SongDetailResponse(SongDetail songDetail) {
             this.id = songDetail.getId();;
@@ -106,6 +130,17 @@ public class SongDetailDto {
             this.guitarCodeId = songDetail.getGuitarCode().getId();
             this.createDate = songDetail.getCreateDate();
             this.modifyDate = songDetail.getModifyDate();
+        }
+
+        public SongDetailResponse(SongDetail songDetail, BookMark bookMark) {
+            this.id = songDetail.getId();;
+            this.title = songDetail.getTitle();
+            this.codeId = songDetail.getSongMaster().getId();
+            this.guitarCodeId = songDetail.getGuitarCode().getId();
+            this.createDate = songDetail.getCreateDate();
+            this.modifyDate = songDetail.getModifyDate();
+            this.bookmarkId = bookMark.getId();
+            this.guitarCode = songDetail.getGuitarCode().getCode();
         }
 
     }

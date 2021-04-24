@@ -111,13 +111,8 @@ public class SongDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<SongDetailDto.SongDetailResponse> gets(Long songMasterId, String order, String sort,
+    public List<SongDetailDto.SongDetailSimpleResponse> gets(Long songMasterId, String order, String sort,
                                                        int size, int offset) {
-
-//        CustomPageRequest pageRequest = CustomPageRequest.builder()
-//                                                        .size(size)
-//                                                        .offset(offset)
-//                                                        .build();
 
         SongMaster songMaster = null;
         if(songMasterId != 0 && !Objects.isNull(songMasterId)) {
@@ -135,16 +130,15 @@ public class SongDetailService {
     }
 
     @Transactional(readOnly = true)
-    public SongDetailDto.SongDetailResponse get(Long songDetailId) {
-
-        SongDetail songDetail = selectedSongDetail(songDetailId);
-        return new SongDetailDto.SongDetailResponse(songDetail);
+    public SongDetailDto.SongDetailResponse get(Long songDetailId, Long userId) {
+        return songDetailRepository.findById(songDetailId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("노래를 찾을 수 없습니다."));
     }
 
-    public List<SongDetailDto.SongDetailResponse> search(String keyword) {
+    public List<SongDetailDto.SongDetailSimpleResponse> search(String keyword) {
         return searchStore.findWords(keyword)
                 .stream()
-                .map(SongDetailDto.SongDetailResponse::new)
+                .map(SongDetailDto.SongDetailSimpleResponse::new)
                 .collect(Collectors.toList());
     }
 

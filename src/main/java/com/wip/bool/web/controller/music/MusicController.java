@@ -67,7 +67,7 @@ public class MusicController {
     }
 
     @GetMapping(value = "/song-details")
-    public ResponseEntity<List<SongDetailDto.SongDetailResponse>> gets(
+    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> gets(
             @RequestParam("codeId") Long songMasterId,
             @RequestParam("order") String order,
             @RequestParam("sort") String sort,
@@ -78,13 +78,14 @@ public class MusicController {
     }
 
     @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}")
-    public ResponseEntity<SongDetailDto.SongDetailResponse> get(@PathVariable("songDetailId") Long songDetailId) {
+    public ResponseEntity<SongDetailDto.SongDetailResponse> get(@PathVariable("songDetailId") Long songDetailId,
+                                                                @RequestHeader("userId") Long userId) {
 
-        return new ResponseEntity<>(songDetailService.get(songDetailId), HttpStatus.OK);
+        return new ResponseEntity<>(songDetailService.get(songDetailId, userId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/song-details/search")
-    public ResponseEntity<List<SongDetailDto.SongDetailResponse>> search(
+    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> search(
             @RequestParam("keyword") String keyword) {
         return new ResponseEntity<>(songDetailService.search(keyword), HttpStatus.OK);
     }

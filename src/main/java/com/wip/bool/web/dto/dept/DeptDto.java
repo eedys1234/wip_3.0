@@ -12,16 +12,10 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptBase {
+    public static class DeptSaveRequest {
 
         @NotBlank
         protected String deptName;
-
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class DeptSaveRequest extends DeptBase {
 
         public Dept toEntity() {
             return Dept.builder()
@@ -37,7 +31,9 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptUpdateRequest extends DeptBase {
+    public static class DeptUpdateRequest {
+
+        protected String deptName;
 
         @Builder
         public DeptUpdateRequest(String deptName) {
@@ -47,9 +43,12 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptResponse extends DeptBase implements CodeModel {
+    public static class DeptResponse implements CodeModel {
 
         private Long deptId;
+
+        @NotBlank
+        protected String deptName;
 
         public DeptResponse(Dept dept) {
             this.deptId = dept.getId();

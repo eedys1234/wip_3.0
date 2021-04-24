@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "guitar_code")
+@Table(name = "guitar_codes")
 public class GuitarCode {
 
     @Id
@@ -22,6 +22,9 @@ public class GuitarCode {
 
     @Column(name = "guitar_order")
     private int guitarOrder;
+
+//    @OneToOne(mappedBy = "guitarCode", fetch = FetchType.LAZY)
+//    private SongDetail songDetail;
 
     public static GuitarCode createGuitarCode(String code, int guitarOrder) {
         GuitarCode guitarCode = new GuitarCode();

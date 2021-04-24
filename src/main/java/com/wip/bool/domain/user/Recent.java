@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "recent_search")
+@Table(name = "recent")
 public class Recent {
 
     @Id
     @GeneratedValue
-    @Column(name = "recent_search_id")
+    @Column(name = "recent_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
