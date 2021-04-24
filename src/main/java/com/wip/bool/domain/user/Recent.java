@@ -3,6 +3,7 @@ package com.wip.bool.domain.user;
 import com.wip.bool.domain.music.SongDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +20,13 @@ public class Recent {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_detail_id")
     private SongDetail songDetail;
 
+    @CreatedDate
     private LocalDateTime createDate;
 }

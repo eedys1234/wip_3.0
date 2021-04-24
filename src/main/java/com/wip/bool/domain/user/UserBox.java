@@ -22,13 +22,14 @@ public class UserBox extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_key")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "user_box_name")
     private String userBoxName;
 
     @OneToMany(mappedBy = "userBox")
-    private List<UserMusic> userMusics = new ArrayList<>();
+    private List<UserBoxSong> userMusics = new ArrayList<>();
 
     public static UserBox createUserBox(User user, String userBoxName) {
         UserBox userBox = new UserBox();

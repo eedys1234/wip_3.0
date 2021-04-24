@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -14,6 +13,7 @@ import java.util.Optional;
 public class UserBoxRepository {
 
     private final EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public UserBox save(UserBox userBox) {
@@ -31,18 +31,8 @@ public class UserBoxRepository {
                             .fetch();
     }
 
-    public int delete(UserBox userBox) {
+    public Long delete(UserBox userBox) {
         entityManager.remove(userBox);
-        return 1;
-    }
-
-    public int delete(Long id) {
-        UserBox userBox = entityManager.find(UserBox.class, id);
-
-        if(!Objects.isNull(userBox)) {
-            return delete(userBox);
-        }
-
-        return 0;
+        return 1L;
     }
 }

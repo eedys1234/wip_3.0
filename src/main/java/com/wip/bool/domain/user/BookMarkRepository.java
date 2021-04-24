@@ -30,17 +30,20 @@ public class BookMarkRepository {
         return bookMark;
     }
 
-    // TODO : userId에 index 추가, 드라이빙 테이블은 무엇이 좋을까?? Order By(TITLE, GuitarCoe)는 어떻게??
+    public Long delete(BookMark bookMark) {
+        entityManager.remove(bookMark);
+        return 1L;
+    }
+
     // TODO : 드라이빙 테이블은 song-detail, 드리븐 테이블은 book-mark
-    // TODO : bookmark 테이블의 index는 songDetailId, userId, song-detail 테이블의 index는 title, guitarcode
+    // TODO : userId에 index 추가, 드라이빙 테이블은 무엇이 좋을까?? Order By(TITLE, GuitarCoe)는 어떻게??
+    // TODO : bookmark 테이블의 index는 songDetailId, userId, song-detail 테이블의 index는 title, guitarcode 설정
     public List<BookMarkDto.BookMarkResponse> findAll(Long userId, SortType sortType, OrderType orderType, int offset, int size) {
         return queryFactory.select(Projections.constructor(BookMarkDto.BookMarkResponse.class,
                 bookMark.id, songDetail.id, songDetail.title, bookMark.createDate))
                 .from(songDetail)
                 .innerJoin(bookMark.songDetail)
-                .fetchJoin()
                 .innerJoin(songDetail.guitarCode, guitarCode)
-                .fetchJoin()
                 .where(bookMark.user.id.eq(userId))
                 .offset(offset)
                 .limit(size)
