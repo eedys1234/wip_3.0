@@ -1,0 +1,21 @@
+[INFO ] 2021-04-20 21:58:55.194 [main] Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+[INFO ] 2021-04-20 21:58:55.206 [main] Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+[INFO ] 2021-04-20 21:58:55.210 [main] ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR] 2021-04-20 21:58:55.232 [main] LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO ] 2021-04-20 21:58:55.236 [main] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-04-20 21:58:55.239 [main] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'

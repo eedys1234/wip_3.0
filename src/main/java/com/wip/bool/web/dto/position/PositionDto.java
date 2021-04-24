@@ -10,18 +10,13 @@ import javax.validation.constraints.NotBlank;
 
 public class PositionDto {
 
+
     @Getter
     @NoArgsConstructor
-    public static class PositionBase {
+    public static class PositionSaveRequest {
 
         @NotBlank
         protected String positionName;
-
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PositionSaveRequest extends PositionBase {
 
         public Position toEntity() {
             return Position.builder()
@@ -37,7 +32,9 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionUpdateRequest extends PositionBase {
+    public static class PositionUpdateRequest {
+
+        protected String positionName;
 
         @Builder
         public PositionUpdateRequest(String positionName) {
@@ -47,9 +44,12 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionResponse extends PositionBase implements CodeModel {
+    public static class PositionResponse implements CodeModel {
 
         private Long positionId;
+
+        @NotBlank
+        protected String positionName;
 
         public PositionResponse(Position position) {
             this.positionId = position.getId();

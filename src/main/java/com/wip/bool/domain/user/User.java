@@ -14,11 +14,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "user")
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_key")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "user_name")

@@ -3,10 +3,7 @@ package com.wip.bool.domain.bible;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -24,5 +21,19 @@ public class WordsMaster {
     @Column(name = "words_order")
     private int wordsOrder;
 
+    public static WordsMaster createWordsMaster(String wordsName, int wordsOrder) {
+        WordsMaster wordsMaster = new WordsMaster();
+        wordsMaster.updateWordsName(wordsName);
+        wordsMaster.updateWordsOrder(wordsOrder);
+        return wordsMaster;
+    }
+
+    public void updateWordsName(String wordsName) {
+        this.wordsName = wordsName;
+    }
+
+    public void updateWordsOrder(int wordsOrder) {
+        this.wordsOrder = wordsOrder;
+    }
 
 }

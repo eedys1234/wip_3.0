@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.wip.bool.domain.user.QUserBox.userBox;
-
 @Repository
 @RequiredArgsConstructor
 public class UserBoxRepository {
@@ -28,8 +26,8 @@ public class UserBoxRepository {
     }
 
     public List<UserBox> findAllByUserId(Long userId) {
-        return queryFactory.selectFrom(userBox)
-                            .where(userBox.user.id.eq(userId))
+        return queryFactory.selectFrom(QUserBox.userBox)
+                            .where(QUserBox.userBox.user.id.eq(userId))
                             .fetch();
     }
 

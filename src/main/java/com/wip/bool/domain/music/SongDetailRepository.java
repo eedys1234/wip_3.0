@@ -1,15 +1,20 @@
 package com.wip.bool.domain.music;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
+
+import static com.wip.bool.domain.music.QSongDetail.songDetail;
+import static com.wip.bool.domain.music.QGuitarCode.guitarCode;
+import static com.wip.bool.domain.user.QBookMark.bookMark;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,15 +29,25 @@ public class SongDetailRepository {
         return songDetail;
     }
 
-    public QueryResults<SongDetail> findAll(SongMaster songMaster, String sortType,
-                                            String order, PageRequest pageRequest) {
+    public List<SongDetailDto.SongDetailSimpleResponse> findAll(SongMaster songMaster, SortType sortType,
+                                         OrderType order, int offset, int size) {
 
-        return queryFactory.selectFrom(QSongDetail.songDetail)
+        return queryFactory.select(
+                Projections.constructor(SongDetailDto.SongDetailSimpleResponse.class,
+                songDetail.id, songDetail.title))
+                .from(songDetail)
+                .join(songDetail.guitarCode, guitarCode)
                 .where(songMasterEq(songMaster))
-                .offset(pageRequest.getOffset())
-                .limit(pageRequest.getPageSize())
                 .orderBy(getOrder(sortType, order))
-                .fetchResults();
+                .offset(offset)
+                .limit(size)
+                .fetch();
+    }
+
+    public List<String> findAll() {
+        return queryFactory.select(songDetail.title)
+                .from(songDetail)
+                .fetch();
     }
 
     public Long delete(SongDetail songDetail) {
@@ -41,30 +56,47 @@ public class SongDetailRepository {
     }
 
     public Optional<SongDetail> findById(Long songDetailId) {
-        return Optional.ofNullable(entityManager.find(SongDetail.class, songDetailId));
+        return Optional.ofNullable(queryFactory
+                .selectFrom(songDetail)
+                .fetchOne());
+    }
+
+    public Optional<SongDetailDto.SongDetailResponse> findById(Long songDetailId, Long userId) {
+        //TODO : BookMark, GuitarCode와 JOIN 해야함
+
+        return Optional.ofNullable(
+                queryFactory.select(
+                        Projections.constructor(SongDetailDto.SongDetailResponse.class,
+                        songDetail, bookMark))
+                .from(songDetail)
+                .leftJoin(bookMark)
+                .on(bookMark.songDetail.eq(songDetail), bookMark.user.id.eq(userId))
+                .innerJoin(songDetail.guitarCode, guitarCode)
+                .fetchJoin()
+                .fetchOne());
     }
 
     //SongMaster
     private BooleanExpression songMasterEq(SongMaster songMaster) {
-        return songMaster != null ? QSongDetail.songDetail.songMaster.eq(songMaster) : null;
+        return songMaster != null ? songDetail.songMaster.eq(songMaster) : null;
     }
 
-    private OrderSpecifier getOrder(String sortType, String order) {
+    private OrderSpecifier getOrder(SortType sortType, OrderType order) {
 
-        if("TITLE".equals(sortType)) {
+        if(SortType.TITLE.equals(sortType)) {
             return titleOrder(order);
         }
         return guitarCodeOrder(order);
     }
 
-    private OrderSpecifier titleOrder(String order) {
-        return "ASC".equals(order) ? QSongDetail.songDetail.title.asc() :
-                QSongDetail.songDetail.title.desc();
+    private OrderSpecifier titleOrder(OrderType order) {
+        return OrderType.ASC.equals(order) ? songDetail.title.asc() :
+                songDetail.title.desc();
     }
 
-    private OrderSpecifier guitarCodeOrder(String order) {
-        return "ASC".equals(order) ? QSongDetail.songDetail.guitarCode.guitarOrder.asc() :
-                QSongDetail.songDetail.guitarCode.guitarOrder.desc();
+    private OrderSpecifier guitarCodeOrder(OrderType order) {
+        return OrderType.ASC.equals(order) ? songDetail.guitarCode.guitarOrder.asc() :
+                songDetail.guitarCode.guitarOrder.desc();
     }
 
 }

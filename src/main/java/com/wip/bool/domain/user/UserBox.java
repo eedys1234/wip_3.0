@@ -13,6 +13,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "user_box")
 public class UserBox extends BaseEntity {
 
     @Id
