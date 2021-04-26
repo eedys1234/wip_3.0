@@ -16,17 +16,17 @@ import java.util.UUID;
 public class SongMaster {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_master_id")
     private Long id;
 
-    @Column(name = "code_key", length = 32, nullable = false)
+    @Column(name = "code_key", length = 32, nullable = false, unique = true)
     private String codeKey;
 
-    @Column(name = "code_name", length = 50, nullable = false)
+    @Column(name = "code_name", length = 10, nullable = false)
     private String codeName;
 
-    @Column(name = "code_order")
+    @Column(name = "code_order", nullable = false)
     private int codeOrder;
 
     @OneToMany(mappedBy = "songMaster")

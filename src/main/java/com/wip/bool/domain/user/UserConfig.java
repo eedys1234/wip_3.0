@@ -14,17 +14,17 @@ import java.util.Objects;
 public class UserConfig {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "config_id")
     private Long id;
 
-    @Column(name = "font_size")
+    @Column(name = "font_size", length = 3, nullable = false)
     private String fontSize;
 
-    @Column(name = "view_type")
+    @Column(name = "view_type", length = 1, nullable = false)
     private String viewType;
 
-    @Column(name = "recv_alaram")
+    @Column(name = "recv_alaram", length = 1, nullable = false)
     private String recvAlaram;
 
     public static UserConfig createUserConfig() {

@@ -13,12 +13,14 @@ import javax.persistence.*;
 public class AppVersion {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "app_version_id")
     private Long id;
 
+    @Column(nullable = false, length = 20, unique = true)
     private String name;
 
+    @Column(nullable = false, length = 7)
     private String version;
 
     public static AppVersion createAppVersion(String name, String version) {

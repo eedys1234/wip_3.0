@@ -17,11 +17,8 @@ public class Dept {
     @Column(name = "dept_id")
     private Long id;
 
-    @Column(name = "dept_name")
+    @Column(name = "dept_name", nullable = false, length = 2)
     private String deptName;
-
-//    @OneToMany(mappedBy = "dept")
-//    private List<User> users = new ArrayList<>();
 
     @Builder
     public Dept(String deptName) {

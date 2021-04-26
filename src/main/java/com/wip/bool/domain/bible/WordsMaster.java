@@ -11,14 +11,14 @@ import javax.persistence.*;
 public class WordsMaster {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "words_master_id")
     private Long id;
 
-    @Column(name = "words_name")
+    @Column(name = "words_name", nullable = false, length = 10, unique = true)
     private String wordsName;
 
-    @Column(name = "words_order")
+    @Column(name = "words_order", nullable = false)
     private int wordsOrder;
 
     public static WordsMaster createWordsMaster(String wordsName, int wordsOrder) {

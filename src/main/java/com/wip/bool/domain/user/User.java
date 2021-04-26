@@ -18,20 +18,20 @@ import java.util.List;
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", length = 10)
     private String name;
 
-    @Column(name = "user_email", unique = true)
+    @Column(name = "user_email", unique = true, length = 30, nullable = false)
     private String email;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", length = 40)
     private String userPassword;
 
-    @Column(name = "user_profile")
+    @Column(name = "user_profile", length = 50)
     private String profile;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,10 +43,11 @@ public class User extends BaseEntity {
     private Position position;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type")
+    @Column(name = "user_type", nullable = false, length = 10)
     private UserType type;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
     private Role role;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

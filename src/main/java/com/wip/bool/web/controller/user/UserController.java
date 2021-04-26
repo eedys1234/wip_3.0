@@ -24,7 +24,6 @@
 //    private final UserService userService;
 //
 //    @PutMapping(value = "/user")
-//    @ResponseStatus(HttpStatus.CREATED)
 //    public ResponseEntity<Long> join(@RequestBody @Valid UserDto.UserSaveRequest requestDto,
 //                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 //
@@ -41,7 +40,6 @@
 //    }
 //
 //    @PostMapping(value = "/user/wip-login")
-//    @ResponseStatus(HttpStatus.OK)
 //    public ResponseEntity<Long> login(@RequestBody @Valid UserDto.UserLoginRequest requestDto,
 //                                      Errors errors) {
 //
@@ -55,7 +53,6 @@
 //    }
 //
 //    @PutMapping(value = "/user/approval/{id}")
-//    @ResponseStatus(HttpStatus.OK)
 //    public ResponseEntity<Long> approve(@PathVariable Long id) {
 //
 //        Long resValue = userService.approve(id);
@@ -64,7 +61,6 @@
 //    }
 //
 //    @PutMapping(value = "/user/{id}")
-//    @ResponseStatus(HttpStatus.OK)
 //    public ResponseEntity<Long> updateUser(@PathVariable Long id,
 //                                           @RequestBody @Valid UserDto.UserUpdateRequest requestDto,
 //                                           Errors errors) {
@@ -79,7 +75,6 @@
 //    }
 //
 //    @DeleteMapping(value = "/user/{id}")
-//    @ResponseStatus(HttpStatus.OK)
 //    public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
 //
 //        Long resValue = userService.delete(id);

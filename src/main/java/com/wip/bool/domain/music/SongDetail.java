@@ -18,26 +18,26 @@ import java.util.List;
 public class SongDetail extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_detail_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 30)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String lyrics;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code_key")
+    @JoinColumn(name = "song_master_id", nullable = false)
     private SongMaster songMaster;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guitar_id")
+    @JoinColumn(name = "guitar_id", nullable = false)
     private GuitarCode guitarCode;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "words_master_id")
+    @JoinColumn(name = "words_master_id", nullable = false)
     private WordsMaster wordsMaster;
 
     @OneToMany(mappedBy = "songDetail")

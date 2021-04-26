@@ -13,14 +13,14 @@ import javax.persistence.*;
 public class GuitarCode {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "guitar_id")
     private Long id;
 
-    @Column(name = "guitar_code")
+    @Column(name = "guitar_code", nullable = false, length = 4, unique = true)
     private String code;
 
-    @Column(name = "guitar_order")
+    @Column(name = "guitar_order", nullable = false)
     private int guitarOrder;
 
     public static GuitarCode createGuitarCode(String code, int guitarOrder) {

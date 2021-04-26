@@ -26,21 +26,21 @@ public class SongSheet extends BaseEntity {
     @Column(name = "song_sheet_id")
     private Long id;
 
-    @Column(name = "sheet_file_path")
+    @Column(name = "sheet_file_path", length = 50, nullable = false)
     private String sheetFilePath;
 
-    @Column(name = "sheet_org_file_name")
+    @Column(name = "sheet_org_file_name", length = 20, nullable = false)
     private String sheetOrgFileName;
 
-    @Column(name = "sheet_new_file_name")
+    @Column(name = "sheet_new_file_name", length = 32, nullable = false)
     private String sheetNewFileName;
 
-    @Column(name = "sheet_order")
+    @Column(name = "sheet_order", nullable = false)
     private int sheetOrder;
 
     private long size;
 
-    @Column(name = "sheet_file_ext")
+    @Column(name = "sheet_file_ext", length = 5, nullable = false)
     private String sheetFileExt;
 
     @ManyToOne(fetch = FetchType.LAZY)

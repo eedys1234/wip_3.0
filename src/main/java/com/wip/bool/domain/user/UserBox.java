@@ -17,7 +17,7 @@ import java.util.Objects;
 public class UserBox extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_box_id")
     private Long id;
 
@@ -25,7 +25,7 @@ public class UserBox extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "user_box_name")
+    @Column(name = "user_box_name", nullable = false, length = 25)
     private String userBoxName;
 
     @OneToMany(mappedBy = "userBox")

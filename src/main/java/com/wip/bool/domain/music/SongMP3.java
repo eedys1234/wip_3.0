@@ -41,18 +41,19 @@ public class SongMP3 extends BaseEntity {
 
     private int miliDuration;
 
-    @Column(name = "mp3_file_path")
+    @Column(name = "mp3_file_path", length = 50, nullable = false)
     private String mp3FilePath;
 
-    @Column(name = "mp3_org_file_name")
+    @Column(name = "mp3_org_file_name", length = 20, nullable = false)
     private String mp3OrgFileName;
 
-    @Column(name = "mp3_new_file_name")
+    @Column(name = "mp3_new_file_name", length = 32, nullable = false)
     private String mp3NewFileName;
 
+    @Column(nullable = false)
     private long size;
 
-    @Column(name = "mp3_file_ext")
+    @Column(name = "mp3_file_ext", length = 5, nullable = false)
     private String mp3FileExt;
 
     @OneToOne(fetch = FetchType.LAZY)

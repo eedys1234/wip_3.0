@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Recent {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recent_id")
     private Long id;
 

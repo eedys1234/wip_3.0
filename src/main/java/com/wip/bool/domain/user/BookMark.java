@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class BookMark {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookmark_id")
     private Long id;
 
