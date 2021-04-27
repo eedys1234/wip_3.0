@@ -44,7 +44,7 @@ public class UserRepository {
         return queryFactory.selectFrom(QUser.user)
                 .where(QUser.user.email.eq(email)
                         .and(QUser.user.userPassword.eq(userPassword))
-                        .and(QUser.user.role.eq(Role.NOMARL).or(QUser.user.role.eq(Role.ADMIN))))
+                        .and(QUser.user.role.eq(Role.NORMAL).or(QUser.user.role.eq(Role.ADMIN))))
                 .fetchCount();
     }
 

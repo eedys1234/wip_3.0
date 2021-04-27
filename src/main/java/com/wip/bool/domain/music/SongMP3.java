@@ -4,7 +4,7 @@ import com.wip.bool.domain.cmmn.BaseEntity;
 import com.wip.bool.domain.cmmn.file.FileManager;
 import com.wip.bool.domain.cmmn.file.FileNIOManager;
 import com.wip.bool.domain.cmmn.retry.Retry;
-import com.wip.bool.exception.handler.NotFoundFileException;
+import com.wip.bool.exception.excp.NotFoundFileException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

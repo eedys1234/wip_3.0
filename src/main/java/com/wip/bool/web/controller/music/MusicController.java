@@ -1,6 +1,6 @@
 package com.wip.bool.web.controller.music;
 
-import com.wip.bool.exception.handler.NotFoundFileException;
+import com.wip.bool.exception.excp.NotFoundFileException;
 import com.wip.bool.service.music.SongDetailService;
 import com.wip.bool.service.music.SongMP3Service;
 import com.wip.bool.service.music.SongMasterService;
