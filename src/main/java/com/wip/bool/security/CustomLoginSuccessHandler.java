@@ -1,7 +1,6 @@
 package com.wip.bool.security;
 
 import com.wip.bool.domain.user.CustomUser;
-import com.wip.bool.domain.user.User;
 import com.wip.bool.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,8 +18,7 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                         final Authentication authentication) {
 
-        final User user = ((CustomUser)authentication.getPrincipal()).getUser();
-        final String token = jwtTokenProvider.createToken(user);
+        final String token = jwtTokenProvider.createToken(((CustomUser)authentication.getPrincipal()).getUser());
         response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
     }
 }

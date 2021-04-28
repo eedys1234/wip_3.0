@@ -1,5 +1,6 @@
 package com.wip.bool.jwt;
 
+import com.wip.bool.domain.user.CustomUser;
 import com.wip.bool.domain.user.Role;
 import com.wip.bool.domain.user.User;
 import io.jsonwebtoken.Claims;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -40,8 +42,8 @@ public class JwtTokenProvider {
         SECURITY_KEY = Base64.getEncoder().encodeToString(SECURITY_KEY.getBytes());
     }
 
-    public boolean isValidateToken(String jwt) {
-        String sub = String.valueOf(getBodyFromToken(jwt).get("sub"));
+    public boolean isValidateToken(String token) {
+        String sub = String.valueOf(getBodyFromToken(token).get("sub"));
         if(!StringUtils.isEmpty(sub)) {
             return true;
         }
@@ -49,9 +51,9 @@ public class JwtTokenProvider {
         return false;
     }
 
-    public boolean isExpireToken(String jwt) {
+    public boolean isExpireToken(String token) {
 
-        long exp = (long) getBodyFromToken(jwt).get("exp");
+        long exp = (long) getBodyFromToken(token).get("exp");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expire = LocalDateTime.ofInstant(Instant.ofEpochMilli(exp), ZoneId.systemDefault());
 
@@ -75,9 +77,28 @@ public class JwtTokenProvider {
     }
 
     //JWT 토큰 생성
-    public String createToken(User user) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(user.getId()));
-        claims.put("role", user.getRole());
+    public <T> String createToken(T userDetails) {
+
+        String email = "";
+        Role role = null;
+
+        if(userDetails instanceof CustomUser) {
+            User user = ((CustomUser) userDetails).getUser();
+            email = user.getEmail();
+            role = user.getRole();
+        }
+
+        if(userDetails instanceof DefaultOAuth2User) {
+            DefaultOAuth2User user = ((DefaultOAuth2User) userDetails);
+            email = String.valueOf(user.getAttributes().get("email"));
+            role = user.getAuthorities().stream().findFirst()
+                    .map(auth -> Role.valueOf(auth.getAuthority()))
+                    .orElseThrow(()-> new IllegalArgumentException());
+
+        }
+
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("role", role);
         Date now = new Date();
 
         return Jwts.builder()

@@ -63,7 +63,7 @@ public class OAuthAttributes {
     }
 
     public User toEntity() {
-        return User.createUser(this.email, this.name, this.profiles, Role.REQUEST);
+        return User.createUser(this.email, this.name, this.profiles, Role.ROLE_REQUEST);
     }
 
 }

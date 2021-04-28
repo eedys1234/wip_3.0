@@ -2,8 +2,8 @@ package com.wip.bool.cmmn.auth;
 
 public enum AuthorizeSort {
 
-    DEPT,
-    POSITION,
-    
+//    DEPT("dept"),
+//    POSITION("position"),
+//    MUSIC("music"),
 
 }

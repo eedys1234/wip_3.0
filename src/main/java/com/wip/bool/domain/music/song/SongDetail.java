@@ -4,6 +4,7 @@ import com.wip.bool.domain.bible.WordsMaster;
 import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.domain.music.guitar.GuitarCode;
 import com.wip.bool.domain.music.mp3.SongMP3;
+import com.wip.bool.domain.music.sheet.SongSheet;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

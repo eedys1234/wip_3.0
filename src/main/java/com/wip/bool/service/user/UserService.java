@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,9 +107,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
     @Transactional(readOnly = true)
     public Long login(UserDto.UserLoginRequest requestDto) {
-
-        String hashingPassword = new PBKDF2(requestDto.getUserPassword()).hash();
-        return userRepository.login(requestDto.getEmail(), hashingPassword);
+        return userRepository.login(requestDto.getEmail(), passwordEncoder.encode(requestDto.getUserPassword()));
     }
 
     private void duplicationUser(String email) {
@@ -139,7 +138,10 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
         User user = saveOrUpdate(attributes);
 
-        return null;
+        return new DefaultOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
+                attributes.getAttributes(),
+                attributes.getNameAttributeKey());
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {

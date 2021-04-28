@@ -314,7 +314,7 @@ public class MusicControllerTest {
                 , guitarCodes.get(0), wordsMasters.get(0));
         songDetailRepository.save(songDetail);
 
-        User user = User.createUser("eedys123@gmail.com", "leeJeng", "", Role.NORMAL);
+        User user = User.createUser("eedys123@gmail.com", "leeJeng", "", Role.ROLE_NORMAL);
         userRepository.save(user);
 
         BookMark bookMark = BookMark.createBookMark(user, songDetail);

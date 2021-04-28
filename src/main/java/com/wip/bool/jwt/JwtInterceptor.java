@@ -25,7 +25,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                 // token으로부터 추출된 권한에 따른 url 체킹 로직
                 Role role = jwtTokenProvider.getRoleFromToken(token);
-                String url = request.getRequestURI();
 
 
                 return true;

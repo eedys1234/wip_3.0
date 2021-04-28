@@ -2,8 +2,8 @@ package com.wip.bool.service.music;
 
 import com.wip.bool.domain.music.song.SongDetail;
 import com.wip.bool.domain.music.song.SongDetailRepository;
-import com.wip.bool.domain.music.song.SongSheet;
-import com.wip.bool.domain.music.song.SongSheetRepository;
+import com.wip.bool.domain.music.sheet.SongSheet;
+import com.wip.bool.domain.music.sheet.SongSheetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

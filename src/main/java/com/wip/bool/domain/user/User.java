@@ -111,7 +111,7 @@ public class User extends BaseEntity {
     }
 
     public User approve() {
-        this.role = Role.NORMAL;
+        this.role = Role.ROLE_NORMAL;
         return updateUserConfig(UserConfig.createUserConfig());
     }
 

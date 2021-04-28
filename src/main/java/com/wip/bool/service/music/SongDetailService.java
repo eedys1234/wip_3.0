@@ -9,6 +9,8 @@ import com.wip.bool.domain.music.guitar.GuitarCode;
 import com.wip.bool.domain.music.guitar.GuitarCodeRepository;
 import com.wip.bool.domain.music.mp3.SongMP3;
 import com.wip.bool.domain.music.mp3.SongMP3Repository;
+import com.wip.bool.domain.music.sheet.SongSheet;
+import com.wip.bool.domain.music.sheet.SongSheetRepository;
 import com.wip.bool.domain.music.song.*;
 import com.wip.bool.web.dto.music.SongDetailDto;
 import lombok.RequiredArgsConstructor;

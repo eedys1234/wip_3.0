@@ -1,10 +1,11 @@
-package com.wip.bool.domain.music.song;
+package com.wip.bool.domain.music.sheet;
 
 import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.cmmn.file.FileManager;
 import com.wip.bool.cmmn.file.FileNIOManager;
 import com.wip.bool.cmmn.retry.Retry;
 import com.wip.bool.cmmn.type.FileExtType;
+import com.wip.bool.domain.music.song.SongDetail;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

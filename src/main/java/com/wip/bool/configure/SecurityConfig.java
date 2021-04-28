@@ -4,6 +4,7 @@ import com.wip.bool.jwt.JwtTokenProvider;
 import com.wip.bool.security.CustomAuthenticationFilter;
 import com.wip.bool.security.CustomAuthenticationProvider;
 import com.wip.bool.security.CustomLoginSuccessHandler;
+import com.wip.bool.security.CustomOauth2SuccessHandler;
 import com.wip.bool.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,12 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-//        .antMatchers("/api/v1/user").permitAll()
-//        .antMatchers("/api/v1/**").hasRole(Role.NORMAL.getKey())
-//        .antMatchers("/api/v1/user/approval", "/api/v1/user/{id}").hasRole(Role.ADMIN.getKey())
-        .anyRequest().permitAll()
+        .antMatchers("/user/login", "/user/wip-login").permitAll()
+        .anyRequest().authenticated()
         .and()
-        .oauth2Login().userInfoEndpoint().userService(userService).and()
+        .oauth2Login().userInfoEndpoint().userService(userService).and().successHandler(customOauth2SuccessHandler())
         .and()
         .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
@@ -79,6 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CustomLoginSuccessHandler customLoginSuccessHandler() {
         return new CustomLoginSuccessHandler();
+    }
+
+    @Bean
+    public CustomOauth2SuccessHandler customOauth2SuccessHandler() {
+        return new CustomOauth2SuccessHandler();
     }
 
     @Bean
