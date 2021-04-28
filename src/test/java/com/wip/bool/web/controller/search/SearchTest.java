@@ -1,8 +1,8 @@
 package com.wip.bool.web.controller.search;
 
-import com.wip.bool.domain.cmmn.dictionary.SearchStore;
-import com.wip.bool.domain.cmmn.dictionary.kmp.KMPStore;
-import com.wip.bool.domain.cmmn.dictionary.standard.Initializer;
+import com.wip.bool.cmmn.dictionary.SearchStore;
+import com.wip.bool.cmmn.dictionary.kmp.KMPStore;
+import com.wip.bool.cmmn.dictionary.standard.Initializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

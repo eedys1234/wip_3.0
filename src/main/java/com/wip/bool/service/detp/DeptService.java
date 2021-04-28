@@ -1,6 +1,6 @@
 package com.wip.bool.service.detp;
 
-import com.wip.bool.domain.cmmn.CodeMapper;
+import com.wip.bool.cmmn.CodeMapper;
 import com.wip.bool.domain.dept.Dept;
 import com.wip.bool.domain.dept.DeptRepository;
 import com.wip.bool.web.dto.dept.DeptDto;

@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping(value = "/user")
+    @PostMapping(value = "/user")
     public ResponseEntity<Long> join(@RequestBody @Valid UserDto.UserSaveRequest requestDto,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 

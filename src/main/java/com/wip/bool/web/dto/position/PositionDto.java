@@ -1,6 +1,6 @@
 package com.wip.bool.web.dto.position;
 
-import com.wip.bool.domain.cmmn.CodeModel;
+import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.domain.position.Position;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,9 @@
 package com.wip.bool.domain.user;
 
-import com.wip.bool.domain.cmmn.BaseEntity;
+import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.domain.dept.Dept;
 import com.wip.bool.domain.position.Position;
+import com.wip.bool.domain.userbox.UserBox;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

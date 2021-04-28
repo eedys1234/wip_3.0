@@ -1,6 +1,6 @@
 package com.wip.bool.web.dto.music;
 
-import com.wip.bool.domain.music.SongMaster;
+import com.wip.bool.domain.music.song.SongMaster;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

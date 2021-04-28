@@ -1,6 +1,6 @@
 package com.wip.bool.web.dto.user;
 
-import com.wip.bool.domain.user.UserBox;
+import com.wip.bool.domain.userbox.UserBox;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

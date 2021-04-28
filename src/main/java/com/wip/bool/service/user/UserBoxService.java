@@ -2,8 +2,8 @@ package com.wip.bool.service.user;
 
 
 import com.wip.bool.domain.user.User;
-import com.wip.bool.domain.user.UserBox;
-import com.wip.bool.domain.user.UserBoxRepository;
+import com.wip.bool.domain.userbox.UserBox;
+import com.wip.bool.domain.userbox.UserBoxRepository;
 import com.wip.bool.domain.user.UserRepository;
 import com.wip.bool.web.dto.user.UserBoxDto;
 import lombok.RequiredArgsConstructor;

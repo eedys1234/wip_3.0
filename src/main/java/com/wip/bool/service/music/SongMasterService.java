@@ -1,8 +1,8 @@
 package com.wip.bool.service.music;
 
-import com.wip.bool.domain.cmmn.CodeMapper;
-import com.wip.bool.domain.music.SongMaster;
-import com.wip.bool.domain.music.SongMasterRepository;
+import com.wip.bool.cmmn.CodeMapper;
+import com.wip.bool.domain.music.song.SongMaster;
+import com.wip.bool.domain.music.song.SongMasterRepository;
 import com.wip.bool.web.dto.music.SongMasterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

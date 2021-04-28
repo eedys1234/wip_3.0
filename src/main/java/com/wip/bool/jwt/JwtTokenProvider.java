@@ -1,5 +1,6 @@
 package com.wip.bool.jwt;
 
+import com.wip.bool.domain.user.Role;
 import com.wip.bool.domain.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -56,12 +58,20 @@ public class JwtTokenProvider {
         return now.isAfter(expire);
     }
 
-    public Map<String, Object> getBodyFromToken(String jwt) {
-        return Jwts.parser().setSigningKey(SECURITY_KEY).parseClaimsJws(jwt).getBody();
+    public Map<String, Object> getBodyFromToken(String token) {
+        return Jwts.parser().setSigningKey(SECURITY_KEY).parseClaimsJws(token).getBody();
     }
 
     public String getTokenFromHeader(String header) {
         return header.split(" ")[1];
+    }
+
+    public Role getRoleFromToken(String token) {
+        Map<String, Object> body = getBodyFromToken(token);
+
+        return Optional.ofNullable(body.get("role"))
+                .map(u -> (Role) u)
+                .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 token입니다. "));
     }
 
     //JWT 토큰 생성

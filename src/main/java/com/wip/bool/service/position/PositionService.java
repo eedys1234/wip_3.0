@@ -1,6 +1,6 @@
 package com.wip.bool.service.position;
 
-import com.wip.bool.domain.cmmn.CodeMapper;
+import com.wip.bool.cmmn.CodeMapper;
 import com.wip.bool.domain.position.Position;
 import com.wip.bool.domain.position.PositionRepository;
 import com.wip.bool.web.dto.position.PositionDto;

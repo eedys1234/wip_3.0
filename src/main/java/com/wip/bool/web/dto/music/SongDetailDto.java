@@ -1,8 +1,8 @@
 package com.wip.bool.web.dto.music;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wip.bool.domain.music.SongDetail;
-import com.wip.bool.domain.user.BookMark;
+import com.wip.bool.domain.music.song.SongDetail;
+import com.wip.bool.domain.bookmark.BookMark;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

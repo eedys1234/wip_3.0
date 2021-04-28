@@ -1,6 +1,6 @@
 package com.wip.bool.web.dto.dept;
 
-import com.wip.bool.domain.cmmn.CodeModel;
+import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.domain.dept.Dept;
 import lombok.Builder;
 import lombok.Getter;

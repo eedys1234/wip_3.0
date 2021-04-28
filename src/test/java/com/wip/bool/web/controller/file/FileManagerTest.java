@@ -1,7 +1,7 @@
 package com.wip.bool.web.controller.file;
 
-import com.wip.bool.domain.cmmn.file.FileManager;
-import com.wip.bool.domain.cmmn.file.FileNIOManager;
+import com.wip.bool.cmmn.file.FileManager;
+import com.wip.bool.cmmn.file.FileNIOManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
