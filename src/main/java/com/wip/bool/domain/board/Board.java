@@ -1,6 +1,7 @@
 package com.wip.bool.domain.board;
 
 import com.wip.bool.cmmn.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "board")
 public class Board extends BaseEntity {
@@ -19,7 +20,10 @@ public class Board extends BaseEntity {
     @Column(name = "board_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -27,4 +31,7 @@ public class Board extends BaseEntity {
 
     @OneToMany
     private List<ImageFile> imageFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<Reply> replies = new ArrayList<>();
 }
