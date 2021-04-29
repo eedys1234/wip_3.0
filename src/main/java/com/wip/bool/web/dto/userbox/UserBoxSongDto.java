@@ -1,11 +1,23 @@
-package com.wip.bool.web.dto.user;
+package com.wip.bool.web.dto.userbox;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 public class UserBoxSongDto {
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserBoxSongSaveRequest {
+
+        @Positive
+        private Long songDetailId;
+
+        @Positive
+        private Long userBoxId;
+    }
 
     @Getter
     @NoArgsConstructor

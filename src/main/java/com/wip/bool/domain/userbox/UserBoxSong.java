@@ -32,4 +32,18 @@ public class UserBoxSong {
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
+    public static UserBoxSong createUserBoxSong(SongDetail songDetail, UserBox userBox) {
+        UserBoxSong userBoxSong = new UserBoxSong();
+        userBoxSong.updateSongDetail(songDetail);
+        userBoxSong.updateUserBox(userBox);
+        return userBoxSong;
+    }
+
+    public void updateSongDetail(SongDetail songDetail) {
+        this.songDetail = songDetail;
+    }
+
+    public void updateUserBox(UserBox userBox) {
+        this.userBox = userBox;
+    }
 }

@@ -1,11 +1,20 @@
-package com.wip.bool.web.dto.user;
+package com.wip.bool.web.dto.bookmark;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 public class BookMarkDto {
+
+    @Getter
+    @NoArgsConstructor
+    public static class BookMarkSaveRequest {
+
+        @Positive
+        private Long songDetailId;
+    }
 
     @Getter
     @NoArgsConstructor

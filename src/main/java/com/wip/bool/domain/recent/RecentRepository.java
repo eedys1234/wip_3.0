@@ -2,7 +2,7 @@ package com.wip.bool.domain.recent;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.web.dto.user.RecentDto;
+import com.wip.bool.web.dto.recent.RecentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

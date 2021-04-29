@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
-import com.wip.bool.web.dto.music.SongDetailDto;
+import com.wip.bool.web.dto.music.song.SongDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

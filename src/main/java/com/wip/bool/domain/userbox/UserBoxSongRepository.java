@@ -5,16 +5,17 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
-import com.wip.bool.web.dto.user.UserBoxSongDto;
+import com.wip.bool.web.dto.userbox.UserBoxSongDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
-import static com.wip.bool.domain.user.QUserBoxSong.userBoxSong;
-import static com.wip.bool.domain.user.QUserBox.userBox;
 import static com.wip.bool.domain.music.QSongDetail.songDetail;
+import static com.wip.bool.domain.user.QUserBox.userBox;
+import static com.wip.bool.domain.user.QUserBoxSong.userBoxSong;
 
 @Repository
 @RequiredArgsConstructor
@@ -48,6 +49,15 @@ public class UserBoxSongRepository {
                 .offset(offset)
                 .limit(size)
                 .fetch();
+    }
+
+    public Long delete(UserBoxSong userBoxSong) {
+        entityManager.remove(userBoxSong);
+        return 1L;
+    }
+
+    public Optional<UserBoxSong> findById(Long userBoxSongId) {
+        return Optional.ofNullable(entityManager.find(UserBoxSong.class, userBoxSongId));
     }
 
     private OrderSpecifier getOrder(SortType sortType, OrderType orderType) {

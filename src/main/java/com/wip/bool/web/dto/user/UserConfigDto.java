@@ -1,5 +1,6 @@
 package com.wip.bool.web.dto.user;
 
+import com.wip.bool.domain.user.UserConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +14,20 @@ public class UserConfigDto {
         private String viewType;
         private String recvAlaram;
 
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserConfigResponse {
+
+        private String fontSize;
+        private String viewType;
+        private String recvAlaram;
+
+        public UserConfigResponse(UserConfig userConfig) {
+            this.fontSize = userConfig.getFontSize();
+            this.viewType = userConfig.getViewType();
+            this.recvAlaram = userConfig.getRecvAlaram();;
+        }
     }
 }

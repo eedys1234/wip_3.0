@@ -32,11 +32,11 @@ public class UserConfigService {
     }
 
     @Transactional(readOnly = true)
-    public UserConfig findOne(Long userId) {
+    public UserConfigDto.UserConfigResponse findOne(Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 존재하지 않습니다."));
 
-        return user.getUserConfig();
+        return new UserConfigDto.UserConfigResponse(user.getUserConfig());
     }
 }

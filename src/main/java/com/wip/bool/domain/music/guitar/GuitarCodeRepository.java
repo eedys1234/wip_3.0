@@ -31,4 +31,9 @@ public class GuitarCodeRepository {
                 .fetch();
     }
 
+    public Integer maxOrder() {
+        return queryFactory.select(QGuitarCode.guitarCode.guitarOrder.max())
+                .from(QGuitarCode.guitarCode)
+                .fetchFirst();
+    }
 }

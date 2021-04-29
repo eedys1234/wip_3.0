@@ -1,7 +1,7 @@
-package com.wip.bool.web.controller.music;
+package com.wip.bool.web.controller.music.song;
 
-import com.wip.bool.service.music.SongMasterService;
-import com.wip.bool.web.dto.music.SongMasterDto;
+import com.wip.bool.service.music.song.SongMasterService;
+import com.wip.bool.web.dto.music.song.SongMasterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

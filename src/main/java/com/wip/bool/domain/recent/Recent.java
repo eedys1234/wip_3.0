@@ -29,5 +29,21 @@ public class Recent {
     private SongDetail songDetail;
 
     @CreatedDate
+    @Column(name = "create_date")
     private LocalDateTime createDate;
+
+    public static Recent createRecent(SongDetail songDetail, User user) {
+        Recent recent = new Recent();
+        recent.updateSongDetail(songDetail);
+        recent.updateUser(user);
+        return recent;
+    }
+
+    public void updateUser(User user) {
+        this.user = user;
+    }
+
+    public void updateSongDetail(SongDetail songDetail) {
+        this.songDetail = songDetail;
+    }
 }

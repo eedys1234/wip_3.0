@@ -20,6 +20,6 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         final String token = jwtTokenProvider.createToken((DefaultOAuth2User) authentication.getPrincipal());
-        response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
+        response.addHeader(AuthConstants.AUTH_HEADER, String.format("%s %s",AuthConstants.TOKEN_TYPE, token));
     }
 }

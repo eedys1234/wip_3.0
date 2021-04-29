@@ -1,4 +1,4 @@
-package com.wip.bool.service.music;
+package com.wip.bool.service.music.sheet;
 
 import com.wip.bool.domain.music.song.SongDetail;
 import com.wip.bool.domain.music.song.SongDetailRepository;

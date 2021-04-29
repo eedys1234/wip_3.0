@@ -5,12 +5,13 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
-import com.wip.bool.web.dto.user.BookMarkDto;
+import com.wip.bool.web.dto.bookmark.BookMarkDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.wip.bool.domain.music.QSongDetail.songDetail;
 import static com.wip.bool.domain.music.QGuitarCode.guitarCode;
@@ -33,6 +34,10 @@ public class BookMarkRepository {
     public Long delete(BookMark bookMark) {
         entityManager.remove(bookMark);
         return 1L;
+    }
+
+    public Optional<BookMark> findById(Long bookMarkId) {
+        return Optional.ofNullable(entityManager.find(BookMark.class, bookMarkId));
     }
 
     // TODO : 드라이빙 테이블은 song-detail, 드리븐 테이블은 book-mark

@@ -1,4 +1,4 @@
-package com.wip.bool.web.dto.music;
+package com.wip.bool.web.dto.music.song;
 
 import com.wip.bool.domain.music.song.SongMaster;
 import lombok.Getter;

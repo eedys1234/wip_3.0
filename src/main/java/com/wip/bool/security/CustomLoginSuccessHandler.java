@@ -19,6 +19,6 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                                         final Authentication authentication) {
 
         final String token = jwtTokenProvider.createToken(((CustomUser)authentication.getPrincipal()).getUser());
-        response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
+        response.addHeader(AuthConstants.AUTH_HEADER, String.format("%s %s",AuthConstants.TOKEN_TYPE, token));
     }
 }

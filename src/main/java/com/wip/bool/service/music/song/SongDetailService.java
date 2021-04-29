@@ -1,4 +1,4 @@
-package com.wip.bool.service.music;
+package com.wip.bool.service.music.song;
 
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
@@ -12,7 +12,7 @@ import com.wip.bool.domain.music.mp3.SongMP3Repository;
 import com.wip.bool.domain.music.sheet.SongSheet;
 import com.wip.bool.domain.music.sheet.SongSheetRepository;
 import com.wip.bool.domain.music.song.*;
-import com.wip.bool.web.dto.music.SongDetailDto;
+import com.wip.bool.web.dto.music.song.SongDetailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
