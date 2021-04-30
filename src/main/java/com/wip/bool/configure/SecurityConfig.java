@@ -5,7 +5,7 @@ import com.wip.bool.security.CustomAuthenticationFilter;
 import com.wip.bool.security.CustomAuthenticationProvider;
 import com.wip.bool.security.CustomLoginSuccessHandler;
 import com.wip.bool.security.CustomOauth2SuccessHandler;
-import com.wip.bool.service.user.UserService;
+import com.wip.bool.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

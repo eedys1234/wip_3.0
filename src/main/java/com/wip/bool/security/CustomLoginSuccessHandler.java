@@ -1,6 +1,6 @@
 package com.wip.bool.security;
 
-import com.wip.bool.domain.user.CustomUser;
+import com.wip.bool.user.domain.CustomUser;
 import com.wip.bool.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -1,7 +1,7 @@
 package com.wip.bool.security;
 
-import com.wip.bool.domain.user.CustomUser;
-import com.wip.bool.service.user.UserService;
+import com.wip.bool.user.domain.CustomUser;
+import com.wip.bool.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

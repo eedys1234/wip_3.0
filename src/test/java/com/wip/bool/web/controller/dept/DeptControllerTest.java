@@ -1,8 +1,8 @@
 package com.wip.bool.web.controller.dept;
 
-import com.wip.bool.domain.dept.DeptRepository;
-import com.wip.bool.service.detp.DeptService;
-import com.wip.bool.web.dto.dept.DeptDto;
+import com.wip.bool.dept.domain.DeptRepository;
+import com.wip.bool.dept.service.DeptService;
+import com.wip.bool.dept.dto.DeptDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

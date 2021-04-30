@@ -1,6 +1,6 @@
 package com.wip.bool.cmmn.dictionary;
 
-import com.wip.bool.domain.music.song.SongDetailRepository;
+import com.wip.bool.music.song.domain.SongDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

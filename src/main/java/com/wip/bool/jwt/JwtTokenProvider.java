@@ -1,8 +1,8 @@
 package com.wip.bool.jwt;
 
-import com.wip.bool.domain.user.CustomUser;
-import com.wip.bool.domain.user.Role;
-import com.wip.bool.domain.user.User;
+import com.wip.bool.user.domain.CustomUser;
+import com.wip.bool.user.domain.Role;
+import com.wip.bool.user.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

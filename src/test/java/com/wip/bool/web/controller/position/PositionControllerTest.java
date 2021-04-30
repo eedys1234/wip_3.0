@@ -1,9 +1,9 @@
 package com.wip.bool.web.controller.position;
 
-import com.wip.bool.domain.position.Position;
-import com.wip.bool.domain.position.PositionRepository;
-import com.wip.bool.service.position.PositionService;
-import com.wip.bool.web.dto.position.PositionDto;
+import com.wip.bool.position.domain.Position;
+import com.wip.bool.position.domain.PositionRepository;
+import com.wip.bool.position.service.PositionService;
+import com.wip.bool.position.dto.PositionDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

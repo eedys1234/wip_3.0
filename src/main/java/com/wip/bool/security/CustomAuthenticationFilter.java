@@ -1,7 +1,7 @@
 package com.wip.bool.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wip.bool.web.dto.user.UserDto;
+import com.wip.bool.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;

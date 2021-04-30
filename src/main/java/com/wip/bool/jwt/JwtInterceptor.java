@@ -1,6 +1,6 @@
 package com.wip.bool.jwt;
 
-import com.wip.bool.domain.user.Role;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.security.AuthConstants;
 import org.springframework.beans.factory.annotation.Autowired;

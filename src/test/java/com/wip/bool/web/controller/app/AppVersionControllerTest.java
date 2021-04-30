@@ -1,9 +1,9 @@
 package com.wip.bool.web.controller.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wip.bool.domain.app.AppVersion;
-import com.wip.bool.domain.app.AppVersionRepository;
-import com.wip.bool.web.dto.app.AppVersionDto;
+import com.wip.bool.app.domain.AppVersion;
+import com.wip.bool.app.domain.AppVersionRepository;
+import com.wip.bool.app.dto.AppVersionDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
