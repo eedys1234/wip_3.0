@@ -1,7 +1,6 @@
 package com.wip.bool.domain.music.guitar;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.domain.music.QGuitarCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

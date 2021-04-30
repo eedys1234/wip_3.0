@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.wip.bool.domain.user.QRecent.recent;
-import static com.wip.bool.domain.music.QSongDetail.songDetail;
+import static com.wip.bool.domain.recent.QRecent.recent;
+import static com.wip.bool.domain.music.song.QSongDetail.songDetail;
 
 @Repository
 @RequiredArgsConstructor

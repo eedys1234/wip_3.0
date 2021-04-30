@@ -1,7 +1,6 @@
 package com.wip.bool.domain.music.sheet;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.domain.music.QSongSheet;
 import com.wip.bool.domain.music.song.SongDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

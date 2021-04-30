@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
-import static com.wip.bool.domain.music.QSongMP3.songMP3;
+import static com.wip.bool.domain.music.mp3.QSongMP3.songMP3;
 
 @Repository
 @RequiredArgsConstructor

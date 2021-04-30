@@ -2,7 +2,6 @@ package com.wip.bool.domain.music.song;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.domain.music.QSongMaster;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

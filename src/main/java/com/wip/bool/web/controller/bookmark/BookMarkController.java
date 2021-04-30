@@ -21,7 +21,7 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @PostMapping(value = "/bookmark")
-    public ResponseEntity<Long> save(@Valid @RequestBody BookMarkDto.BookMarkSaveReqeust reqeustDto,
+    public ResponseEntity<Long> save(@Valid @RequestBody BookMarkDto.BookMarkSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -29,7 +29,7 @@ public class BookMarkController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = bookMarkService.save(userId, reqeustDto);
+        Long id = bookMarkService.save(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());

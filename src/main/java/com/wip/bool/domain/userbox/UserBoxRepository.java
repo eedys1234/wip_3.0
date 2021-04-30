@@ -1,7 +1,6 @@
 package com.wip.bool.domain.userbox;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.domain.user.QUserBox;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

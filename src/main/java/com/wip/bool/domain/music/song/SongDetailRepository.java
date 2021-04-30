@@ -14,9 +14,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wip.bool.domain.music.QSongDetail.songDetail;
-import static com.wip.bool.domain.music.QGuitarCode.guitarCode;
-import static com.wip.bool.domain.user.QBookMark.bookMark;
+import static com.wip.bool.domain.music.guitar.QGuitarCode.guitarCode;
+import static com.wip.bool.domain.music.song.QSongDetail.songDetail;
+import static com.wip.bool.domain.bookmark.QBookMark.bookMark;
 
 @Repository
 @RequiredArgsConstructor
