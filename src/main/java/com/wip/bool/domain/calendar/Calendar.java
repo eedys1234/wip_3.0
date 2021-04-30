@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,8 +20,15 @@ public class Calendar extends BaseEntity {
     @Column(name = "caledar_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "share_type")
+    private ShareType shareType;
+
     @Column(name = "calendar_date", nullable = false)
-    private LocalDate calendarDate;
+    private LocalDateTime calendarDate;
+
+    @Column(length = 30, nullable = false)
+    private String title;
 
     @Column(name = "calendar_content", length = 150, nullable = false)
     private String content;
