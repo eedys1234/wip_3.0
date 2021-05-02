@@ -13,9 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,16 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable()
         .csrf().disable()
 //        .headers().frameOptions().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-        .antMatchers("/user/login", "/user/wip-login").permitAll()
-        .anyRequest().authenticated()
-        .and()
+//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//        .and()
+//        .authorizeRequests()
+//        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+//        .antMatchers("/user/login", "/user/wip-login").permitAll()
+//        .anyRequest().authenticated()
+//        .and()
 //        .oauth2Login().userInfoEndpoint().userService(userService).and().successHandler(customOauth2SuccessHandler())
 //        .and()
-        .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+//        .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
     }
 

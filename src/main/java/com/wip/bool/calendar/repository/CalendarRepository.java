@@ -31,6 +31,14 @@ public class CalendarRepository {
         return Optional.ofNullable(entityManager.find(Calendar.class, calendarId));
     }
 
+    public Optional<Calendar> findByIdAndUserId(Long userId, Long calendarId) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(calendar)
+                            .where(calendar.id.eq(calendarId), calendar.user.id.eq(userId))
+                            .fetchOne()
+        );
+    }
+
     public List<CalendarDto.CalendarResponse> deptCalendars(List<Long> userIds, LocalDateTime fromDate, LocalDateTime toDate) {
 
         return queryFactory.select(Projections.constructor(CalendarDto.CalendarResponse.class,

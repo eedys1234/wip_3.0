@@ -64,7 +64,7 @@ public class CalendarRepositoryTest {
     }
 
     @Test
-    public void 일정_저장() throws Exception {
+    public void 일정_추가_Repository() throws Exception {
 
         //given
         String title = "본사 출근";
@@ -89,7 +89,7 @@ public class CalendarRepositoryTest {
 
     @DisplayName("사용자가 속한 부서원들과 전체의 일정 가져오기")
     @Test
-    public void 일정_리스트_가져오기_부서() throws Exception {
+    public void 일정_리스트_가져오기_부서_Repository() throws Exception {
 
         //given
         List<User> users = userRepository.findAll();
@@ -130,7 +130,7 @@ public class CalendarRepositoryTest {
 
     @DisplayName(value = "사용자가 등록한 개인일정 리스트 가져오기")
     @Test
-    public void 일정_가져오기_개인() throws Exception {
+    public void 일정_가져오기_개인_Repository() throws Exception {
 
         //given
         String title = "본사 출근";
@@ -158,7 +158,7 @@ public class CalendarRepositoryTest {
     }
 
     @Test
-    public void 일정_삭제() throws Exception {
+    public void 일정_삭제_Repository() throws Exception {
 
         //given
         String title = "OO솔루션 도입검토 회의";

@@ -79,9 +79,9 @@ public class CalendarService {
     }
 
     @Transactional
-    public Long delete(Long calendarId) {
+    public Long delete(Long userId, Long calendarId) {
 
-        Calendar calendar = calendarRepository.findById(calendarId)
+        Calendar calendar = calendarRepository.findByIdAndUserId(userId, calendarId)
                 .orElseThrow(() -> new IllegalArgumentException("일정이 존재하지 않습니다. id = " + calendarId));
 
         return calendarRepository.delete(calendar);

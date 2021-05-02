@@ -40,7 +40,7 @@ public class CalendarController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/calendar/dept")
+    @GetMapping(value = "/calendar-dept")
     public ResponseEntity<List<CalendarDto.CalendarResponse>> getDeptCalendars(
             @RequestHeader("userId") @Positive Long userId,
             @RequestParam("from") @Positive Long from,
@@ -49,7 +49,7 @@ public class CalendarController {
         return ResponseEntity.ok(calendarService.getDeptCalendars(userId, from, to));
     }
 
-    @GetMapping(value = "/calendar/individual")
+    @GetMapping(value = "/calendar-individual")
     public ResponseEntity<List<CalendarDto.CalendarResponse>> getIndividualCalendar(
             @RequestHeader("userId") @Positive Long userId,
             @RequestParam("from") @Positive Long from,
@@ -60,8 +60,9 @@ public class CalendarController {
     }
 
     @DeleteMapping(value = "/calendar/{calendarId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("calendarId") Long calendarId) {
+    public ResponseEntity<Long> delete(@PathVariable("calendarId") Long calendarId,
+                                       @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(calendarService.delete(calendarId));
+        return ResponseEntity.ok(calendarService.delete(userId, calendarId));
     }
 }

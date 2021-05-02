@@ -51,19 +51,19 @@ public class CalendarServiceTest {
         UserType userType = UserType.WIP;
         Role role = Role.ROLE_NORMAL;
 
-        Optional<User> opt = Optional.ofNullable(User.createUser(email, password, profiles, userType, role));
-        ReflectionTestUtils.setField(opt.get(), "id", 1L);
+        User user = User.createUser(email, password, profiles, userType, role);
+        ReflectionTestUtils.setField(user, "id", 1L);
 
-        return opt;
+        return Optional.ofNullable(user);
     }
 
-    private Calendar getCalendar(Optional<User> opt) {
+    private Calendar getCalendar(User user) {
         String title = "본사 출근";
         String content = "OO팀 부서와의 OO관련 회의";
         ShareType shareType = ShareType.DEPT;
         LocalDateTime now = LocalDateTime.now();
 
-        Calendar calendar = Calendar.createCalender(title, content, now, shareType, opt.get());
+        Calendar calendar = Calendar.createCalender(title, content, now, shareType, user);
         ReflectionTestUtils.setField(calendar, "id", 1L);
         return calendar;
     }
@@ -122,14 +122,14 @@ public class CalendarServiceTest {
         return dept;
     }
 
-    @DisplayName("일정_저장하기")
+    @DisplayName("일정_추가하기")
     @Test
-    public void 일정_저장() throws Exception {
+    public void 일정_추가_Service() throws Exception {
 
         //given
         Long userId = 1L;
         Optional<User> opt = getUser();
-        Calendar calendar = getCalendar(opt);
+        Calendar calendar = getCalendar(opt.get());
         CalendarDto.CalendarSaveRequest requestDto = getCalendarSaveReqeustDto();
 
         //when
@@ -147,7 +147,7 @@ public class CalendarServiceTest {
     }
 
     @Test
-    public void 일정_리스트_가져오기_부서() throws Exception {
+    public void 일정_리스트_가져오기_부서_Service() throws Exception {
 
         //given
         Dept dept = getDept();
@@ -190,7 +190,7 @@ public class CalendarServiceTest {
     }
 
     @Test
-    public void 일정_리스트_가져오기_개인() throws Exception {
+    public void 일정_리스트_가져오기_개인_Service() throws Exception {
 
         //given
         Dept dept = getDept();
@@ -225,21 +225,22 @@ public class CalendarServiceTest {
     }
 
     @Test
-    public void 일정_삭제() throws Exception {
+    public void 일정_삭제_Service() throws Exception {
 
         //given
-        Calendar calendar = getCalendar(getUser());
+        Optional<User> opt = getUser();
+        Calendar calendar = getCalendar(opt.get());
 
         //when
-        doReturn(Optional.ofNullable(calendar)).when(calendarRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(calendar)).when(calendarRepository).findByIdAndUserId(any(Long.class), any(Long.class));
         doReturn(1L).when(calendarRepository).delete(any(Calendar.class));
-        Long resValue = calendarService.delete(calendar.getId());
+        Long resValue = calendarService.delete(opt.get().getId(), calendar.getId());
 
         //then
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(calendarRepository, times(1)).findById(any(Long.class));
+        verify(calendarRepository, times(1)).findByIdAndUserId(any(Long.class), any(Long.class));
         verify(calendarRepository, times(1)).delete(any(Calendar.class));
     }
 }
