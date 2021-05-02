@@ -20,9 +20,15 @@ public class Reply extends BaseEntity {
     @Column(name = "reply_id")
     private Long id;
 
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @OneToMany
+    private List<ImageFile> imageFiles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -30,4 +36,5 @@ public class Reply extends BaseEntity {
 
     @OneToMany(mappedBy = "parentReply")
     private List<Reply> childReply = new ArrayList<>();
+
 }

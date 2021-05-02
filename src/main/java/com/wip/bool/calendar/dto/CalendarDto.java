@@ -1,7 +1,6 @@
 package com.wip.bool.calendar.dto;
 
 import com.wip.bool.calendar.repository.ShareType;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,13 +26,13 @@ public class CalendarDto {
         @Positive
         private Long calendarDate;
 
-        @Builder
-        public CalendarSaveRequest(String title, String content, String shareType, Long calendarDate) {
-            this.title = title;
-            this.content = content;
-            this.shareType = shareType;
-            this.calendarDate = calendarDate;
-        }
+//        @Builder
+//        public CalendarSaveRequest(String title, String content, String shareType, Long calendarDate) {
+//            this.title = title;
+//            this.content = content;
+//            this.shareType = shareType;
+//            this.calendarDate = calendarDate;
+//        }
     }
 
     @Getter

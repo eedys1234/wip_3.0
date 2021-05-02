@@ -17,23 +17,20 @@ public class AppVersionDto {
 
         @NotBlank
         private String version;
-
-        public AppVersionSaveRequest(String name, String version) {
-            this.name = name;
-            this.version = version;
-        }
-
     }
 
     @Getter
     @NoArgsConstructor
     public static class AppVersionResponse {
 
+        private Long appVersionId;
+
         private String name;
 
         private String version;
 
         public AppVersionResponse(AppVersion appVersion) {
+            this.appVersionId = appVersion.getId();
             this.name = appVersion.getName();
             this.version = appVersion.getVersion();
         }

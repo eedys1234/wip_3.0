@@ -38,11 +38,16 @@ public class AppVersionController {
 
     @GetMapping(value = "/version")
     public ResponseEntity<AppVersionDto.AppVersionResponse> get(@RequestParam("name") String name) {
-        return new ResponseEntity<>(appVersionService.get(name), HttpStatus.OK);
+        return ResponseEntity.ok(appVersionService.get(name));
     }
 
     @GetMapping(value = "/versions")
     public ResponseEntity<List<AppVersionDto.AppVersionResponse>> gets() {
-        return new ResponseEntity<>(appVersionService.gets(), HttpStatus.OK);
+        return ResponseEntity.ok(appVersionService.gets());
+    }
+
+    @DeleteMapping(value = "/version/appVersionId:[\\d]+")
+    public ResponseEntity<Long> delete(@PathVariable("appVersionId") Long appVersionId) {
+        return ResponseEntity.ok(appVersionService.delete(appVersionId));
     }
 }

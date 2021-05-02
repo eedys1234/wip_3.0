@@ -2,6 +2,7 @@ package com.wip.bool.cmmn.file;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -39,6 +40,16 @@ public abstract class FileManager {
         if(Files.exists(Paths.get(filePath, fileName))) {
             return Files.deleteIfExists(Paths.get(filePath, fileName));
         }
+        return true;
+    }
+
+    public static boolean copy(String srcFullFilePath, String destFullFilePath) throws IOException {
+        Files.copy(FileSystems.getDefault().getPath(srcFullFilePath), FileSystems.getDefault().getPath(destFullFilePath));
+        return true;
+    }
+
+    public static boolean move(String srcFullFilePath, String destFullFilePath) throws IOException {
+        Files.move(FileSystems.getDefault().getPath(srcFullFilePath), FileSystems.getDefault().getPath(destFullFilePath));
         return true;
     }
 

@@ -1,16 +1,24 @@
 package com.wip.bool.board.domain;
 
 import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.file.FileManager;
+import com.wip.bool.cmmn.retry.Retry;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "image_file")
+@Slf4j
 public class ImageFile extends BaseEntity {
 
     @Id
@@ -30,7 +38,79 @@ public class ImageFile extends BaseEntity {
     private int size;
 
     @Column(name = "image_file_ext", length = 5, nullable = false)
-    private String fileExt;
+    private String imageFileExt;
+
+    @Transient
+    private final int MAX = 5;
+
+    public static ImageFile createImageFile(String filePath, String orgFileName) {
+        ImageFile imageFile = new ImageFile();
+        imageFile.updateFilePath(filePath);
+        imageFile.updateOrgFileName(orgFileName);
+        imageFile.updateFileExt(orgFileName);
+        imageFile.updateNewFileName();
+        return imageFile;
+    }
+
+    public void updateFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void updateOrgFileName(String orgFileName) {
+        this.orgFileName = orgFileName;
+    }
+
+    public void updateNewFileName() {
+        this.newFileName = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+    }
+
+    public void updateSize(int size) {
+        this.size = size;
+    }
+
+    public void updateFileExt(String orgFileName) {
+        this.imageFileExt = orgFileName.substring(orgFileName.lastIndexOf('.') + 1).toUpperCase();
+    }
+
+    public boolean createImageFile(String tempFilePath) {
+
+        int count = 1;
+        Retry retry = new Retry();
+
+        while(count++ <= MAX) {
+            try {
+                byte[] bytes = Files.readAllBytes(FileSystems.getDefault().getPath(tempFilePath));
+                updateSize(bytes.length);
+                boolean isMove = FileManager.move(tempFilePath, String.format("%s/%s", this.filePath, fileDirectory(this.newFileName)));
+                return isMove;
+            } catch (IOException e) {
+                log.error("{} 임시파일을 이동하는데 실패하였습니다. {}", count, tempFilePath);
+                retry.sleep(count * 100);
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteImageFile() {
+
+        int count = 1;
+        Retry retry = new Retry();
+
+        while(count <= MAX) {
+
+            try {
+                return FileManager.delete(this.filePath, fileDirectory(this.newFileName));
+            } catch (IOException e) {
+                log.error("{} 파일 삭제 실패 {}", count, fileDirectory(this.newFileName));
+                retry.sleep(100 * count);
+            }
+        }
+        return false;
+    }
+
+    private String fileDirectory(String fileName) {
+        return String.join("/", String.valueOf(fileName.charAt(0)), String.valueOf(fileName.charAt(1)), String.valueOf(fileName.charAt(2)), fileName);
+    }
 
 
 }

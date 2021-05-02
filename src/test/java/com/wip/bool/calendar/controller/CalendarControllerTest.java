@@ -124,12 +124,11 @@ public class CalendarControllerTest {
         ShareType shareType = ShareType.PUBLIC;
         LocalDateTime date = LocalDateTime.of(2021, 05, 02, 16, 00, 00);
 
-        CalendarDto.CalendarSaveRequest requestDto = CalendarDto.CalendarSaveRequest.builder()
-                .title(title)
-                .content(content)
-                .calendarDate(Timestamp.valueOf(date).getTime())
-                .shareType(shareType.name())
-                .build();
+        CalendarDto.CalendarSaveRequest requestDto = new CalendarDto.CalendarSaveRequest();
+        ReflectionTestUtils.setField(requestDto, "title", title);
+        ReflectionTestUtils.setField(requestDto, "content", content);
+        ReflectionTestUtils.setField(requestDto, "shareType", shareType.name());
+        ReflectionTestUtils.setField(requestDto, "calendarDate", Timestamp.valueOf(date).getTime());
 
         Optional<User> opt = getUser();
         Calendar calendar = getCalendar(opt.get());

@@ -39,4 +39,12 @@ public class AppVersionService {
                 .collect(Collectors.toList());
 
     }
+
+    @Transactional
+    public Long delete(Long appVersionId) {
+        AppVersion appVersion = appVersionRepository.findById(appVersionId)
+                .orElseThrow(() -> new IllegalArgumentException("앱 정보가 존재하지 않습니다. id = " + appVersionId));
+
+        return appVersionRepository.delete(appVersion);
+    }
 }

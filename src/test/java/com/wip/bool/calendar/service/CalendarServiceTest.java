@@ -68,18 +68,19 @@ public class CalendarServiceTest {
         return calendar;
     }
 
-    private CalendarDto.CalendarSaveRequest getCalendarSaveReqeustDto() {
+    private CalendarDto.CalendarSaveRequest getCalendarSaveRequestDto() {
         String title = "본사 출근";
         String content = "OO팀 부서와의 OO관련 회의";
         ShareType shareType = ShareType.DEPT;
         LocalDateTime now = LocalDateTime.now();
 
-        return CalendarDto.CalendarSaveRequest.builder()
-                .title(title)
-                .content(content)
-                .shareType(shareType.name())
-                .calendarDate(Timestamp.valueOf(now).getTime())
-                .build();
+        CalendarDto.CalendarSaveRequest requestDto = new CalendarDto.CalendarSaveRequest();
+        ReflectionTestUtils.setField(requestDto, "title", title);
+        ReflectionTestUtils.setField(requestDto, "content", content);
+        ReflectionTestUtils.setField(requestDto, "shareType", shareType.name());
+        ReflectionTestUtils.setField(requestDto, "calendarDate", Timestamp.valueOf(now).getTime());
+
+        return requestDto;
     }
 
     private List<Long> getUserIds() {
@@ -130,7 +131,7 @@ public class CalendarServiceTest {
         Long userId = 1L;
         Optional<User> opt = getUser();
         Calendar calendar = getCalendar(opt.get());
-        CalendarDto.CalendarSaveRequest requestDto = getCalendarSaveReqeustDto();
+        CalendarDto.CalendarSaveRequest requestDto = getCalendarSaveRequestDto();
 
         //when
         doReturn(opt).when(userRepository).findById(any(Long.class));

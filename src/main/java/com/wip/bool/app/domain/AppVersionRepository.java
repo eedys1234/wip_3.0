@@ -24,14 +24,29 @@ public class AppVersionRepository {
     }
 
     public Optional<AppVersion> findOne(String name) {
-        return Optional.ofNullable(queryFactory.selectFrom(appVersion)
-                                                .where(appVersion.name.eq(name))
-                                                .fetchOne());
+        return Optional.ofNullable(
+                queryFactory.selectFrom(appVersion)
+                            .where(appVersion.name.eq(name))
+                            .fetchOne()
+        );
+    }
+
+    public Optional<AppVersion> findById(Long appVersionid) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(appVersion)
+                        .where(appVersion.id.eq(appVersionid))
+                        .fetchOne()
+        );
     }
 
     public List<AppVersion> findAll() {
         return queryFactory
                 .selectFrom(appVersion)
                 .fetch();
+    }
+
+    public Long delete(AppVersion appVersion) {
+        entityManager.remove(appVersion);
+        return 1L;
     }
 }
