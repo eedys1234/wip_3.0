@@ -1,18 +1,19 @@
 package com.wip.bool.calendar.service;
 
-import com.wip.bool.calendar.domain.Calendar;
-import com.wip.bool.calendar.domain.CalendarRepository;
-import com.wip.bool.calendar.domain.ShareType;
+import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.calendar.repository.Calendar;
+import com.wip.bool.calendar.repository.CalendarRepository;
+import com.wip.bool.calendar.repository.ShareType;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.calendar.dto.CalendarDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,11 +41,19 @@ public class CalendarService {
     @Transactional(readOnly = true)
     public List<CalendarDto.CalendarResponse> getDeptCalendars(Long userId, Long from, Long to) {
 
-        selectUser(userId);
+        User user = userRepository.deptByUser(userId)
+                .orElseThrow(()-> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
 
-        List<LocalDateTime> periodDate = getPeriodDate(from, to);
+        if(isGreaterOneMonth(from, to)) {
+            throw new IllegalArgumentException("조회시작일자와 마지막일자가 한달이상 차이납니다.");
+        }
 
-        return calendarRepository.deptCalendars(userId, periodDate)
+        List<Long> userIds = userRepository.usersByDept(user.getDept().getId());
+
+        LocalDateTime fromDate = new Timestamp(from).toLocalDateTime();
+        LocalDateTime toDate = new Timestamp(to).toLocalDateTime();
+
+        return calendarRepository.deptCalendars(userIds, fromDate, toDate)
                 .stream()
                 .filter(calendarResponse -> calendarResponse.getShareType().equals(ShareType.DEPT) ||
                         calendarResponse.getShareType().equals(ShareType.PUBLIC))
@@ -56,9 +65,14 @@ public class CalendarService {
 
         selectUser(userId);
 
-        List<LocalDateTime> periodDate = getPeriodDate(from, to);
+        if(isGreaterOneMonth(from, to)) {
+            throw new IllegalArgumentException("조회시작일자와 마지막일자가 한달이상 차이납니다.");
+        }
 
-        return calendarRepository.individualCalendars(userId, periodDate)
+        LocalDateTime fromDate = new Timestamp(from).toLocalDateTime();
+        LocalDateTime toDate = new Timestamp(to).toLocalDateTime();
+
+        return calendarRepository.individualCalendars(userId, fromDate, toDate)
                 .stream()
                 .filter(calendarResponse -> calendarResponse.getShareType().equals(ShareType.PRIVATE))
                 .collect(Collectors.toList());
@@ -78,17 +92,22 @@ public class CalendarService {
                 .orElseThrow(()-> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
     }
 
-    private List<LocalDateTime> getPeriodDate(long from, long to) {
+    private boolean isGreaterOneMonth(long from, long to) {
 
-        LocalDateTime fromDate = new Timestamp(from).toLocalDateTime();
-        LocalDateTime toDate = new Timestamp(to).toLocalDateTime();
-        List<LocalDateTime> periodDate = new ArrayList<>();
+        LocalDate fromDate = new Timestamp(from).toLocalDateTime().toLocalDate();
+        LocalDate toDate = new Timestamp(to).toLocalDateTime().toLocalDate();
 
-        while(toDate.isAfter(fromDate)) {
-            periodDate.add(fromDate);
-            fromDate = fromDate.plusDays(1);
+        Period period = Period.between(fromDate, toDate);
+
+        int year = period.getYears();
+        int month = period.getMonths();
+        int day = period.getDays();
+
+        if(year >= 1 || (month >= 1 && day >= 1)) {
+            return true;
         }
 
-        return periodDate;
+        return false;
     }
+
 }

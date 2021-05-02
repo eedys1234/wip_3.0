@@ -4,10 +4,7 @@ import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.dept.domain.DeptRepository;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
-import com.wip.bool.user.domain.CustomUser;
-import com.wip.bool.user.domain.Role;
-import com.wip.bool.user.domain.User;
-import com.wip.bool.user.domain.UserRepository;
+import com.wip.bool.user.domain.*;
 import com.wip.bool.exception.excp.NotFoundUserException;
 import com.wip.bool.user.dto.OAuthAttributes;
 import com.wip.bool.user.dto.UserDto;
@@ -51,7 +48,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
         //password hashing
         //db함수를 이용할 경우 dbms에 종속적이기 때문에 application에서 hashing 함수 적용
         User user = User.createUser(requestDto.getEmail(), requestDto.getName(), passwordEncoder.encode(requestDto.getUserPassword()),
-                "", Role.ROLE_REQUEST);
+                "", UserType.WIP, Role.ROLE_REQUEST);
 
         return userRepository.save(user).getId();
     }
@@ -88,7 +85,11 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
     }
 
     public Long delete(Long userId) {
-        return userRepository.delete(userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+
+        return userRepository.delete(user);
     }
 
     @Transactional(readOnly = true)

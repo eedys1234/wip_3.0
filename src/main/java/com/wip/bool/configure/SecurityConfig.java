@@ -5,7 +5,6 @@ import com.wip.bool.security.CustomAuthenticationFilter;
 import com.wip.bool.security.CustomAuthenticationProvider;
 import com.wip.bool.security.CustomLoginSuccessHandler;
 import com.wip.bool.security.CustomOauth2SuccessHandler;
-import com.wip.bool.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+//    private final UserService userService;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -40,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/user/login", "/user/wip-login").permitAll()
         .anyRequest().authenticated()
         .and()
-        .oauth2Login().userInfoEndpoint().userService(userService).and().successHandler(customOauth2SuccessHandler())
-        .and()
+//        .oauth2Login().userInfoEndpoint().userService(userService).and().successHandler(customOauth2SuccessHandler())
+//        .and()
         .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
     }

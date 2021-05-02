@@ -2,7 +2,6 @@ package com.wip.bool.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.user.dto.UserDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,10 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Log4j2
-@RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
+    public CustomAuthenticationFilter(final AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -33,6 +33,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             throw new IllegalArgumentException();
         }
         setDetails(request, authRequest);
-        return authenticationManager.authenticate(authRequest);
+        return this.getAuthenticationManager().authenticate(authRequest);
     }
 }

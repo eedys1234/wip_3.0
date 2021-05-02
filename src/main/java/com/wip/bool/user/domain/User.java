@@ -26,10 +26,10 @@ public class User extends BaseEntity {
     @Column(name = "user_name", length = 10)
     private String name;
 
-    @Column(name = "user_email", unique = true, length = 30, nullable = false)
+    @Column(name = "user_email", unique = true, length = 50, nullable = false)
     private String email;
 
-    @Column(name = "user_password", length = 40)
+    @Column(name = "user_password", length = 100)
     private String userPassword;
 
     @Column(name = "user_profile", length = 50)
@@ -44,8 +44,8 @@ public class User extends BaseEntity {
     private Position position;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", nullable = false, length = 10)
-    private UserType type;
+    @Column(name = "user_type", nullable = false, length = 15)
+    private UserType userType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
@@ -57,33 +57,35 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<UserBox> musicBoxes = new ArrayList<>();
 
-    public static User createUser(String email, String name, String profile, Role role) {
+    public static User createUser(String email, String name, String profile, UserType userType, Role role) {
         User user = new User();
-        return user.init(email, name, profile, role);
+        return user.init(email, name, profile, userType, role);
     }
 
-    public static User createUser(String email, String name, String userPassword, String profile, Role role) {
+    public static User createUser(String email, String name, String userPassword, String profile, UserType userType, Role role) {
         User user = new User();
-        return user.init(email, name, userPassword, profile, role);
+        return user.init(email, name, userPassword, profile, userType, role);
     }
 
-    public User init(String email, String name, String profile, Role role) {
+    public User init(String email, String name, String profile, UserType userType, Role role) {
 
         this.email = email;
         this.name = name;
         this.profile = profile;
         this.role = role;
+        this.userType = userType;
 
         return this;
     }
 
-    public User init(String email, String name, String userPassword, String profile, Role role) {
+    public User init(String email, String name, String userPassword, String profile, UserType userType, Role role) {
 
         this.email = email;
         this.name = name;
         this.userPassword = userPassword;
         this.profile = profile;
         this.role = role;
+        this.userType = userType;
 
         return this;
     }
