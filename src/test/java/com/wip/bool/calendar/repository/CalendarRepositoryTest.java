@@ -157,4 +157,24 @@ public class CalendarRepositoryTest {
         assertThat(calendars.get(0).getCalendarId()).isGreaterThan(0L);
     }
 
+    @Test
+    public void 일정_삭제() throws Exception {
+
+        //given
+        String title = "OO솔루션 도입검토 회의";
+        String content = "OO솔루션 도입검토 회의내용";
+        LocalDateTime now = LocalDateTime.now();
+
+        List<User> users = userRepository.findAll();
+
+        Calendar calendar = Calendar.createCalender(title, content, now, ShareType.PRIVATE, users.get(0));
+        calendarRepository.save(calendar);
+
+        //when
+        Long resValue = calendarRepository.delete(calendar);
+
+        //then
+        assertThat(resValue).isEqualTo(1L);
+    }
+
 }

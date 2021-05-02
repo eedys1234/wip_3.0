@@ -64,6 +64,7 @@ public class CalendarServiceTest {
         LocalDateTime now = LocalDateTime.now();
 
         Calendar calendar = Calendar.createCalender(title, content, now, shareType, opt.get());
+        ReflectionTestUtils.setField(calendar, "id", 1L);
         return calendar;
     }
 
@@ -96,6 +97,20 @@ public class CalendarServiceTest {
                     ShareType.PUBLIC, "test2@gmail.com", 1L),
             new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
                 ShareType.DEPT, "test2@gmail.com", 1L)
+        );
+
+        return deptCalendars;
+    }
+
+    private List<CalendarDto.CalendarResponse> getIndividualCalendars() {
+
+        List<CalendarDto.CalendarResponse> deptCalendars = Arrays.asList(
+                new CalendarDto.CalendarResponse(1L, "OO부서 회의", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 01, 14, 00, 00),
+                        ShareType.PRIVATE, "test@gmail.com", 1L),
+                new CalendarDto.CalendarResponse(2L, "OO부서 회의 - 1", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 02, 14, 00, 00),
+                        ShareType.PRIVATE, "test2@gmail.com", 1L),
+                new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
+                        ShareType.PRIVATE, "test2@gmail.com", 1L)
         );
 
         return deptCalendars;
@@ -138,7 +153,6 @@ public class CalendarServiceTest {
         Dept dept = getDept();
         Optional<User> opt = getUser();
         opt = Optional.ofNullable(opt.get().updateDept(dept));
-        Calendar calendar = getCalendar(opt);
         List<Long> userIds = getUserIds();
 
         List<CalendarDto.CalendarResponse> deptCalendars = getDeptCalendars();
@@ -179,12 +193,53 @@ public class CalendarServiceTest {
     public void 일정_리스트_가져오기_개인() throws Exception {
 
         //given
+        Dept dept = getDept();
         Optional<User> opt = getUser();
-
+        opt = Optional.ofNullable(opt.get().updateDept(dept));
+        List<CalendarDto.CalendarResponse> individualCalendars = getIndividualCalendars();
 
         //when
+        doReturn(opt).when(userRepository).findById(any(Long.class));
+        doReturn(individualCalendars).when(calendarRepository).individualCalendars(any(Long.class), any(LocalDateTime.class), any(LocalDateTime.class));
 
+        LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
+        LocalDateTime toDate = LocalDateTime.of(2021, 05, 31, 23, 59, 59);
+
+        List<CalendarDto.CalendarResponse> values = calendarService.getIndividualCalenders(1L, Timestamp.valueOf(fromDate).getTime(), Timestamp.valueOf(toDate).getTime());
 
         //then
+        assertThat(values.size()).isEqualTo(3);
+        assertThat(values).extracting(CalendarDto.CalendarResponse::getShareType)
+                .allMatch(shareType -> shareType.equals(ShareType.PRIVATE));
+
+        assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarId)
+                .containsExactly(1L, 2L, 3L);
+
+        assertThat(values).extracting(CalendarDto.CalendarResponse::getUserId)
+                .allMatch(u -> u == 1L);
+
+        //verify
+        verify(userRepository, times(1)).findById(any(Long.class));
+        verify(calendarRepository, times(1)).individualCalendars(any(Long.class),
+                any(LocalDateTime.class), any(LocalDateTime.class));
+    }
+
+    @Test
+    public void 일정_삭제() throws Exception {
+
+        //given
+        Calendar calendar = getCalendar(getUser());
+
+        //when
+        doReturn(Optional.ofNullable(calendar)).when(calendarRepository).findById(any(Long.class));
+        doReturn(1L).when(calendarRepository).delete(any(Calendar.class));
+        Long resValue = calendarService.delete(calendar.getId());
+
+        //then
+        assertThat(resValue).isEqualTo(1L);
+
+        //verify
+        verify(calendarRepository, times(1)).findById(any(Long.class));
+        verify(calendarRepository, times(1)).delete(any(Calendar.class));
     }
 }
