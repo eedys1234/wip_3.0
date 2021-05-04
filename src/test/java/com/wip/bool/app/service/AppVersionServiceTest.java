@@ -103,4 +103,12 @@ public class AppVersionServiceTest {
         assertThat(values.getName()).isEqualTo(appVersion.getName());
         assertThat(values.getVersion()).isEqualTo(appVersion.getVersion());
     }
+
+    @Test
+    public void app_정보_삭제_Service() throws Exception {
+
+        //given
+        //when
+        //then
+    }
 }
