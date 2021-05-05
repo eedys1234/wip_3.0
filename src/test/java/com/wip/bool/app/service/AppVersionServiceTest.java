@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AppVersionServiceTest {
@@ -68,6 +68,9 @@ public class AppVersionServiceTest {
 
         //then
         assertThat(id).isEqualTo(appVersion.getId());
+
+        //verify
+        verify(appVersionRepository, times(1)).save(any(AppVersion.class));
     }
 
     @Test
@@ -87,6 +90,9 @@ public class AppVersionServiceTest {
 
         assertThat(values).extracting(AppVersionDto.AppVersionResponse::getName)
                 .containsExactly("ILECTRON");
+
+        //verfiy
+        verify(appVersionRepository, times(1)).findAll();
     }
 
     @Test
@@ -102,13 +108,26 @@ public class AppVersionServiceTest {
         //then
         assertThat(values.getName()).isEqualTo(appVersion.getName());
         assertThat(values.getVersion()).isEqualTo(appVersion.getVersion());
+
+        //verfiy
+        verify(appVersionRepository, times(1)).findOne(any(String.class));
     }
 
     @Test
     public void app_정보_삭제_Service() throws Exception {
 
         //given
+        AppVersion appVersion = getAppVersion();
         //when
+        doReturn(Optional.ofNullable(appVersion)).when(appVersionRepository).findById(any(Long.class));
+        doReturn(1L).when(appVersionRepository).delete(any(AppVersion.class));
+        Long resValue = appVersionService.delete(1L);
+
         //then
+        assertThat(resValue).isEqualTo(1L);
+
+        //verify
+        verify(appVersionRepository, times(1)).findById(any(Long.class));
+        verify(appVersionRepository, times(1)).delete(any(AppVersion.class));
     }
 }

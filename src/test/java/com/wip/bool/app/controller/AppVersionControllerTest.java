@@ -131,6 +131,22 @@ public class AppVersionControllerTest {
 
         assertThat(values.getVersion()).isEqualTo(appVersion.getVersion());
         assertThat(values.getName()).isEqualTo(appVersion.getName());
+    }
 
+    @Test
+    public void app_정보_삭제_Controller() throws Exception {
+
+        //given
+        doReturn(1L).when(appVersionService).delete(any(Long.class));
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/app/version/1")
+        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
+        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+
+        assertThat(resValue).isEqualTo(1L);
     }
  }

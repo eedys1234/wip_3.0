@@ -1,4 +1,4 @@
-[INFO ] 2021-05-02 22:13:03.703 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
-[INFO ] 2021-05-02 22:13:03.733 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-[INFO ] 2021-05-02 22:13:03.738 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-05-02 22:13:03.741 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
+[INFO ] 2021-05-05 15:55:39.780 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-05 15:55:39.795 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-05 15:55:39.804 [main] TestDispatcherServlet - Completed initialization in 9 ms
+[WARN ] 2021-05-05 15:55:39.934 [main] PageNotFound - No mapping for DELETE /api/v1/app/version/1
