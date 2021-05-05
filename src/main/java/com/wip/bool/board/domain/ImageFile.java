@@ -40,6 +40,10 @@ public class ImageFile extends BaseEntity {
     @Column(name = "image_file_ext", length = 5, nullable = false)
     private String imageFileExt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     @Transient
     private final int MAX = 5;
 

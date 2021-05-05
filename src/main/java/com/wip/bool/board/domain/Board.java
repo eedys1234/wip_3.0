@@ -35,7 +35,7 @@ public class Board extends BaseEntity {
     @Column(name = "is_delete")
     private DeleteStatus isDeleted;
 
-    @OneToMany
+    @OneToMany(mappedBy = "board")
     private List<ImageFile> imageFiles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

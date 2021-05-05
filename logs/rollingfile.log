@@ -1,8 +1,4 @@
-[INFO ] 2021-05-05 15:55:39.780 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-05 15:55:39.795 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-05 15:55:39.804 [main] TestDispatcherServlet - Completed initialization in 9 ms
-[WARN ] 2021-05-05 15:55:39.934 [main] PageNotFound - No mapping for DELETE /api/v1/app/version/1
-[INFO ] 2021-05-05 15:57:01.095 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-05 15:57:02.141 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-05 15:57:02.143 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-05 15:57:02.153 [main] TestDispatcherServlet - Completed initialization in 7 ms
+[INFO ] 2021-05-06 00:39:12.799 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-06 00:39:12.811 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-06 00:39:12.814 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-05-06 00:39:12.822 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.

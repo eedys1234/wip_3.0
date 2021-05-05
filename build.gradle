@@ -39,7 +39,13 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
     compile 'io.jsonwebtoken:jjwt:0.9.1'
     annotationProcessor 'org.projectlombok:lombok'
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile ('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+        exclude module: 'junit-vintage-engine'
+    }
+    testCompile ('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testCompile ('org.junit.jupiter:junit-jupiter-params:5.2.0')
+    testRuntime ('org.junit.jupiter:junit-jupiter-engine:5.2.0')
     testCompile 'org.springframework.security:spring-security-test'
 
     testCompileOnly 'org.projectlombok:lombok'
@@ -84,3 +90,4 @@ configurations {
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
+

@@ -64,9 +64,8 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardDto.BoardResponse get(Long boardId) {
-        BoardDto.BoardResponse boardResponse = boardRepository.findDetailById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
-        return boardResponse;
+        List<BoardDto.BoardResponse> boards = boardRepository.findDetailById(boardId);
+        return boards.get(0);
     }
 
     @Transactional

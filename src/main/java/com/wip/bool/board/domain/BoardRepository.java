@@ -1,16 +1,19 @@
 package com.wip.bool.board.domain;
 
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.board.dto.BoardDto;
-import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.wip.bool.board.domain.QBoard.board;
 import static com.wip.bool.board.domain.QImageFile.imageFile;
 
@@ -55,17 +58,18 @@ public class BoardRepository {
         );
     }
 
-    public Optional<BoardDto.BoardResponse> findDetailById(Long boardId) {
-        return Optional.ofNullable(
-                queryFactory.select(Projections.constructor(BoardDto.BoardResponse.class,
-                        board.id, board.title, board.content, board.boardType,
-                        imageFile.filePath, imageFile.newFileName, imageFile.imageFileExt))
+    public List<BoardDto.BoardResponse> findDetailById(Long boardId) {
+        Map<Board, List<ImageFile>> transform = queryFactory
                             .from(board)
-                            .innerJoin(imageFile)
-                            .on(board.imageFiles.contains(imageFile))
-                            .where(board.id.eq(boardId), board.isDeleted.eq(DeleteStatus.NORMAL))
-                            .fetchOne()
-        );
+                            .leftJoin(board.imageFiles, imageFile)
+                            .fetchJoin()
+                            .where(board.id.eq(boardId))
+                            .transform(groupBy(board).as(GroupBy.list(imageFile)));
+
+        return transform.entrySet()
+                .stream()
+                .map(entry -> new BoardDto.BoardResponse(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
     public Long delete(Board board) {

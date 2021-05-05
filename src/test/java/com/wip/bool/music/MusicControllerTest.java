@@ -3,25 +3,25 @@ package com.wip.bool.music;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.bible.domain.WordsMaster;
 import com.wip.bool.bible.domain.WordsMasterRepository;
-import com.wip.bool.cmmn.dictionary.SearchStoreProxy;
 import com.wip.bool.bookmark.domain.BookMark;
 import com.wip.bool.bookmark.domain.BookMarkRepository;
+import com.wip.bool.cmmn.dictionary.SearchStoreProxy;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
+import com.wip.bool.music.mp3.service.SongMP3Service;
+import com.wip.bool.music.sheet.service.SongSheetService;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.music.song.domain.SongMaster;
 import com.wip.bool.music.song.domain.SongMasterRepository;
-import com.wip.bool.music.mp3.service.SongMP3Service;
-import com.wip.bool.music.sheet.service.SongSheetService;
+import com.wip.bool.music.song.dto.SongDetailDto;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.music.song.dto.SongDetailDto;
 import com.wip.bool.user.domain.UserType;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,7 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(value = "local")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -91,7 +91,7 @@ public class MusicControllerTest {
     @Autowired
     private SearchStoreProxy searchStoreProxy;
 
-    @Before
+    @BeforeEach
     public void begin() throws Exception {
 
         //given

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.dto.AppVersionDto;
 import com.wip.bool.app.service.AppVersionService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AppVersionControllerTest {
 
     @InjectMocks
@@ -41,7 +41,7 @@ public class AppVersionControllerTest {
     ObjectMapper objectMapper;
 
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(appVersionController).build();
         objectMapper = new ObjectMapper();

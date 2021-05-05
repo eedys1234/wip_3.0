@@ -1,11 +1,15 @@
 package com.wip.bool.board.dto;
 
+import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
+import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoardDto {
 
@@ -57,17 +61,16 @@ public class BoardDto {
 
         private BoardType boardType;
 
-        private String filePath;
+        private List<ImageFileDto.ImageFileResponse> images;
 
-        private String newFileName;
-
-        private String fileExt;
-
-        public BoardResponse(Long boardId, String title, String content, BoardType boardType, String filePath, String newFileName, String fileExt) {
-            this.boardId = boardId;
-            this.title = title;
-            this.content = content;
-            this.boardType = boardType;
+        public BoardResponse(Board board, List<ImageFile> imageFiles) {
+            this.boardId = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.boardType = board.getBoardType();
+            this.images = imageFiles.stream()
+                                    .map(ImageFileDto.ImageFileResponse::new)
+                                    .collect(Collectors.toList());
         }
     }
 }

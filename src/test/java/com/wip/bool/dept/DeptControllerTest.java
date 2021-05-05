@@ -1,11 +1,11 @@
 package com.wip.bool.dept;
 
 import com.wip.bool.dept.domain.DeptRepository;
-import com.wip.bool.dept.service.DeptService;
 import com.wip.bool.dept.dto.DeptDto;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.wip.bool.dept.service.DeptService;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -15,11 +15,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(value = "local")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeptControllerTest {
@@ -36,7 +36,7 @@ public class DeptControllerTest {
     @Autowired
     private DeptService deptService;
 
-    @After
+    @AfterAll
     public void tearDown() throws Exception {
         deptRepository.deleteAll();
     }
