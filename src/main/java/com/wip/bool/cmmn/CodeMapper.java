@@ -22,6 +22,5 @@ public class CodeMapper<T> {
     public Map<String, List<T>> get(String keys) {
         return Arrays.stream(keys.split(","))
                 .collect(Collectors.toMap(Function.identity(), factory::get)); //test 해본 후 변경예정
-//                .collect(Collectors.toMap(Function.identity(), key -> factory.get(key)));
     }
 }

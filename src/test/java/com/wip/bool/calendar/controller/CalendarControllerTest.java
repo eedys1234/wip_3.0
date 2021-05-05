@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.repository.CalendarRepository;
-import com.wip.bool.calendar.repository.ShareType;
+import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;

@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -30,20 +32,25 @@ public class BoardService {
     @Transactional
     public Long save(Long userId, BoardDto.BoardSaveRequest requestDto) {
 
-        List<ImageFile> imageFiles = Arrays.stream(requestDto.getOrgFileNames().split(","))
-                .map(orgFileName -> ImageFile.createImageFile(boardFilePath, orgFileName))
-                .collect(Collectors.toList());
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
 
         BoardType boardType = BoardType.valueOf(requestDto.getBoardType());
 
-        Board board = Board.createBoard(requestDto.getTitle(), requestDto.getContent(), boardType, user, imageFiles);
+        Board board = Board.createBoard(requestDto.getTitle(), requestDto.getContent(), boardType, user);
 
         Long id = boardRepository.save(board).getId();
-        if(!moveImageFile(imageFiles, requestDto.getTempFileNames())) {
-            throw new IllegalStateException("파일 저장이 실패하였습니다.");
+
+        if(hasText(requestDto.getOrgFileNames())) {
+            List<ImageFile> imageFiles = Arrays.stream(requestDto.getOrgFileNames().split(","))
+                    .map(orgFileName -> ImageFile.createImageFile(boardFilePath, orgFileName))
+                    .collect(Collectors.toList());
+
+            board.updateImageFiles(imageFiles);
+
+            if(!moveImageFile(imageFiles, requestDto.getTempFileNames())) {
+                throw new IllegalStateException("파일 저장이 실패하였습니다.");
+            }
         }
 
         return id;
@@ -66,7 +73,9 @@ public class BoardService {
     public Long delete(Long userId, Long boardId) {
         Board board = boardRepository.findById(userId, boardId)
                                     .orElseThrow(() -> new IllegalArgumentException());
-        return boardRepository.delete(board);
+
+        board.deleteStatus();
+        return 1L;
     }
 
     private boolean moveImageFile(List<ImageFile> imageFiles, String tempFileNames) {

@@ -3,7 +3,7 @@ package com.wip.bool.calendar.service;
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.repository.CalendarRepository;
-import com.wip.bool.calendar.repository.ShareType;
+import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;

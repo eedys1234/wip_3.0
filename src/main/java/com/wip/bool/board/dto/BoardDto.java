@@ -1,6 +1,7 @@
 package com.wip.bool.board.dto;
 
 import com.wip.bool.board.domain.BoardType;
+import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,9 +38,9 @@ public class BoardDto {
 
         private BoardType boardType;
 
-        public BoardSimpleResponse(Long boardId, String title, BoardType boardType) {
+        public BoardSimpleResponse(Long boardId, String title, DeleteStatus isDeleted, BoardType boardType) {
             this.boardId = boardId;
-            this.title = title;
+            this.title = isDeleted == DeleteStatus.DELETE ? "삭제된 게시글입니다." : title;
             this.boardType = boardType;
         }
     }

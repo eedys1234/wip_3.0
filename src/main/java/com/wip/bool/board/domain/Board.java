@@ -1,6 +1,7 @@
 package com.wip.bool.board.domain;
 
 import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.status.DeleteStatus;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +31,10 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_delete")
+    private DeleteStatus isDeleted;
+
     @OneToMany
     private List<ImageFile> imageFiles = new ArrayList<>();
 
@@ -39,13 +44,13 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board")
     private List<Reply> replies = new ArrayList<>();
 
-    public static Board createBoard(String title, String content, BoardType boardType, User user, List<ImageFile> imageFiles) {
+    public static Board createBoard(String title, String content, BoardType boardType, User user) {
         Board board = new Board();
         board.updateTitle(title);
         board.updateContent(content);
         board.updateBoardType(boardType);
         board.updateUser(user);
-        board.updateImageFiles(imageFiles);
+        board.createStatus();
         return board;
     }
 
@@ -66,9 +71,18 @@ public class Board extends BaseEntity {
     }
 
     public void updateImageFiles(List<ImageFile> imageFiles) {
+        this.imageFiles.addAll(imageFiles);
+    }
 
-        for(ImageFile imageFile : imageFiles) {
-            this.imageFiles.add(imageFile);
-        }
+    public void createStatus() {
+        this.isDeleted = DeleteStatus.NORMAL;
+    }
+
+    public void hiddenStatus() {
+        this.isDeleted = DeleteStatus.HIDDEN;
+    }
+
+    public void deleteStatus() {
+        this.isDeleted = DeleteStatus.DELETE;
     }
 }

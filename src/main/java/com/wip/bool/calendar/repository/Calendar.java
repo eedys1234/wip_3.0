@@ -1,6 +1,7 @@
 package com.wip.bool.calendar.repository;
 
 import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;

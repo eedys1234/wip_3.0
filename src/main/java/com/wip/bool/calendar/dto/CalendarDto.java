@@ -1,6 +1,6 @@
 package com.wip.bool.calendar.dto;
 
-import com.wip.bool.calendar.repository.ShareType;
+import com.wip.bool.cmmn.type.ShareType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

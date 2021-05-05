@@ -1,10 +1,13 @@
 package com.wip.bool.board.dto;
 
+import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReplyDto {
 
@@ -14,9 +17,6 @@ public class ReplyDto {
 
         @NotBlank
         private String content;
-
-        @Positive
-        private Long boardId;
 
         @Positive
         private Long parentId;
@@ -45,11 +45,13 @@ public class ReplyDto {
 
         private Long parentId;
 
-        public ReplyResponse(Long replyId, String content, String filePath, String newFileName, String fileExt,
+        private List<ReplyResponse> nodes = new ArrayList<>();
+
+        public ReplyResponse(Long replyId, String content, DeleteStatus isDeleted, String filePath, String newFileName, String fileExt,
                              Long boardId, Long parentId) {
 
             this.replyId = replyId;
-            this.content = content;
+            this.content = isDeleted == DeleteStatus.DELETE ? "삭제된 댓글입니다." : content;
             this.filePath = filePath;
             this.newFileName = newFileName;
             this.fileExt = fileExt;

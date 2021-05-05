@@ -3,6 +3,7 @@ package com.wip.bool.board.domain;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.board.dto.BoardDto;
+import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -28,15 +29,23 @@ public class BoardRepository {
 
     public List<BoardDto.BoardSimpleResponse> findAll(BoardType boardType, int size, int offset) {
         return queryFactory.select(Projections.constructor(BoardDto.BoardSimpleResponse.class,
-                board.id, board.title, board.boardType))
+                board.id, board.title, board.isDeleted, board.boardType))
                 .from(board)
                 .where(board.boardType.eq(boardType))
-                .orderBy(board.createDate.asc())
+                .orderBy(board.createDate.desc())
                 .offset(offset)
                 .limit(size)
                 .fetch();
     }
 
+    public Optional<Board> findById(Long boardId) {
+        return Optional.ofNullable(
+                queryFactory.select(board)
+                .from(board)
+                .where(board.id.eq(boardId))
+                .fetchOne()
+        );
+    }
     public Optional<Board> findById(Long userId, Long boardId) {
         return Optional.ofNullable(
                 queryFactory.select(board)
@@ -54,7 +63,7 @@ public class BoardRepository {
                             .from(board)
                             .innerJoin(imageFile)
                             .on(board.imageFiles.contains(imageFile))
-                            .where(board.id.eq(boardId))
+                            .where(board.id.eq(boardId), board.isDeleted.eq(DeleteStatus.NORMAL))
                             .fetchOne()
         );
     }

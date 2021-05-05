@@ -1,6 +1,7 @@
 package com.wip.bool.calendar.repository;
 
 import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.configure.TestConfig;
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.dept.domain.DeptRepository;
