@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BoardDto {
@@ -68,9 +69,11 @@ public class BoardDto {
             this.title = board.getTitle();
             this.content = board.getContent();
             this.boardType = board.getBoardType();
-            this.images = imageFiles.stream()
-                                    .map(ImageFileDto.ImageFileResponse::new)
-                                    .collect(Collectors.toList());
+            if(!Objects.isNull(imageFiles)) {
+                this.images = imageFiles.stream()
+                        .map(ImageFileDto.ImageFileResponse::new)
+                        .collect(Collectors.toList());
+            }
         }
     }
 }

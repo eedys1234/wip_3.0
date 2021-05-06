@@ -23,7 +23,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping(value = "/board")
-    public ResponseEntity<Long> save(@Valid @RequestBody BoardDto.BoardSaveRequest requestDto,
+    public ResponseEntity<Long> saveBoard(@Valid @RequestBody BoardDto.BoardSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -31,7 +31,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = boardService.save(userId, requestDto);
+        Long id = boardService.saveBoard(userId, requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
@@ -39,23 +39,29 @@ public class BoardController {
     }
 
     @GetMapping(value = "/boards")
-    public ResponseEntity<List<BoardDto.BoardSimpleResponse>> gets(
-            @RequestParam("board") String board,
-            @RequestParam("size") int size,
-            @RequestParam("offset") int offset) {
+    public ResponseEntity<List<BoardDto.BoardSimpleResponse>> findBoards(
+                                            @RequestParam("board") String board,
+                                            @RequestParam("size") int size,
+                                            @RequestParam("offset") int offset) {
 
-        return ResponseEntity.ok(boardService.gets(board, size, offset));
+        return ResponseEntity.ok(boardService.findBoards(board, size, offset));
     }
 
     @GetMapping(value = "/board/{boardId:[\\d]+}")
-    public ResponseEntity<BoardDto.BoardResponse> get(@PathVariable("boardId") Long boardId) {
-        return ResponseEntity.ok(boardService.get(boardId));
+    public ResponseEntity<BoardDto.BoardResponse> findDetailBoard(@PathVariable("boardId") Long boardId) {
+        return ResponseEntity.ok(boardService.findDetailBoard(boardId));
     }
 
     @DeleteMapping(value = "/board/{boardId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable Long boardId,
+    public ResponseEntity<Long> deleteBoard(@PathVariable Long boardId,
                                        @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(boardService.delete(userId, boardId));
+        return ResponseEntity.ok(boardService.deleteBoard(userId, boardId));
+    }
+
+    @PutMapping(value = "/board/{boardId:[\\d]+}")
+    public ResponseEntity<Long> hiddenBoard(@PathVariable Long boardId,
+                                            @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(boardService.hiddenBoard(userId, boardId));
     }
 }

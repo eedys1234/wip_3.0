@@ -5,6 +5,8 @@ import com.wip.bool.board.domain.BoardRepository;
 import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.dto.BoardDto;
+import com.wip.bool.exception.excp.AuthorizationException;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ public class BoardService {
     private String boardFilePath;
 
     @Transactional
-    public Long save(Long userId, BoardDto.BoardSaveRequest requestDto) {
+    public Long saveBoard(Long userId, BoardDto.BoardSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
@@ -57,23 +59,62 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardDto.BoardSimpleResponse> gets(String board, int size, int offset) {
+    public List<BoardDto.BoardSimpleResponse> findBoards(String board, int size, int offset) {
         BoardType boardType = BoardType.valueOf(board);
         return boardRepository.findAll(boardType, size, offset);
     }
 
     @Transactional(readOnly = true)
-    public BoardDto.BoardResponse get(Long boardId) {
+    public BoardDto.BoardResponse findDetailBoard(Long boardId) {
         List<BoardDto.BoardResponse> boards = boardRepository.findDetailById(boardId);
         return boards.get(0);
     }
 
     @Transactional
-    public Long delete(Long userId, Long boardId) {
-        Board board = boardRepository.findById(userId, boardId)
-                                    .orElseThrow(() -> new IllegalArgumentException());
+    public Long deleteBoard(Long userId, Long boardId) {
 
-        board.deleteStatus();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+
+        Role role = user.getRole();
+        Board board = null;
+        if(role == Role.ROLE_ADMIN) {
+            board = boardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+        }
+        else if(role == Role.ROLE_NORMAL){
+            board = boardRepository.findById(userId, boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+        }
+        else {
+            throw new AuthorizationException();
+        }
+
+        boardRepository.delete(board);
+        return 1L;
+    }
+
+    @Transactional
+    public Long hiddenBoard(Long userId, Long boardId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+
+        Role role = user.getRole();
+        Board board = null;
+        if(role == Role.ROLE_ADMIN) {
+            board = boardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+        }
+        else if(role == Role.ROLE_NORMAL){
+            board = boardRepository.findById(userId, boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+        }
+        else {
+            throw new AuthorizationException();
+        }
+
+        board.hiddenStatus();
         return 1L;
     }
 
