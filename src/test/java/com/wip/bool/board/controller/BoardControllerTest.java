@@ -222,7 +222,7 @@ public class BoardControllerTest {
 
     @DisplayName("게시물 숨김처리")
     @Test
-    public void 게시물_숨김처리_Contoller() throws Exception {
+    public void 게시물_숨김처리_Controller() throws Exception {
 
         //given
         doReturn(1L).when(boardService).hiddenBoard(any(Long.class), any(Long.class));
