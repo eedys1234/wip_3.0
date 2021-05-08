@@ -100,7 +100,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물 추가")
     @Test
-    public void 게시물_추가() throws Exception {
+    public void 게시물_추가_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -129,7 +129,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물_삭제_소유자")
     @Test
-    public void 게시물_삭제_소유자() throws Exception {
+    public void 게시물_삭제_소유자_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -151,7 +151,7 @@ public class BoardServiceTest {
     }
     @DisplayName("게시물_삭제_관리자")
     @Test
-    public void 게시물_삭제_관리자() throws Exception {
+    public void 게시물_삭제_관리자_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -174,7 +174,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물_리스트_조회")
     @Test
-    public void 게시물_리스트_조회() throws Exception {
+    public void 게시물_리스트_조회_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -195,7 +195,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물_상세조회")
     @Test
-    public void 게시물_상세조회() throws Exception {
+    public void 게시물_상세조회_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -216,7 +216,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물_숨김처리_소유자")
     @Test
-    public void 게시물_숨김처리_소유자() throws Exception {
+    public void 게시물_숨김처리_소유자_Service() throws Exception {
 
         //given
         User user = getUser();
@@ -240,7 +240,7 @@ public class BoardServiceTest {
 
     @DisplayName("게시물_숨김처리_관리자")
     @Test
-    public void 게시물_숨김처리_관리자() throws Exception {
+    public void 게시물_숨김처리_관리자_Service() throws Exception {
 
         //given
         User user = getUser();

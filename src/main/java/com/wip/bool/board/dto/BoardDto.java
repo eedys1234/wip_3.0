@@ -69,10 +69,11 @@ public class BoardDto {
             this.title = board.getTitle();
             this.content = board.getContent();
             this.boardType = board.getBoardType();
+
             if(!Objects.isNull(imageFiles)) {
                 this.images = imageFiles.stream()
-                        .map(ImageFileDto.ImageFileResponse::new)
-                        .collect(Collectors.toList());
+                                        .map(ImageFileDto.ImageFileResponse::new)
+                                        .collect(Collectors.toList());
             }
         }
     }

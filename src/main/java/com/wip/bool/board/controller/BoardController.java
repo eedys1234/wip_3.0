@@ -59,7 +59,7 @@ public class BoardController {
         return ResponseEntity.ok(boardService.deleteBoard(userId, boardId));
     }
 
-    @PutMapping(value = "/board/{boardId:[\\d]+}")
+    @PutMapping(value = "/board/{boardId:[\\d]+}/hidden")
     public ResponseEntity<Long> hiddenBoard(@PathVariable Long boardId,
                                             @RequestHeader("userId") Long userId) {
         return ResponseEntity.ok(boardService.hiddenBoard(userId, boardId));
