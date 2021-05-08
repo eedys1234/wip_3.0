@@ -48,7 +48,7 @@ public class BoardService {
                     .map(orgFileName -> ImageFile.createImageFile(boardFilePath, orgFileName))
                     .collect(Collectors.toList());
 
-            board.updateImageFiles(imageFiles);
+            updateBoard(board, imageFiles);
 
             if(!moveImageFile(imageFiles, requestDto.getTempFileNames())) {
                 throw new IllegalStateException("파일 저장이 실패하였습니다.");
@@ -118,6 +118,13 @@ public class BoardService {
         return 1L;
     }
 
+    private void updateBoard(Board board, List<ImageFile> imageFiles) {
+
+        for(ImageFile imageFile : imageFiles) {
+            imageFile.updateBoard(board);
+        }
+    }
+
     private boolean moveImageFile(List<ImageFile> imageFiles, String tempFileNames) {
 
         //파일 생성
@@ -126,7 +133,8 @@ public class BoardService {
         String[] tempFilePaths = tempFileNames.split(",");
 
         for(cnt=0;cnt<imageFiles.size();cnt++) {
-            if(!imageFiles.get(cnt).createImageFile(tempFilePaths[cnt])) {
+            ImageFile imageFile = imageFiles.get(cnt);
+            if(!imageFile.createImageFile(tempFilePaths[cnt])) {
                 isSuccess = false;
                 break;
             }

@@ -54,10 +54,9 @@ public class ReplyService {
                     .map(orgFileName -> ImageFile.createImageFile(imageFilePath, orgFileName))
                     .collect(Collectors.toList());
 
+            updateBoard(reply, imageFiles);
 
             moveImageFile(imageFiles, requestDto.getTempFileNames());
-
-            reply.updateImageFiles(imageFiles);
         }
 
         return reply.getId();
@@ -116,6 +115,12 @@ public class ReplyService {
         return parent;
     }
 
+    private void updateBoard(Reply reply, List<ImageFile> imageFiles) {
+
+        for(ImageFile imageFile : imageFiles) {
+            imageFile.updateReply(reply);
+        }
+    }
 
     private boolean moveImageFile(List<ImageFile> imageFiles, String tempFileNames) {
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.wip.bool.board.domain.QImageFile.imageFile;
 import static com.wip.bool.board.domain.QReply.reply;
@@ -46,20 +47,20 @@ public class ReplyRepository {
 
     public List<ReplyDto.ReplyResponse> findAllByBoard(Long boardId, int size, int offset) {
 
-        return queryFactory.select(
-                    Projections.constructor(ReplyDto.ReplyResponse.class,
-                        reply.id, reply.content, reply.isDeleted, imageFile.filePath, imageFile.newFileName,
-                            imageFile.imageFileExt, reply.board.id, reply.parentReply.id
-                    )
-                )
+        List<Reply> replies = queryFactory
+                .select(reply)
                 .from(reply)
-                .innerJoin(reply.imageFiles, imageFile)
-                .on(reply.imageFiles.contains(imageFile))
+                .leftJoin(reply.imageFiles, imageFile)
+                .fetchJoin()
                 .where(reply.board.id.eq(boardId))
                 .orderBy(reply.createDate.asc())
                 .offset(offset)
                 .limit(size)
                 .fetch();
+
+        return replies.stream()
+                .map(reply -> new ReplyDto.ReplyResponse(reply, reply.getImageFiles()))
+                .collect(Collectors.toList());
     }
 
     public List<ReplyDto.ReplyResponse> findAllByReply(Long parentId, int size, int offset) {

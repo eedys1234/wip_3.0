@@ -45,7 +45,7 @@ public class BoardDto {
 
         public BoardSimpleResponse(Long boardId, String title, DeleteStatus isDeleted, BoardType boardType) {
             this.boardId = boardId;
-            this.title = isDeleted == DeleteStatus.DELETE ? "삭제된 게시글입니다." : title;
+            this.title = isDeleted == DeleteStatus.DELETE ? "숨김처리된 게시글입니다." : title;
             this.boardType = boardType;
         }
     }

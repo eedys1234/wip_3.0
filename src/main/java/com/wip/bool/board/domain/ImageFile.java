@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -44,6 +45,10 @@ public class ImageFile extends BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reply_id")
+    private Reply reply;
+
     @Transient
     private final int MAX = 5;
 
@@ -74,6 +79,20 @@ public class ImageFile extends BaseEntity {
 
     public void updateFileExt(String orgFileName) {
         this.imageFileExt = orgFileName.substring(orgFileName.lastIndexOf('.') + 1).toUpperCase();
+    }
+
+    public void updateBoard(Board board) {
+        if(!Objects.isNull(board)) {
+            board.getImageFiles().add(this);
+            this.board = board;
+        }
+    }
+
+    public void updateReply(Reply reply) {
+        if (!Objects.isNull(reply)) {
+            reply.getImageFiles().add(this);
+            this.reply = reply;
+        }
     }
 
     public boolean createImageFile(String tempFilePath) {

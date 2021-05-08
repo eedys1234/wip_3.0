@@ -1,8 +1,4 @@
-[INFO ] 2021-05-08 17:18:54.298 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-08 17:18:54.315 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-08 17:18:54.326 [main] TestDispatcherServlet - Completed initialization in 10 ms
-[WARN ] 2021-05-08 17:18:54.565 [main] DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingRequestHeaderException: Missing request header 'userId' for method parameter of type Long]
-[INFO ] 2021-05-08 17:19:50.347 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-08 17:19:51.387 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-08 17:19:51.391 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-08 17:19:51.402 [main] TestDispatcherServlet - Completed initialization in 11 ms
+[INFO ] 2021-05-08 23:17:09.167 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-08 23:17:09.179 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-08 23:17:09.180 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-05-08 23:17:09.182 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.

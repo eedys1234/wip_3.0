@@ -70,10 +70,6 @@ public class Board extends BaseEntity {
         this.user = user;
     }
 
-    public void updateImageFiles(List<ImageFile> imageFiles) {
-        this.imageFiles.addAll(imageFiles);
-    }
-
     public void createStatus() {
         this.isDeleted = DeleteStatus.NORMAL;
     }

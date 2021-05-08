@@ -37,7 +37,7 @@ public class Reply extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reply")
     private List<ImageFile> imageFiles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,10 +62,6 @@ public class Reply extends BaseEntity {
 
     public void updateUser(User user) {
         this.user = user;
-    }
-
-    public void updateImageFiles(List<ImageFile> imageFiles) {
-        this.imageFiles.addAll(imageFiles);
     }
 
     public void updateBoard(Board board) {

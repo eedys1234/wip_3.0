@@ -164,7 +164,7 @@ public class BoardControllerTest {
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
                                                 .andExpect(jsonPath("$[0].boardId").value(1L))
-                                                .andExpect(jsonPath("$[0].title").value("삭제된 게시글입니다."))
+                                                .andExpect(jsonPath("$[0].title").value("숨김처리된 게시글입니다."))
                                                 .andReturn();
 
         //verify
