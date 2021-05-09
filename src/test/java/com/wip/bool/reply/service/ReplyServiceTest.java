@@ -1,6 +1,9 @@
 package com.wip.bool.reply.service;
 
-import com.wip.bool.board.domain.*;
+import com.wip.bool.board.domain.Board;
+import com.wip.bool.board.domain.BoardRepository;
+import com.wip.bool.board.domain.Reply;
+import com.wip.bool.board.domain.ReplyRepository;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.board.service.ReplyService;
 import com.wip.bool.cmmn.board.BoardFactory;
@@ -16,10 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,6 +41,12 @@ public class ReplyServiceTest {
     @Mock
     private BoardRepository boardRepository;
 
+    private User getUser() {
+        User user = UserFactory.getNormalUser();
+        ReflectionTestUtils.setField(user, "id", 1L);
+        return user;
+    }
+
     private Board getBoard(User user) {
         Board board = BoardFactory.getBoard(user);
         ReflectionTestUtils.setField(board, "id", 1L);
@@ -47,82 +54,17 @@ public class ReplyServiceTest {
     }
 
     private Reply getReply(Board board, User user) {
-
         Reply reply = ReplyFactory.getReply(board, user);
         ReflectionTestUtils.setField(reply, "id", 1L);
         return reply;
     }
 
     private List<ReplyDto.ReplyResponse> getRepliesByBoard(Board board, User user) {
-
-        Reply reply1 = getReply(board, user);
-        ReflectionTestUtils.setField(reply1, "id", 1L);
-
-        Reply reply2 = getReply(board, user);
-        ReflectionTestUtils.setField(reply2, "id", 2L);
-
-        Reply reply3 = getReply(board, user);
-        ReflectionTestUtils.setField(reply3, "id", 3L);
-
-        Reply reply4 = getReply(board, user);
-        ReflectionTestUtils.setField(reply4, "id", 4L);
-
-        Reply reply5 = getReply(board, user);
-        ReflectionTestUtils.setField(reply5, "id", 5L);
-
-        Reply reply6 = getReply(board, user);
-        ReflectionTestUtils.setField(reply6, "id", 6L);
-
-        Reply reply7 = getReply(board, user);
-        ReflectionTestUtils.setField(reply7, "id", 7L);
-
-
-        return Arrays.asList(
-                reply1, reply2, reply3, reply4, reply5,
-                reply6, reply7
-        ).stream()
-                .map(reply -> new ReplyDto.ReplyResponse(reply, null))
-                .collect(Collectors.toList());
-
+        return ReplyFactory.getRepliesByBoard(board, user);
     }
 
-    private List<ReplyDto.ReplyResponse> getRepliesByReply(Board board, User user) {
-
-        Reply reply1 = getReply(board, user);
-        ReflectionTestUtils.setField(reply1, "id", 1L);
-
-        Reply reply2 = getReply(board, user);
-        reply2.updateParentReply(reply1);
-        ReflectionTestUtils.setField(reply2, "id", 2L);
-
-        Reply reply3 = getReply(board, user);
-        reply3.updateParentReply(reply1);
-        ReflectionTestUtils.setField(reply3, "id", 3L);
-
-        Reply reply4 = getReply(board, user);
-        reply4.updateParentReply(reply3);
-        ReflectionTestUtils.setField(reply4, "id", 4L);
-
-        Reply reply5 = getReply(board, user);
-        reply5.updateParentReply(reply3);
-        ReflectionTestUtils.setField(reply5, "id", 5L);
-
-        Reply reply6 = getReply(board, user);
-        reply6.updateParentReply(reply2);
-        ReflectionTestUtils.setField(reply6, "id", 6L);
-
-        Reply reply7 = getReply(board, user);
-        reply7.updateParentReply(reply6);
-        ReflectionTestUtils.setField(reply7, "id", 7L);
-
-
-        return Arrays.asList(
-            reply1, reply2, reply3, reply4, reply5,
-            reply6, reply7
-        ).stream()
-        .map(reply -> new ReplyDto.ReplyResponse(reply, null))
-        .collect(Collectors.toList());
-
+    private List<ReplyDto.ReplyResponse> getRepliesByReplies(Board board, User user) {
+        return ReplyFactory.getRepliesByReplies(board, user);
     }
 
     @DisplayName("댓글 추가 by 게시물 Service")
@@ -130,7 +72,7 @@ public class ReplyServiceTest {
     public void 댓글_추가_by게시물_Service() throws Exception {
 
         //given
-        User user = UserFactory.getNormalUser();
+        User user = getUser();
         Board board = getBoard(user);
         Reply reply = getReply(board, user);
 
@@ -157,7 +99,7 @@ public class ReplyServiceTest {
     public void 댓글_추가_by댓글_Service() throws Exception {
 
         //given
-        User user = UserFactory.getNormalUser();
+        User user = getUser();
         Board board = getBoard(user);
         Reply parentReply = getReply(board, user);
         Reply childReply = getReply(board, user);
@@ -191,7 +133,7 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = UserFactory.getNormalUser();
+        User user = getUser();
         Board board = getBoard(user);
         List<ReplyDto.ReplyResponse> repliesByBoard = getRepliesByBoard(board, user);
 
@@ -213,9 +155,9 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = UserFactory.getNormalUser();
+        User user = getUser();
         Board board = getBoard(user);
-        List<ReplyDto.ReplyResponse> repliesByReply = getRepliesByReply(board, user);
+        List<ReplyDto.ReplyResponse> repliesByReply = getRepliesByReplies(board, user);
 
         //when
         doReturn(repliesByReply).when(replyRepository).findAllByReply(any(Long.class), any(Integer.class), any(Integer.class));
@@ -235,7 +177,7 @@ public class ReplyServiceTest {
     public void 댓글_삭제_Service() throws Exception {
 
         //given
-        User user = UserFactory.getNormalUser();
+        User user = getUser();
         Board board = getBoard(user);
         Reply parentReply = getReply(board, user);
         Reply childReply = getReply(board, user);
