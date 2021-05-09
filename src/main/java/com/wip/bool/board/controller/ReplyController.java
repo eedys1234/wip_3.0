@@ -22,7 +22,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @PostMapping(value = "/board/{board:[\\d]+}/reply")
+    @PostMapping(value = "/board/{boardId:[\\d]+}/reply")
     public ResponseEntity<Long> saveReply(@Valid @RequestBody ReplyDto.ReplySaveRequest requestDto,
                                      @PathVariable("boardId") Long boardId,
                                      @RequestHeader("userId") Long userId,

@@ -3,10 +3,11 @@ package com.wip.bool.reply.service;
 import com.wip.bool.board.domain.*;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.board.service.ReplyService;
-import com.wip.bool.user.domain.Role;
+import com.wip.bool.cmmn.board.BoardFactory;
+import com.wip.bool.cmmn.reply.ReplyFactory;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,37 +40,16 @@ public class ReplyServiceTest {
     @Mock
     private BoardRepository boardRepository;
 
-    private User getUser() {
-
-        String email = "test@gmail.com";
-        String password = "test1234";
-        String profiles = "";
-        UserType userType = UserType.WIP;
-        Role role = Role.ROLE_NORMAL;
-
-        User user = User.createUser(email, password, profiles, userType, role);
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
     private Board getBoard(User user) {
-
-        String title = "테스트 게시물";
-        String content = "게시물 내용";
-        BoardType boardType = BoardType.BOARD;
-
-        Board board = Board.createBoard(title, content, boardType, user);
+        Board board = BoardFactory.getBoard(user);
         ReflectionTestUtils.setField(board, "id", 1L);
         return board;
     }
 
     private Reply getReply(Board board, User user) {
 
-        String content = "테스트 댓글";
-
-        Reply reply = Reply.createReply(content, board, user);
+        Reply reply = ReplyFactory.getReply(board, user);
         ReflectionTestUtils.setField(reply, "id", 1L);
-
         return reply;
     }
 
@@ -150,7 +130,7 @@ public class ReplyServiceTest {
     public void 댓글_추가_by게시물_Service() throws Exception {
 
         //given
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         Board board = getBoard(user);
         Reply reply = getReply(board, user);
 
@@ -177,7 +157,7 @@ public class ReplyServiceTest {
     public void 댓글_추가_by댓글_Service() throws Exception {
 
         //given
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         Board board = getBoard(user);
         Reply parentReply = getReply(board, user);
         Reply childReply = getReply(board, user);
@@ -211,7 +191,7 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         Board board = getBoard(user);
         List<ReplyDto.ReplyResponse> repliesByBoard = getRepliesByBoard(board, user);
 
@@ -233,7 +213,7 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         Board board = getBoard(user);
         List<ReplyDto.ReplyResponse> repliesByReply = getRepliesByReply(board, user);
 
@@ -255,15 +235,18 @@ public class ReplyServiceTest {
     public void 댓글_삭제_Service() throws Exception {
 
         //given
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         Board board = getBoard(user);
-        Reply reply = getReply(board, user);
+        Reply parentReply = getReply(board, user);
+        Reply childReply = getReply(board, user);
+        ReflectionTestUtils.setField(childReply, "id", 2L);
+        childReply.updateParentReply(parentReply);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(reply)).when(replyRepository).findById(any(Long.class), any(Long.class));
+        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(any(Long.class), any(Long.class));
         doReturn(1L).when(replyRepository).delete(any(Reply.class));
-        Long resValue = replyService.deleteReply(user.getId(), reply.getId());
+        Long resValue = replyService.deleteReply(user.getId(), parentReply.getId());
 
         //then
         assertThat(resValue).isEqualTo(1L);

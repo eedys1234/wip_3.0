@@ -68,6 +68,8 @@ public class ReplyRepository {
                 .from(reply)
                 .leftJoin(reply.parentReply)
                 .fetchJoin()
+                .leftJoin(reply.imageFiles, imageFile)
+                .fetchJoin()
                 .where(reply.parentReply.id.eq(parentId))
                 .orderBy(reply.parentReply.id.asc().nullsFirst(), reply.createDate.desc())
                 .offset(offset)

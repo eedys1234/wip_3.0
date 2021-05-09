@@ -1,12 +1,16 @@
 package com.wip.bool.reply.repository;
 
-import com.wip.bool.board.domain.*;
+import com.wip.bool.board.domain.Board;
+import com.wip.bool.board.domain.BoardRepository;
+import com.wip.bool.board.domain.Reply;
+import com.wip.bool.board.domain.ReplyRepository;
 import com.wip.bool.board.dto.ReplyDto;
+import com.wip.bool.cmmn.board.BoardFactory;
+import com.wip.bool.cmmn.reply.ReplyFactory;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.configure.TestConfig;
-import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,33 +40,19 @@ public class ReplyRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
 
-    private User getUser() {
-
-        String email = "test@gmail.com";
-        String password = "test1234";
-        String profiles = "";
-        UserType userType = UserType.WIP;
-        Role role = Role.ROLE_NORMAL;
-
-        User user = User.createUser(email, password, profiles, userType, role);
-        userRepository.save(user);
-        return user;
+    private User getSaveUser() {
+        User user = UserFactory.getNormalUser();
+        return userRepository.save(user);
     }
 
-    private Board getBoard(User user) {
-
-        String title = "테스트 게시물";
-        String content = "게시물 내용";
-        BoardType boardType = BoardType.BOARD;
-
-        Board board = Board.createBoard(title, content, boardType, user);
+    private Board getSaveBoard(User user) {
+        Board board = BoardFactory.getBoard(user);
         boardRepository.save(board);
         return board;
     }
 
-    private Reply getReply(Board board, User user) {
-        String content = "테스트 댓글";
-        Reply reply = Reply.createReply(content, board, user);
+    private Reply getSaveReply(Board board, User user) {
+        Reply reply = ReplyFactory.getReply(board, user);
         return reply;
     }
 
@@ -70,9 +61,9 @@ public class ReplyRepositoryTest {
     public void 댓글_추가_by게시물_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply reply = getReply(board, user);
+        User user = getSaveUser();
+        Board board = getSaveBoard(user);
+        Reply reply = getSaveReply(board, user);
 
         //when
         Reply addReply = replyRepository.save(reply);
@@ -89,11 +80,11 @@ public class ReplyRepositoryTest {
     public void 댓글_추가_by댓글_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply parentReply = getReply(board, user);
+        User user = getSaveUser();
+        Board board = getSaveBoard(user);
+        Reply parentReply = getSaveReply(board, user);
         Reply addParentReply = replyRepository.save(parentReply);
-        Reply childReply = getReply(board, user);
+        Reply childReply = getSaveReply(board, user);
         childReply.updateParentReply(addParentReply);
 
         //when
@@ -109,24 +100,28 @@ public class ReplyRepositoryTest {
     public void 댓글_리스트_조회_by게시물_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
+        User user = getSaveUser();
+        Board board = getSaveBoard(user);
+        List<Reply> replies = new ArrayList<>();
         int size = 10;
         int offset = 0;
         int cnt = 10;
 
         for(int i=0;i<cnt;i++) {
-            Reply reply = getReply(board, user);
+            Reply reply = getSaveReply(board, user);
             replyRepository.save(reply);
+            replies.add(reply);
         }
 
         //when
-        List<ReplyDto.ReplyResponse> replies = replyRepository.findAllByBoard(board.getId(), size, offset);
+        List<ReplyDto.ReplyResponse> values = replyRepository.findAllByBoard(board.getId(), size, offset);
 
         //then
-        assertThat(replies.size()).isEqualTo(cnt);
-        assertThat(replies).extracting(ReplyDto.ReplyResponse::getReplyId)
-                .contains(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L);
+        assertThat(values.size()).isEqualTo(cnt);
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getReplyId)
+                .containsAll(replies.stream()
+                        .map(Reply::getId)
+                        .collect(Collectors.toList()));
     }
 
     @DisplayName("댓글 리스트 조회 by 댓글 Repository")
@@ -137,15 +132,15 @@ public class ReplyRepositoryTest {
         int size = 10;
         int offset = 0;
         int cnt = 10;
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply parentReply = getReply(board, user);
+        User user = getSaveUser();
+        Board board = getSaveBoard(user);
+        Reply parentReply = getSaveReply(board, user);
         Reply addParentReply = replyRepository.save(parentReply);
         List<Long> childReplyIds = new ArrayList<>();
 
         for(int i=0;i<cnt;i++)
         {
-            Reply childReply = getReply(board, user);
+            Reply childReply = getSaveReply(board, user);
             childReply.updateParentReply(addParentReply);
             Reply addChildReply = replyRepository.save(childReply);
             childReplyIds.add(addChildReply.getId());
@@ -165,9 +160,9 @@ public class ReplyRepositoryTest {
     public void 댓글_삭제_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply reply = getReply(board, user);
+        User user = getSaveUser();
+        Board board = getSaveBoard(user);
+        Reply reply = getSaveReply(board, user);
 
         Reply addReply = replyRepository.save(reply);
 
