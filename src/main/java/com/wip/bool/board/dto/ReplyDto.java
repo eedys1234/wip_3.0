@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +21,6 @@ public class ReplyDto {
         @NotBlank
         private String content;
 
-        @Positive
         private Long parentId;
 
         private String orgFileNames;
@@ -49,6 +47,7 @@ public class ReplyDto {
 
             this.replyId = reply.getId();
             this.content = reply.getIsDeleted() == DeleteStatus.DELETE ? "삭제된 댓글입니다." : reply.getContent();
+
             if(!Objects.isNull(reply.getParentReply())) {
                 this.parentId = reply.getParentReply().getId();
             }

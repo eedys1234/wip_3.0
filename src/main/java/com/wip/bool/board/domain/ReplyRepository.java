@@ -1,6 +1,5 @@
 package com.wip.bool.board.domain;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.board.dto.ReplyDto;
 import lombok.RequiredArgsConstructor;
@@ -65,12 +64,7 @@ public class ReplyRepository {
 
     public List<ReplyDto.ReplyResponse> findAllByReply(Long parentId, int size, int offset) {
 
-        return queryFactory.select(
-                    Projections.constructor(ReplyDto.ReplyResponse.class,
-                            reply.id, reply.content, imageFile.filePath, imageFile.newFileName,
-                            imageFile.imageFileExt, reply.board.id, reply.parentReply.id
-                    )
-                )
+        List<Reply> replies = queryFactory.select(reply)
                 .from(reply)
                 .leftJoin(reply.parentReply)
                 .fetchJoin()
@@ -79,6 +73,10 @@ public class ReplyRepository {
                 .offset(offset)
                 .limit(size)
                 .fetch();
+
+        return replies.stream()
+                .map(reply -> new ReplyDto.ReplyResponse(reply, reply.getImageFiles()))
+                .collect(Collectors.toList());
     }
 
     public Long delete(Reply reply) {

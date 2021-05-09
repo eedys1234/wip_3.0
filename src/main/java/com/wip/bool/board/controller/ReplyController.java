@@ -23,7 +23,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @PostMapping(value = "/board/{board:[\\d]+}/reply")
-    public ResponseEntity<Long> save(@Valid @RequestBody ReplyDto.ReplySaveRequest requestDto,
+    public ResponseEntity<Long> saveReply(@Valid @RequestBody ReplyDto.ReplySaveRequest requestDto,
                                      @PathVariable("boardId") Long boardId,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
@@ -32,7 +32,7 @@ public class ReplyController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = replyService.save(userId, boardId, requestDto);
+        Long id = replyService.saveReply(userId, boardId, requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
@@ -60,11 +60,11 @@ public class ReplyController {
     }
 
     @DeleteMapping(value = "/board/{boardId:[\\d]+}/reply/{replyId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("replyId") Long replyId,
+    public ResponseEntity<Long> deleteReply(@PathVariable("replyId") Long replyId,
                                        @PathVariable("boardId") Long boardId,
                                        @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(replyService.delete(userId, replyId));
+        return ResponseEntity.ok(replyService.deleteReply(userId, replyId));
     }
 
 }

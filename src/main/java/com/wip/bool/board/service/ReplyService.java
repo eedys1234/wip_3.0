@@ -3,6 +3,7 @@ package com.wip.bool.board.service;
 import com.wip.bool.board.domain.*;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ReplyService {
     private String imageFilePath;
 
     @Transactional
-    public Long save(Long userId, Long boardId, ReplyDto.ReplySaveRequest requestDto) {
+    public Long saveReply(Long userId, Long boardId, ReplyDto.ReplySaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
@@ -46,7 +47,7 @@ public class ReplyService {
             reply.updateParentReply(parent);
         }
 
-        replyRepository.save(reply);
+        reply = replyRepository.save(reply);
 
         if(hasText(requestDto.getOrgFileNames())) {
 
@@ -73,10 +74,23 @@ public class ReplyService {
     }
 
     @Transactional
-    public Long delete(Long userId, Long replyId) {
+    public Long deleteReply(Long userId, Long replyId) {
 
-        Reply reply = replyRepository.findById(userId, replyId)
-                .orElseThrow(() -> new IllegalArgumentException());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+
+        Role role = user.getRole();
+        Reply reply = null;
+
+        if(role == Role.ROLE_ADMIN) {
+            reply = replyRepository.findById(replyId)
+                    .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다. id = " + replyId));
+        }
+        else if(role == Role.ROLE_NORMAL) {
+            reply = replyRepository.findById(userId, replyId)
+                    .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다. id = " + replyId));
+
+        }
 
         if(reply.getChildReply().size() != 0) {
             reply.deleteStatus();
@@ -88,22 +102,24 @@ public class ReplyService {
         return 1L;
     }
 
-    private List<ReplyDto.ReplyResponse> nestedStructure(List<ReplyDto.ReplyResponse> replys) {
+    private List<ReplyDto.ReplyResponse> nestedStructure(List<ReplyDto.ReplyResponse> replies) {
 
-        List<ReplyDto.ReplyResponse> newReplys = new ArrayList<>();
+        List<ReplyDto.ReplyResponse> newReplies = new ArrayList<>();
         Map<Long, ReplyDto.ReplyResponse> replyResponseMap = new HashMap<>();
 
-        for(ReplyDto.ReplyResponse reply : replys) {
+        for(ReplyDto.ReplyResponse reply : replies)
+        {
+            replyResponseMap.put(reply.getReplyId(), reply);
 
-            if(Objects.isNull(reply.getParentId())) {
+            if(!Objects.isNull(reply.getParentId())) {
                 replyResponseMap.get(reply.getParentId()).getNodes().add(reply);
             }
             else {
-                newReplys.add(reply);
+                newReplies.add(reply);
             }
         }
 
-        return newReplys;
+        return newReplies;
     }
 
     private Reply getAncestorReply(Reply reply) {
@@ -112,7 +128,7 @@ public class ReplyService {
         if(!Objects.isNull(parent) && parent.getChildReply().size() == 1 && parent.getIsDeleted() == DeleteStatus.DELETE) {
             return getAncestorReply(parent);
         }
-        return parent;
+        return reply;
     }
 
     private void updateBoard(Reply reply, List<ImageFile> imageFiles) {

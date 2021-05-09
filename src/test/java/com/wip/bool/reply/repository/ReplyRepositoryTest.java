@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,7 +65,7 @@ public class ReplyRepositoryTest {
         return reply;
     }
 
-    @DisplayName("댓글 추가 by 게시물")
+    @DisplayName("댓글 추가 by 게시물 Repository")
     @Test
     public void 댓글_추가_by게시물_Repository() throws Exception {
 
@@ -83,7 +84,7 @@ public class ReplyRepositoryTest {
         assertThat(addReply.getChildReply()).isEmpty();
     }
 
-    @DisplayName("댓글 추가 by 댓글")
+    @DisplayName("댓글 추가 by 댓글 Repository")
     @Test
     public void 댓글_추가_by댓글_Repository() throws Exception {
 
@@ -103,7 +104,7 @@ public class ReplyRepositoryTest {
         assertThat(addChildReply.getParentReply().getId()).isEqualTo(parentReply.getId());
     }
 
-    @DisplayName("댓글 리스트 조회 by 게시물")
+    @DisplayName("댓글 리스트 조회 by 게시물 Repository")
     @Test
     public void 댓글_리스트_조회_by게시물_Repository() throws Exception {
 
@@ -128,7 +129,53 @@ public class ReplyRepositoryTest {
                 .contains(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L);
     }
 
-//    @DisplayName("")
-//    @Test
-//    public void 댓글_리스트_조회
+    @DisplayName("댓글 리스트 조회 by 댓글 Repository")
+    @Test
+    public void 댓글_리스트_조회_by댓글_Repository() throws Exception {
+
+        //given
+        int size = 10;
+        int offset = 0;
+        int cnt = 10;
+        User user = getUser();
+        Board board = getBoard(user);
+        Reply parentReply = getReply(board, user);
+        Reply addParentReply = replyRepository.save(parentReply);
+        List<Long> childReplyIds = new ArrayList<>();
+
+        for(int i=0;i<cnt;i++)
+        {
+            Reply childReply = getReply(board, user);
+            childReply.updateParentReply(addParentReply);
+            Reply addChildReply = replyRepository.save(childReply);
+            childReplyIds.add(addChildReply.getId());
+        }
+
+        //when
+        List<ReplyDto.ReplyResponse> replies = replyRepository.findAllByReply(addParentReply.getId(), size, offset);
+
+        //then
+        assertThat(replies.size()).isEqualTo(cnt);
+        assertThat(replies).extracting(ReplyDto.ReplyResponse::getParentId).contains(addParentReply.getId());
+        assertThat(replies).extracting(ReplyDto.ReplyResponse::getReplyId).containsAll(childReplyIds);
+    }
+
+    @DisplayName("댓글 삭제 Repository")
+    @Test
+    public void 댓글_삭제_Repository() throws Exception {
+
+        //given
+        User user = getUser();
+        Board board = getBoard(user);
+        Reply reply = getReply(board, user);
+
+        Reply addReply = replyRepository.save(reply);
+
+        //when
+        Long resValue = replyRepository.delete(addReply);
+
+        //then
+        assertThat(resValue).isEqualTo(1L);
+
+    }
 }
