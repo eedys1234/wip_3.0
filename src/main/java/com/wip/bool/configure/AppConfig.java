@@ -1,7 +1,7 @@
 package com.wip.bool.configure;
 
-import com.wip.bool.domain.cmmn.CodeMapper;
-import com.wip.bool.domain.cmmn.CodeModel;
+import com.wip.bool.cmmn.CodeMapper;
+import com.wip.bool.cmmn.CodeModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

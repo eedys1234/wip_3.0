@@ -5,3 +5,5 @@
 generated
 application-oauth.properties
 application-jwt.properties
+
+/logs
