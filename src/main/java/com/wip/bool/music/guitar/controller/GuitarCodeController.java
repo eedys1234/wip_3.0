@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/music/guitar")
+@RequestMapping(value = "/api/v1/music")
 public class GuitarCodeController {
 
     private final GuitarCodeService guitarCodeService;
@@ -28,7 +28,7 @@ public class GuitarCodeController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = guitarCodeService.save(requestDto);
+        Long id = guitarCodeService.saveGuitarCode(requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -37,8 +37,13 @@ public class GuitarCodeController {
     }
 
     @GetMapping(value = "/guitar/codes")
-    public ResponseEntity<List<GuitarCodeDto.GuitarCodeResponse>> gets() {
-        return new ResponseEntity<>(guitarCodeService.gets(), HttpStatus.OK);
+    public ResponseEntity<List<GuitarCodeDto.GuitarCodeResponse>> getGuitarCoeds() {
+        return ResponseEntity.ok(guitarCodeService.getGuitarCodes());
+    }
+
+    @DeleteMapping(value = "/guitar/code/{guitarCodeId:[\\d]+}")
+    public ResponseEntity<Long> deleteGuitarCode(@PathVariable Long guitarCodeId) {
+        return ResponseEntity.ok(guitarCodeService.deleteGuitarCode(guitarCodeId));
     }
 
 }
