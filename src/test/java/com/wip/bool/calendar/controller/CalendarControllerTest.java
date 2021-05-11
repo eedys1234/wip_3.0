@@ -5,11 +5,11 @@ import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.repository.CalendarRepository;
 import com.wip.bool.calendar.service.CalendarService;
+import com.wip.bool.cmmn.calendar.CalendarFactory;
 import com.wip.bool.cmmn.type.ShareType;
-import com.wip.bool.user.domain.Role;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,26 +62,16 @@ public class CalendarControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    private Optional<User> getUser() {
+    private User getUser() {
 
-        String email = "test@gmail.com";
-        String name = "";
-        String profile = "";
-        UserType userType = UserType.WIP;
-        Role role = Role.ROLE_NORMAL;
-        User user = User.createUser(email, name, profile, userType, role);
+        User user = UserFactory.getNormalUser();
         ReflectionTestUtils.setField(user, "id", 1L);
-        return Optional.ofNullable(user);
+        return user;
     }
 
     private Calendar getCalendar(User user) {
 
-        String title = "일정 추가!";
-        String content = "네트워크 일정";
-        ShareType shareType = ShareType.PUBLIC;
-        LocalDateTime date = LocalDateTime.of(2021, 05, 02, 16, 00, 00);
-
-        Calendar calendar = Calendar.createCalender(title, content, date, shareType, user);
+        Calendar calendar = CalendarFactory.getPublicCalendar(user);
         ReflectionTestUtils.setField(calendar, "id", 1L);
         return calendar;
     }
@@ -130,8 +119,8 @@ public class CalendarControllerTest {
         ReflectionTestUtils.setField(requestDto, "shareType", shareType.name());
         ReflectionTestUtils.setField(requestDto, "calendarDate", Timestamp.valueOf(date).getTime());
 
-        Optional<User> opt = getUser();
-        Calendar calendar = getCalendar(opt.get());
+        User user = getUser();
+        Calendar calendar = getCalendar(user);
 
         doReturn(calendar.getId()).when(calendarService).save(any(Long.class), any(CalendarDto.CalendarSaveRequest.class));
 
@@ -204,8 +193,8 @@ public class CalendarControllerTest {
     public void 일정_삭제_Controller() throws Exception {
 
         //given
-        Optional<User> opt = getUser();
-        Calendar calendar = getCalendar(opt.get());
+        User user = getUser();
+        Calendar calendar = getCalendar(user);
 
         doReturn(1L).when(calendarService).delete(any(Long.class), any(Long.class));
 

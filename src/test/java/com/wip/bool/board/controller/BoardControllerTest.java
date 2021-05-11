@@ -5,10 +5,10 @@ import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.board.service.BoardService;
+import com.wip.bool.cmmn.board.BoardFactory;
 import com.wip.bool.cmmn.status.DeleteStatus;
-import com.wip.bool.user.domain.Role;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,25 +56,14 @@ public class BoardControllerTest {
     }
 
     private User getUser() {
-
-        String email = "test@gmail.com";
-        String password = "test1234";
-        String profiles = "";
-        Role role = Role.ROLE_NORMAL;
-        UserType userType = UserType.WIP;
-
-        User user = User.createUser(email, password, profiles, userType, role);
+        User user = UserFactory.getNormalUser();
         ReflectionTestUtils.setField(user, "id", 1L);
         return user;
     }
 
     private Board getBoard(User user) {
 
-        String title = "테스트 게시물";
-        String content = "게시물 내용";
-        BoardType boardType = BoardType.BOARD;
-
-        Board board = Board.createBoard(title, content, boardType, user);
+        Board board = BoardFactory.getBoard(user);
         ReflectionTestUtils.setField(board, "id", 1L);
         return board;
     }
@@ -104,7 +93,7 @@ public class BoardControllerTest {
         Board board = Board.createBoard(title, content, boardType, user);
         ReflectionTestUtils.setField(board, "id", 1L);
 
-        detailBoards.add(new BoardDto.BoardResponse(board, null));
+        detailBoards.add(new BoardDto.BoardResponse(board));
         return detailBoards;
     }
 

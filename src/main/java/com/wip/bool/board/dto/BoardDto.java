@@ -2,7 +2,6 @@ package com.wip.bool.board.dto;
 
 import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
-import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,14 +63,14 @@ public class BoardDto {
 
         private List<ImageFileDto.ImageFileResponse> images;
 
-        public BoardResponse(Board board, List<ImageFile> imageFiles) {
+        public BoardResponse(Board board) {
             this.boardId = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.boardType = board.getBoardType();
 
-            if(!Objects.isNull(imageFiles)) {
-                this.images = imageFiles.stream()
+            if(!Objects.isNull(board.getImageFiles())) {
+                this.images = board.getImageFiles().stream()
                                         .map(ImageFileDto.ImageFileResponse::new)
                                         .collect(Collectors.toList());
             }

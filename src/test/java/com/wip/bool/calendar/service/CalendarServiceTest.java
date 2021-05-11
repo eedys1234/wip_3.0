@@ -4,12 +4,10 @@ import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.repository.CalendarRepository;
 import com.wip.bool.cmmn.type.ShareType;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.dept.domain.Dept;
-import com.wip.bool.dept.domain.DeptRepository;
-import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,20 +39,11 @@ public class CalendarServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private DeptRepository deptRepository;
-
-    private Optional<User> getUser() {
-        String email = "test@gmail.com";
-        String password = "";
-        String profiles = "";
-        UserType userType = UserType.WIP;
-        Role role = Role.ROLE_NORMAL;
-
-        User user = User.createUser(email, password, profiles, userType, role);
+    private User getUser() {
+        User user = UserFactory.getNormalUser();
         ReflectionTestUtils.setField(user, "id", 1L);
 
-        return Optional.ofNullable(user);
+        return user;
     }
 
     private Calendar getCalendar(User user) {
@@ -129,12 +118,12 @@ public class CalendarServiceTest {
 
         //given
         Long userId = 1L;
-        Optional<User> opt = getUser();
-        Calendar calendar = getCalendar(opt.get());
+        User user = getUser();
+        Calendar calendar = getCalendar(user);
         CalendarDto.CalendarSaveRequest requestDto = getCalendarSaveRequestDto();
 
         //when
-        doReturn(opt).when(userRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
         doReturn(calendar)
                 .when(calendarRepository)
                 .save(any(Calendar.class));
@@ -152,15 +141,14 @@ public class CalendarServiceTest {
 
         //given
         Dept dept = getDept();
-        Optional<User> opt = getUser();
-        opt = Optional.ofNullable(opt.get().updateDept(dept));
+        User user = getUser();
+        user.updateDept(dept);
         List<Long> userIds = getUserIds();
 
         List<CalendarDto.CalendarResponse> deptCalendars = getDeptCalendars();
 
         //when
-        doReturn(dept).when(deptRepository).save(any(Dept.class));
-        doReturn(opt).when(userRepository).deptByUser(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
         doReturn(userIds).when(userRepository).usersByDept(any(Long.class));
         doReturn(deptCalendars).when(calendarRepository).deptCalendars(any(List.class), any(LocalDateTime.class), any(LocalDateTime.class));
 
@@ -195,12 +183,12 @@ public class CalendarServiceTest {
 
         //given
         Dept dept = getDept();
-        Optional<User> opt = getUser();
-        opt = Optional.ofNullable(opt.get().updateDept(dept));
+        User user = getUser();
+        user.updateDept(dept);
         List<CalendarDto.CalendarResponse> individualCalendars = getIndividualCalendars();
 
         //when
-        doReturn(opt).when(userRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
         doReturn(individualCalendars).when(calendarRepository).individualCalendars(any(Long.class), any(LocalDateTime.class), any(LocalDateTime.class));
 
         LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
@@ -229,13 +217,13 @@ public class CalendarServiceTest {
     public void 일정_삭제_Service() throws Exception {
 
         //given
-        Optional<User> opt = getUser();
-        Calendar calendar = getCalendar(opt.get());
+        User user = getUser();
+        Calendar calendar = getCalendar(user);
 
         //when
         doReturn(Optional.ofNullable(calendar)).when(calendarRepository).findByIdAndUserId(any(Long.class), any(Long.class));
         doReturn(1L).when(calendarRepository).delete(any(Calendar.class));
-        Long resValue = calendarService.delete(opt.get().getId(), calendar.getId());
+        Long resValue = calendarService.delete(user.getId(), calendar.getId());
 
         //then
         assertThat(resValue).isEqualTo(1L);
