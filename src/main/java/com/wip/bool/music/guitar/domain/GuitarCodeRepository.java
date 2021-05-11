@@ -35,4 +35,9 @@ public class GuitarCodeRepository {
                 .from(QGuitarCode.guitarCode)
                 .fetchFirst();
     }
+
+    public Long delete(GuitarCode guitarCode) {
+        entityManager.remove(guitarCode);
+        return 1L;
+    }
 }

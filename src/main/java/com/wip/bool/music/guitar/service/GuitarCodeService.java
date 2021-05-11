@@ -17,7 +17,7 @@ public class GuitarCodeService {
     private final GuitarCodeRepository guitarCodeRepository;
 
     @Transactional
-    public Long save(GuitarCodeDto.GuitarCodeSaveRequest requestDto) {
+    public Long saveGuitarCode(GuitarCodeDto.GuitarCodeSaveRequest requestDto) {
 
         int order = guitarCodeRepository.maxOrder();
         GuitarCode guitarCode = GuitarCode.createGuitarCode(requestDto.getCode(), order + 1);
@@ -25,11 +25,18 @@ public class GuitarCodeService {
     }
 
     @Transactional(readOnly = true)
-    public List<GuitarCodeDto.GuitarCodeResponse> gets() {
+    public List<GuitarCodeDto.GuitarCodeResponse> getGuitarCodes() {
         return guitarCodeRepository.findAll()
                 .stream()
                 .map(GuitarCodeDto.GuitarCodeResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Long deleteGuitarCode(Long guitarCodeId) {
+        GuitarCode guitarCode = guitarCodeRepository.findById(guitarCodeId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 기타코드가 존재하지 않습니다. id = " + guitarCodeId));
+        return guitarCodeRepository.delete(guitarCode);
     }
 
 }
