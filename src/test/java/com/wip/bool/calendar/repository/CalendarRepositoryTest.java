@@ -64,6 +64,7 @@ public class CalendarRepositoryTest {
         userRepository.save(userB);
     }
 
+    @DisplayName("일정 추가")
     @Test
     public void 일정_추가_Repository() throws Exception {
 
@@ -158,6 +159,7 @@ public class CalendarRepositoryTest {
         assertThat(calendars.get(0).getCalendarId()).isGreaterThan(0L);
     }
 
+    @DisplayName("일정_삭제")
     @Test
     public void 일정_삭제_Repository() throws Exception {
 

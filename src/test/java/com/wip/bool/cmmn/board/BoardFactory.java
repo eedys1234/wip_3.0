@@ -14,4 +14,13 @@ public class BoardFactory {
         Board board = Board.createBoard(title, content, boardType, user);
         return board;
     }
+
+    public static Board getNotice(User user) {
+
+        String title = "테스트 게시물";
+        String content = "게시물 내용";
+        BoardType boardType = BoardType.NOTICE;
+        Board board = Board.createBoard(title, content, boardType, user);
+        return board;
+    }
 }

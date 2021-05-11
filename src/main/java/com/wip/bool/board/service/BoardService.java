@@ -66,8 +66,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardDto.BoardResponse findDetailBoard(Long boardId) {
-        List<BoardDto.BoardResponse> boards = boardRepository.findDetailById(boardId);
-        return boards.get(0);
+        return boardRepository.findDetailById(boardId);
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.wip.bool.board.domain;
 
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.board.dto.BoardDto;
@@ -9,11 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.wip.bool.board.domain.QBoard.board;
 import static com.wip.bool.board.domain.QImageFile.imageFile;
 
@@ -58,18 +54,16 @@ public class BoardRepository {
         );
     }
 
-    public List<BoardDto.BoardResponse> findDetailById(Long boardId) {
-        Map<Board, List<ImageFile>> transform = queryFactory
+    public BoardDto.BoardResponse findDetailById(Long boardId) {
+        Board boardEntity = queryFactory
+                            .select(board)
                             .from(board)
                             .leftJoin(board.imageFiles, imageFile)
                             .fetchJoin()
                             .where(board.id.eq(boardId))
-                            .transform(groupBy(board).as(GroupBy.list(imageFile)));
+                            .fetchOne();
 
-        return transform.entrySet()
-                .stream()
-                .map(entry -> new BoardDto.BoardResponse(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+        return new BoardDto.BoardResponse(boardEntity);
     }
 
     public Long delete(Board board) {
