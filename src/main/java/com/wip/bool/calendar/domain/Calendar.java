@@ -1,4 +1,4 @@
-package com.wip.bool.calendar.repository;
+package com.wip.bool.calendar.domain;
 
 import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.cmmn.type.ShareType;

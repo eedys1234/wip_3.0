@@ -38,6 +38,7 @@ public class UserBoxController {
 
     @PutMapping(value = "/userbox/{userBoxId:[\\d]+}")
     public ResponseEntity<Long> update(@PathVariable("userBoxId") Long userBoxId,
+                                       @RequestHeader("userId") Long userId,
                                        @Valid @RequestBody UserBoxDto.UserBoxUpdateRequest requestDto,
                                        Errors errors) {
 
@@ -45,16 +46,21 @@ public class UserBoxController {
             return ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(userBoxService.updateUserBox(userBoxId, requestDto), HttpStatus.OK);
+        return ResponseEntity.ok(userBoxService.updateUserBox(userId, userBoxId, requestDto));
     }
 
     @DeleteMapping(value = "/userbox/{userBoxId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("userBoxId") Long userBoxId) {
-        return new ResponseEntity<>(userBoxService.deleteUserBox(userBoxId), HttpStatus.OK);
+    public ResponseEntity<Long> delete(@PathVariable("userBoxId") Long userBoxId,
+                                       @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(userBoxService.deleteUserBox(userId, userBoxId));
     }
 
     @GetMapping(value = "/userboxes")
-    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> gets(@RequestHeader("userId") Long userId) {
-        return new ResponseEntity<>(userBoxService.findAllByUserId(userId), HttpStatus.OK);
+    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> gets(@RequestHeader("userId") Long userId,
+                                                                 @RequestParam String share,
+                                                                 @RequestParam String order,
+                                                                 @RequestParam int size,
+                                                                 @RequestParam int offset) {
+        return ResponseEntity.ok(userBoxService.findAll(userId, order, share, size, offset));
     }
 }

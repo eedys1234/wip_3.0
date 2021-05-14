@@ -1,9 +1,4 @@
-[INFO ] 2021-05-11 23:24:27.392 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-11 23:24:28.465 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-11 23:24:28.470 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-11 23:24:28.480 [main] TestDispatcherServlet - Completed initialization in 10 ms
-[WARN ] 2021-05-11 23:24:28.643 [main] DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported]
-[INFO ] 2021-05-11 23:24:51.390 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-11 23:24:52.406 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-11 23:24:52.421 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-11 23:24:52.421 [main] TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] 2021-05-12 21:12:50.436 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-12 21:12:50.455 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-12 21:12:50.457 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-05-12 21:12:50.459 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
