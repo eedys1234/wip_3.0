@@ -1,6 +1,7 @@
 package com.wip.bool.group.service;
 
 import com.wip.bool.cmmn.auth.AuthExecutor;
+import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
@@ -69,8 +70,13 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupDto.GroupResponse> findAllByMaster(Long userId) {
-        return groupRepository.findAllByMaster(userId)
+    public List<GroupDto.GroupResponse> findAllByMaster(Long userId, String order, int size, int offset) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+
+        OrderType orderType = OrderType.valueOf(order);
+        return groupRepository.findAllByMaster(userId, orderType, size, offset)
                 .stream()
                 .map(GroupDto.GroupResponse::new)
                 .collect(Collectors.toList());
@@ -82,9 +88,10 @@ public class GroupService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<GroupDto.GroupResponse> findAllByUser(Long userId) {
+    public List<GroupDto.GroupResponse> findAllByUser(Long userId, String order, int size, int offset) {
 
-        return groupRepository.findAllByUser(userId)
+        OrderType orderType = OrderType.valueOf(order);
+        return groupRepository.findAllByUser(userId, orderType, size, offset)
                 .stream()
                 .map(GroupDto.GroupResponse::new)
                 .collect(Collectors.toList());

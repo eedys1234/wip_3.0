@@ -25,19 +25,11 @@ public class GroupMemberDto {
         @JsonProperty(value = "group_member_id")
         private Long groupMemberId;
 
-        @JsonProperty(value = "group_id")
-        private Long groupId;
-
-        @JsonProperty(value = "group_name")
-        private String groupName;
-
         @JsonProperty(value = "user_id")
         private Long userId;
 
         public GroupMemberResponse(GroupMember groupMember) {
             this.groupMemberId = groupMember.getId();
-            this.groupId = groupMember.getGroup().getId();
-            this.groupName = groupMember.getGroup().getGroupName();
             this.userId = groupMember.getUser().getId();
         }
     }

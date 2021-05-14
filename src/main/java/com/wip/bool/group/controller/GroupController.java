@@ -23,7 +23,7 @@ public class GroupController {
 
     private final GroupService groupService;
 
-    @PutMapping(value = "/group")
+    @PostMapping(value = "/group")
     public ResponseEntity<Long> saveGroup(@RequestBody @Valid GroupDto.GroupSaveRequest requestDto,
                                           @RequestHeader("userId") Long userId,
                                           Errors errors, UriComponentsBuilder uriComponentsBuilder) {
@@ -61,13 +61,19 @@ public class GroupController {
     }
 
     @GetMapping(value = "/groups-master")
-    public ResponseEntity<List<GroupDto.GroupResponse>> findAllByMaster(@RequestHeader("userId") Long userId) {
-        return ResponseEntity.ok(groupService.findAllByMaster(userId));
+    public ResponseEntity<List<GroupDto.GroupResponse>> findAllByMaster(@RequestHeader("userId") Long userId,
+                                                                        @RequestParam String order,
+                                                                        @RequestParam int size,
+                                                                        @RequestParam int offset) {
+        return ResponseEntity.ok(groupService.findAllByMaster(userId, order, size, offset));
     }
 
     @GetMapping(value = "/groups-user")
-    public ResponseEntity<List<GroupDto.GroupResponse>> findAllByUser(@RequestHeader("userId") Long userId) {
-        return ResponseEntity.ok(groupService.findAllByUser(userId));
+    public ResponseEntity<List<GroupDto.GroupResponse>> findAllByUser(@RequestHeader("userId") Long userId,
+                                                                      @RequestParam String order,
+                                                                      @RequestParam int size,
+                                                                      @RequestParam int offset) {
+        return ResponseEntity.ok(groupService.findAllByUser(userId, order, size, offset));
     }
 
 }

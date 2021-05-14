@@ -1,5 +1,6 @@
 package com.wip.bool.group.domain;
 
+import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "group_member")
-public class GroupMember {
+public class GroupMember extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

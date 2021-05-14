@@ -1,5 +1,6 @@
 package com.wip.bool.group.domain;
 
+import com.wip.bool.cmmn.BaseEntity;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,8 +14,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "group")
-public class Group {
+@Table(name = "groups")
+public class Group extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +25,9 @@ public class Group {
     @Column(name = "group_name", nullable = false)
     private String groupName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_master_id")
-    private User groupMaster;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "group")
     private List<GroupMember> groupMembers = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Group {
     }
 
     public void setGroupMaster(User user) {
-        this.groupMaster = user;
+        this.user = user;
     }
 
     public void updateGroupName(String groupName) {
@@ -48,10 +49,4 @@ public class Group {
         }
     }
 
-//    public void addGroupMember(GroupMember... groupMembers) {
-//        for(GroupMember member : groupMembers) {
-//            member.setGroup(this);
-//            this.groupMembers.add(member);
-//        }
-//    }
 }

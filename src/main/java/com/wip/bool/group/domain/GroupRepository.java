@@ -1,6 +1,8 @@
 package com.wip.bool.group.domain;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wip.bool.cmmn.type.OrderType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -32,32 +34,42 @@ public class GroupRepository {
     public Optional<Group> findById(Long usrId, Long groupId) {
         return Optional.ofNullable(
                     queryFactory.selectFrom(group)
-                    .where(group.id.eq(groupId), group.groupMaster.id.eq(usrId))
+                    .where(group.id.eq(groupId), group.user.id.eq(usrId))
                     .fetchOne()
                 );
     }
 
-    public List<Group> findAllByMaster(Long userId) {
+    public List<Group> findAllByMaster(Long userId, OrderType orderType, int size, int offset) {
         return queryFactory.selectFrom(group)
                 .leftJoin(group.groupMembers, groupMember)
                 .fetchJoin()
-                .where(group.groupMaster.id.eq(userId))
+                .where(group.user.id.eq(userId))
+                .orderBy(getOrder(orderType))
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 
-    public List<Group> findAllByUser(Long userId) {
+    public List<Group> findAllByUser(Long userId, OrderType orderType, int size, int offset) {
         return queryFactory.select(group)
                 .from(group)
                 .innerJoin(group.groupMembers, groupMember)
                 .fetchJoin()
-                .innerJoin(group.groupMaster, user)
+                .innerJoin(group.user, user)
                 .fetchJoin()
                 .where(groupMember.user.id.eq(userId))
+                .orderBy(getOrder(orderType))
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 
     public Long delete(Group group) {
         entityManager.remove(group);
         return 1L;
+    }
+
+    private OrderSpecifier getOrder(OrderType orderType) {
+        return orderType == OrderType.ASC ? group.createDate.asc() :  group.createDate.desc();
     }
 }

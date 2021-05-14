@@ -49,7 +49,7 @@ public class GroupDto {
         public GroupResponse(Group group) {
             this.groupId = group.getId();
             this.groupName = group.getGroupName();
-            this.userId = group.getGroupMaster().getId();
+            this.userId = group.getUser().getId();
 
             if(group.getGroupMembers().size() > 0) {
                 this.groupMember = group.getGroupMembers()
