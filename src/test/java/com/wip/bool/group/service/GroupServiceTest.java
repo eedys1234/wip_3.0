@@ -4,6 +4,8 @@ import com.wip.bool.cmmn.group.GroupFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.group.domain.Group;
+import com.wip.bool.group.domain.GroupMember;
+import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.group.dto.GroupDto;
 import com.wip.bool.user.domain.User;
@@ -34,7 +36,11 @@ public class GroupServiceTest {
     private GroupRepository groupRepository;
 
     @Mock
+    private GroupMemberRepository groupMemberRepository;
+
+    @Mock
     private UserRepository userRepository;
+
 
     private User getUser() {
         User user = UserFactory.getNormalUser();
@@ -54,6 +60,12 @@ public class GroupServiceTest {
         return group;
     }
 
+    private GroupMember getGroupMember(Group group, User user) {
+        GroupMember groupMember = GroupMember.createGroupMember(group, user);
+        ReflectionTestUtils.setField(groupMember, "id", 1L);
+        return groupMember;
+    }
+
     private Group addGroup(User user, Long id) {
         return getGroup(user, id);
     }
@@ -65,12 +77,14 @@ public class GroupServiceTest {
         //given
         User user = getUser();
         Group group = getGroup(user);
+        GroupMember groupMember = getGroupMember(group, user);
         GroupDto.GroupSaveRequest requestDto = new GroupDto.GroupSaveRequest();
         ReflectionTestUtils.setField(requestDto, "groupName", "테스트그룹_1");
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
         doReturn(group).when(groupRepository).save(any(Group.class));
+        doReturn(groupMember).when(groupMemberRepository).save(any(GroupMember.class));
         Long id = groupService.saveGroup(user.getId(), requestDto);
 
         //then
@@ -79,6 +93,7 @@ public class GroupServiceTest {
         //verify
         verify(userRepository, times(1)).findById(any(Long.class));
         verify(groupRepository, times(1)).save(any(Group.class));
+        verify(groupMemberRepository, times(1)).save(any(GroupMember.class));
     }
 
     @DisplayName("그룹수정")

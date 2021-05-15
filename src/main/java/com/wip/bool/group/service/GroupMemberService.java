@@ -1,6 +1,7 @@
 package com.wip.bool.group.service;
 
 import com.wip.bool.cmmn.auth.AuthExecutor;
+import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
@@ -54,8 +55,10 @@ public class GroupMemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupMemberDto.GroupMemberResponse> findAllByGroup(Long groupId) {
-        return groupMemberRepository.findAllByGroup(groupId)
+    public List<GroupMemberDto.GroupMemberResponse> findAllByGroup(Long groupId, String order, int size, int offset) {
+
+        OrderType orderType = OrderType.valueOf(order);
+        return groupMemberRepository.findAllByGroup(groupId, orderType, size, offset)
                 .stream()
                 .map(GroupMemberDto.GroupMemberResponse::new)
                 .collect(Collectors.toList());

@@ -1,5 +1,4 @@
-[INFO ] 2021-05-14 23:09:54.376 [main] TestDispatcherServlet - Completed initialization in 11 ms
-[INFO ] 2021-05-14 23:11:33.729 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-14 23:11:34.801 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-14 23:11:34.803 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-14 23:11:34.811 [main] TestDispatcherServlet - Completed initialization in 8 ms
+[INFO ] 2021-05-16 00:04:32.030 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-16 00:04:32.072 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-16 00:04:32.074 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-05-16 00:04:32.078 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.

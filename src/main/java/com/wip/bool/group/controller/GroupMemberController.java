@@ -42,9 +42,12 @@ public class GroupMemberController {
         return ResponseEntity.ok(groupMemberService.deleteGroupMember(userId, groupMemberId));
     }
 
-    @GetMapping(value = "/group/members/{groupId:[\\d]+}")
-    public ResponseEntity<List<GroupMemberDto.GroupMemberResponse>> findAllByGroup(@PathVariable Long groupId) {
+    @GetMapping(value = "/group/{groupId:[\\d]+}/members")
+    public ResponseEntity<List<GroupMemberDto.GroupMemberResponse>> findAllByGroup(@PathVariable Long groupId,
+                                                                                   @RequestParam String order,
+                                                                                   @RequestParam int size,
+                                                                                   @RequestParam int offset) {
 
-        return ResponseEntity.ok(groupMemberService.findAllByGroup(groupId));
+        return ResponseEntity.ok(groupMemberService.findAllByGroup(groupId, order, size, offset));
     }
 }

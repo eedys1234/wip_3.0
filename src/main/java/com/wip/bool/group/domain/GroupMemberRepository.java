@@ -1,6 +1,7 @@
 package com.wip.bool.group.domain;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wip.bool.cmmn.type.OrderType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -42,11 +43,15 @@ public class GroupMemberRepository {
         );
     }
 
-    public List<GroupMember> findAllByGroup(Long groupId) {
+    public List<GroupMember> findAllByGroup(Long groupId, OrderType orderType, int size, int offset) {
         return queryFactory.selectFrom(groupMember)
                 .innerJoin(groupMember.user, user)
                 .fetchJoin()
                 .where(groupMember.group.id.eq(groupId))
+                .offset(offset)
+                .limit(size)
                 .fetch();
    }
+
+
 }

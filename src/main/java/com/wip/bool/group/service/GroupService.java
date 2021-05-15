@@ -3,6 +3,7 @@ package com.wip.bool.group.service;
 import com.wip.bool.cmmn.auth.AuthExecutor;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.group.domain.Group;
+import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.group.dto.GroupDto;
@@ -30,8 +31,11 @@ public class GroupService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
 
         Group group = Group.createGroup(requestDto.getGroupName(), user);
+        Long id = groupRepository.save(group).getId();
 
-        return groupRepository.save(group).getId();
+        GroupMember groupMember = GroupMember.createGroupMember(group, user);
+        groupMemberRepository.save(groupMember);
+        return id;
     }
 
     @Transactional
@@ -84,8 +88,6 @@ public class GroupService {
 
     /**
      * 내가 속해있는 그룹
-     * @param userId
-     * @return
      */
     @Transactional(readOnly = true)
     public List<GroupDto.GroupResponse> findAllByUser(Long userId, String order, int size, int offset) {
