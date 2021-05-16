@@ -1,6 +1,5 @@
 package com.wip.bool.dept.service;
 
-import com.wip.bool.cmmn.CodeMapper;
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.dept.domain.DeptRepository;
 import com.wip.bool.dept.dto.DeptDto;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class DeptService {
 
@@ -26,8 +24,7 @@ public class DeptService {
 
     private final UserRepository userRepository;
 
-    private final CodeMapper codeMapper;
-
+    @Transactional
     public Long saveDept(Long userId, DeptDto.DeptSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
@@ -43,6 +40,7 @@ public class DeptService {
 
     }
 
+    @Transactional
     public Long updateDept(Long userId, Long deptId, DeptDto.DeptUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
@@ -66,12 +64,12 @@ public class DeptService {
     @Transactional(readOnly = true)
     public List<DeptDto.DeptResponse> findAll() {
 
-
         return deptRepository.findAll().stream()
                                         .map(DeptDto.DeptResponse::new)
                                         .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public DeptDto.DeptResponse findOne(Long deptId) {
 
         Dept dept = deptRepository.findById(deptId)
@@ -80,6 +78,7 @@ public class DeptService {
         return new DeptDto.DeptResponse(dept);
     }
 
+    @Transactional
     public Long deleteDept(Long userId, Long deptId) {
 
         User user = userRepository.findById(userId)
