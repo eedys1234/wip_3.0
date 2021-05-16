@@ -1,6 +1,7 @@
 package com.wip.bool.music.song.service;
 
 import com.wip.bool.cmmn.CodeMapper;
+import com.wip.bool.exception.excp.not_found.NotFoundSongMasterException;
 import com.wip.bool.music.song.domain.SongMaster;
 import com.wip.bool.music.song.domain.SongMasterRepository;
 import com.wip.bool.music.song.dto.SongMasterDto;
@@ -35,7 +36,7 @@ public class SongMasterService {
     public Long delete(Long songMasterId) {
 
         SongMaster songMaster = songMasterRepository.findById(songMasterId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 분류가 존재하지 않습니다. id = " + songMasterId));
+                .orElseThrow(() -> new NotFoundSongMasterException(songMasterId));
 
         return songMasterRepository.delete(songMaster);
     }

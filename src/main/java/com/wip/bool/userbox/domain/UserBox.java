@@ -1,7 +1,6 @@
 package com.wip.bool.userbox.domain;
 
 import com.wip.bool.cmmn.BaseEntity;
-import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,15 +32,10 @@ public class UserBox extends BaseEntity {
     @OneToMany(mappedBy = "userBox")
     private List<UserBoxSong> userMusics = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "share_type", nullable = false)
-    private ShareType shareType;
-
-    public static UserBox createUserBox(User user, String userBoxName, ShareType shareType) {
+    public static UserBox createUserBox(User user, String userBoxName) {
         UserBox userBox = new UserBox();
         userBox.setUser(user);
         userBox.updateUserBoxName(userBoxName);
-        userBox.updateShareType(shareType);
         return userBox;
     }
 
@@ -55,7 +49,4 @@ public class UserBox extends BaseEntity {
         }
     }
 
-    public void updateShareType(ShareType shareType) {
-        this.shareType = shareType;
-    }
 }

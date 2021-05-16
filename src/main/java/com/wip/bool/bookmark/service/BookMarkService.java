@@ -4,6 +4,8 @@ import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
 import com.wip.bool.bookmark.domain.BookMark;
 import com.wip.bool.bookmark.domain.BookMarkRepository;
+import com.wip.bool.exception.excp.not_found.NotFoundBookMarkException;
+import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.user.domain.User;
@@ -28,7 +30,7 @@ public class BookMarkService {
     public Long save(Long userId, BookMarkDto.BookMarkSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         SongDetail songDetail = songDetailRepository.findById(requestDto.getSongDetailId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + requestDto.getSongDetailId()));
@@ -41,7 +43,7 @@ public class BookMarkService {
     @Transactional
     public Long delete(Long bookMarkId) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId)
-                .orElseThrow(() -> new IllegalArgumentException("즐겨찾기가 존재하지 않습니다. id = " + bookMarkId));
+                .orElseThrow(() -> new NotFoundBookMarkException(bookMarkId));
         return bookMarkRepository.delete(bookMark);
     }
 

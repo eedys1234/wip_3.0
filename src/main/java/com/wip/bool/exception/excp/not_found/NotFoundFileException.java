@@ -1,4 +1,4 @@
-package com.wip.bool.exception.excp;
+package com.wip.bool.exception.excp.not_found;
 
 public class NotFoundFileException extends RuntimeException {
 

@@ -5,6 +5,9 @@ import com.wip.bool.cmmn.type.SortType;
 import com.wip.bool.bible.domain.WordsMaster;
 import com.wip.bool.bible.domain.WordsMasterRepository;
 import com.wip.bool.cmmn.dictionary.SearchStore;
+import com.wip.bool.exception.excp.not_found.NotFoundGuitarCodeException;
+import com.wip.bool.exception.excp.not_found.NotFoundSongException;
+import com.wip.bool.exception.excp.not_found.NotFoundSongMasterException;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
 import com.wip.bool.music.mp3.domain.SongMP3;
@@ -143,7 +146,7 @@ public class SongDetailService {
     @Transactional(readOnly = true)
     public SongDetailDto.SongDetailResponse get(Long songDetailId, Long userId) {
         return songDetailRepository.findById(songDetailId, userId)
-                .orElseThrow(() -> new IllegalArgumentException("노래를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundSongException());
     }
 
     public List<SongDetailDto.SongDetailSimpleResponse> search(String keyword) {
@@ -155,7 +158,7 @@ public class SongDetailService {
 
     private SongDetail selectedSongDetail(Long songDetailId) {
         return songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+                .orElseThrow(() -> new NotFoundSongException(songDetailId));
     }
 
     private WordsMaster selectedWordsMaster(Long wordsMasterId) {
@@ -165,11 +168,11 @@ public class SongDetailService {
 
     private GuitarCode selectedGuitarCode(Long guitarCodeId) {
         return guitarCodeRepository.findById(guitarCodeId)
-                .orElseThrow(() -> new IllegalArgumentException("guitar code id가 존재하지 않습니다. "));
+                .orElseThrow(() -> new NotFoundGuitarCodeException());
     }
 
     private SongMaster selectedSongMaster(Long songMasterId) {
         return  songMasterRepository.findById(songMasterId)
-                .orElseThrow(() -> new IllegalArgumentException("code key가 존재하지 않습니다. "));
+                .orElseThrow(() -> new NotFoundSongMasterException(songMasterId));
     }
 }

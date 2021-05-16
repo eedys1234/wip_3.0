@@ -2,6 +2,9 @@ package com.wip.bool.group.service;
 
 import com.wip.bool.cmmn.auth.AuthExecutor;
 import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.exception.excp.not_found.NotFoundGroupException;
+import com.wip.bool.exception.excp.not_found.NotFoundGroupMemberException;
+import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
@@ -28,10 +31,10 @@ public class GroupMemberService {
     public Long saveGroupMember(Long userId, GroupMemberDto.GroupMemberSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id =" + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         Group group = groupRepository.findById(requestDto.getGroupId())
-                .orElseThrow(() -> new IllegalArgumentException("그룹이 존재하지 않습니다. id = " + requestDto.getGroupId()));
+                .orElseThrow(() -> new NotFoundGroupException(requestDto.getGroupId()));
 
         GroupMember groupMember = GroupMember.createGroupMember(group, user);
         return groupMemberRepository.save(groupMember).getId();
@@ -41,15 +44,15 @@ public class GroupMemberService {
     public Long deleteGroupMember(Long userId, Long groupMemberId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id =" + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         AuthExecutor<Long, GroupMember> authExecutor = new AuthExecutor<>();
 
         GroupMember groupMember = authExecutor.execute(user, groupMemberId,
                 gid -> groupMemberRepository.findById(gid)
-                        .orElseThrow(() -> new IllegalArgumentException("그룹에 속해있지 않습니다. id = " + groupMemberId)),
+                        .orElseThrow(() -> new NotFoundGroupMemberException(groupMemberId)),
                 (uid, gid) -> groupMemberRepository.findById(uid, gid)
-                        .orElseThrow(() -> new IllegalArgumentException("그룹에 속해있지 않습니다. id = " + groupMemberId)));
+                        .orElseThrow(() -> new NotFoundGroupMemberException(groupMemberId)));
 
         return groupMemberRepository.delete(groupMember);
     }

@@ -1,5 +1,6 @@
 package com.wip.bool.recent.service;
 
+import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.recent.domain.Recent;
@@ -25,7 +26,7 @@ public class RecentService {
     public Long save(Long userId, RecentDto.RecentSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         SongDetail songDetail = songDetailRepository.findById(requestDto.getSongDetailId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + requestDto.getSongDetailId()));

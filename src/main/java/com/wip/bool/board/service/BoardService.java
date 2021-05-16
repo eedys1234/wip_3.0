@@ -6,6 +6,8 @@ import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.exception.excp.AuthorizationException;
+import com.wip.bool.exception.excp.not_found.NotFoundBoardException;
+import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -35,7 +37,7 @@ public class BoardService {
     public Long saveBoard(Long userId, BoardDto.BoardSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         BoardType boardType = BoardType.valueOf(requestDto.getBoardType());
 
@@ -73,17 +75,17 @@ public class BoardService {
     public Long deleteBoard(Long userId, Long boardId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         Role role = user.getRole();
         Board board = null;
         if(role == Role.ROLE_ADMIN) {
             board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+                    .orElseThrow(() -> new NotFoundBoardException(boardId));
         }
         else if(role == Role.ROLE_NORMAL){
             board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+                    .orElseThrow(() -> new NotFoundBoardException(boardId));
         }
         else {
             throw new AuthorizationException();
@@ -97,17 +99,17 @@ public class BoardService {
     public Long hiddenBoard(Long userId, Long boardId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         Role role = user.getRole();
         Board board = null;
         if(role == Role.ROLE_ADMIN) {
             board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+                    .orElseThrow(() -> new NotFoundBoardException(boardId));
         }
         else if(role == Role.ROLE_NORMAL){
             board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다. id = " + boardId));
+                    .orElseThrow(() -> new NotFoundBoardException(boardId));
         }
         else {
             throw new AuthorizationException();

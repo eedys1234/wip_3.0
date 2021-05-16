@@ -1,6 +1,6 @@
 package com.wip.bool.music.mp3.controller;
 
-import com.wip.bool.exception.excp.NotFoundFileException;
+import com.wip.bool.exception.excp.not_found.NotFoundFileException;
 import com.wip.bool.music.mp3.service.SongMP3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

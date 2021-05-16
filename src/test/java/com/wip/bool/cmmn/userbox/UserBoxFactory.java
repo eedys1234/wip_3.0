@@ -10,14 +10,14 @@ public class UserBoxFactory {
 
         String userBoxName = "사용자박스_1";
         ShareType shareType = ShareType.PRIVATE;
-        UserBox userBox = UserBox.createUserBox(user, userBoxName, shareType);
+        UserBox userBox = UserBox.createUserBox(user, userBoxName);
         return userBox;
     }
 
     public static UserBox getUserBox(User user, String userBoxName) {
 
         ShareType shareType = ShareType.PRIVATE;
-        UserBox userBox = UserBox.createUserBox(user, userBoxName, shareType);
+        UserBox userBox = UserBox.createUserBox(user, userBoxName);
         return userBox;
     }
 }

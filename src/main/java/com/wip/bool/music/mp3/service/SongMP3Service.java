@@ -1,5 +1,7 @@
 package com.wip.bool.music.mp3.service;
 
+import com.wip.bool.exception.excp.not_found.NotFoundMP3Exception;
+import com.wip.bool.exception.excp.not_found.NotFoundSongException;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.music.mp3.domain.SongMP3;
@@ -23,7 +25,7 @@ public class SongMP3Service {
     public Long save(Long songDetailId, String orgFileName, byte[] mp3File) {
 
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+                .orElseThrow(() -> new NotFoundSongException(songDetailId));
 
         SongMP3 songMP3 = SongMP3.createSongMP3(songDetail, mp3FilePath, orgFileName, mp3File);
 
@@ -46,7 +48,7 @@ public class SongMP3Service {
     public Long delete(Long songMP3Id) {
 
         SongMP3 songMP3 = songMP3Repository.findById(songMP3Id)
-            .orElseThrow(() -> new IllegalArgumentException("MP3 파일이 존재하지 않습니다. id = " + songMP3Id));
+            .orElseThrow(() -> new NotFoundMP3Exception(songMP3Id));
 
         songMP3Repository.delete(songMP3);
 
@@ -61,7 +63,7 @@ public class SongMP3Service {
     public byte[] getFile(Long songMP3Id) {
 
         SongMP3 songMP3 = songMP3Repository.findById(songMP3Id)
-                .orElseThrow(() -> new IllegalArgumentException("MP3 파일이 존재하지 않습니다. id = " + songMP3Id));
+                .orElseThrow(() -> new NotFoundMP3Exception(songMP3Id));
 
         return songMP3.getFile(mp3FilePath);
     }

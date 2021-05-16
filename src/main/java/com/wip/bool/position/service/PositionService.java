@@ -1,6 +1,7 @@
 package com.wip.bool.position.service;
 
 import com.wip.bool.cmmn.CodeMapper;
+import com.wip.bool.exception.excp.not_found.NotFoundPositionException;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
 import com.wip.bool.position.dto.PositionDto;
@@ -29,7 +30,7 @@ public class PositionService {
     public Long update(Long positionId, PositionDto.PositionUpdateRequest requestDto) {
 
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+                .orElseThrow(() -> new NotFoundPositionException(positionId));
 
         position.update(requestDto.getPositionName());
         return position.getId();
@@ -60,7 +61,7 @@ public class PositionService {
     public PositionDto.PositionResponse findOne(Long positionId) {
 
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+                .orElseThrow(() -> new NotFoundPositionException(positionId));
         return new PositionDto.PositionResponse(position);
     }
 }

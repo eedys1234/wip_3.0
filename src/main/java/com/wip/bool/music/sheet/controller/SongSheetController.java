@@ -1,6 +1,6 @@
 package com.wip.bool.music.sheet.controller;
 
-import com.wip.bool.exception.excp.NotFoundFileException;
+import com.wip.bool.exception.excp.not_found.NotFoundFileException;
 import com.wip.bool.music.sheet.service.SongSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

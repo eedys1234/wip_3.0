@@ -4,6 +4,8 @@ package com.wip.bool.userbox.service;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.exception.excp.AuthorizationException;
+import com.wip.bool.exception.excp.not_found.NotFoundUserBoxException;
+import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -30,29 +32,28 @@ public class UserBoxService {
     public Long addUserBox(Long userId, UserBoxDto.UserBoxSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
-        ShareType shareType = ShareType.valueOf(requestDto.getShareType());
-        UserBox userBox = UserBox.createUserBox(user, requestDto.getUserBoxName(), shareType);
+        UserBox userBox = UserBox.createUserBox(user, requestDto.getUserBoxName());
         return userBoxRepository.save(userBox).getId();
     }
 
     public Long updateUserBox(Long userId, Long userBoxId, UserBoxDto.UserBoxUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         UserBox userBox = null;
         Role role = user.getRole();
 
         if(role == Role.ROLE_ADMIN) {
             userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
+                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
         }
         else if(role == Role.ROLE_NORMAL) {
 
             userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
+                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
         }
         else {
             throw new AuthorizationException();
@@ -65,18 +66,18 @@ public class UserBoxService {
     public Long deleteUserBox(Long userId, Long userBoxId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+                .orElseThrow(() -> new NotFoundUserException(userId));
 
         UserBox userBox = null;
         Role role = user.getRole();
 
         if(role == Role.ROLE_ADMIN) {
             userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
+                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
         }
         else if(role == Role.ROLE_NORMAL) {
             userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자 Box 정보가 없습니다. id = " + userBoxId));
+                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
         }
         else {
             throw new AuthorizationException();

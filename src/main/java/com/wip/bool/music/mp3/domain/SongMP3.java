@@ -6,7 +6,7 @@ import com.wip.bool.cmmn.file.FileNIOManager;
 import com.wip.bool.cmmn.retry.Retry;
 import com.wip.bool.cmmn.type.FileExtType;
 import com.wip.bool.music.song.domain.SongDetail;
-import com.wip.bool.exception.excp.NotFoundFileException;
+import com.wip.bool.exception.excp.not_found.NotFoundFileException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

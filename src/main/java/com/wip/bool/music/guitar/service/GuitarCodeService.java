@@ -1,5 +1,6 @@
 package com.wip.bool.music.guitar.service;
 
+import com.wip.bool.exception.excp.not_found.NotFoundGuitarCodeException;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
 import com.wip.bool.music.guitar.dto.GuitarCodeDto;
@@ -35,7 +36,7 @@ public class GuitarCodeService {
     @Transactional
     public Long deleteGuitarCode(Long guitarCodeId) {
         GuitarCode guitarCode = guitarCodeRepository.findById(guitarCodeId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 기타코드가 존재하지 않습니다. id = " + guitarCodeId));
+                    .orElseThrow(() -> new NotFoundGuitarCodeException(guitarCodeId));
         return guitarCodeRepository.delete(guitarCode);
     }
 
