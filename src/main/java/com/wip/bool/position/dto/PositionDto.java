@@ -1,5 +1,6 @@
 package com.wip.bool.position.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.position.domain.Position;
 import lombok.Builder;
@@ -15,6 +16,7 @@ public class PositionDto {
     @NoArgsConstructor
     public static class PositionSaveRequest {
 
+        @JsonProperty(value = "position_name")
         @NotBlank
         protected String positionName;
 
@@ -34,6 +36,8 @@ public class PositionDto {
     @NoArgsConstructor
     public static class PositionUpdateRequest {
 
+        @JsonProperty(value = "position_name")
+        @NotBlank
         protected String positionName;
 
         @Builder
@@ -46,8 +50,10 @@ public class PositionDto {
     @NoArgsConstructor
     public static class PositionResponse implements CodeModel {
 
+        @JsonProperty(value = "position_id")
         private Long positionId;
 
+        @JsonProperty(value = "position_name")
         @NotBlank
         protected String positionName;
 

@@ -1,66 +1,89 @@
 package com.wip.bool.position.service;
 
-import com.wip.bool.cmmn.CodeMapper;
+import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
 import com.wip.bool.position.dto.PositionDto;
+import com.wip.bool.user.domain.Role;
+import com.wip.bool.user.domain.User;
+import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class PositionService {
 
     private final PositionRepository positionRepository;
 
-    private final CodeMapper codeMapper;
+    private final UserRepository userRepository;
 
-    public Long add(PositionDto.PositionSaveRequest requestDto) {
+    @Transactional
+    public Long savePosition(Long userId, PositionDto.PositionSaveRequest requestDto) {
 
-        return positionRepository.save(requestDto.toEntity()).getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        Role role = user.getRole();
+
+        if(role == Role.ROLE_ADMIN) {
+            return positionRepository.save(requestDto.toEntity()).getId();
+        }
+        else {
+            throw new AuthorizationException();
+        }
+
     }
 
-    public Long update(Long positionId, PositionDto.PositionUpdateRequest requestDto) {
+    @Transactional
+    public Long updatePosition(Long userId, Long positionId, PositionDto.PositionUpdateRequest requestDto) {
 
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException());
 
-        position.update(requestDto.getPositionName());
-        return position.getId();
+        Role role = user.getRole();
+
+        if(role == Role.ROLE_ADMIN) {
+            Position position = positionRepository.findById(positionId)
+                    .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+
+            position.updatePositionName(requestDto.getPositionName());
+            return position.getId();
+        }
+        else {
+            throw new AuthorizationException();
+        }
+
     }
 
     @Transactional(readOnly = true)
     public List<PositionDto.PositionResponse> findAll() {
-
-        final String POSITION_KEY = "position";
-        List<PositionDto.PositionResponse> list = null;
-
-        if(Objects.isNull(codeMapper.get(POSITION_KEY))) {
-
-            list = positionRepository.findAll().stream()
-                    .map(PositionDto.PositionResponse::new)
-                    .collect(Collectors.toList());
-
-            codeMapper.put(POSITION_KEY, list);
-
-        }
-        else {
-            list = (List<PositionDto.PositionResponse>) codeMapper.get(POSITION_KEY).get(POSITION_KEY);
-        }
-
-        return list;
+       return positionRepository.findAll().stream()
+               .map(PositionDto.PositionResponse::new)
+               .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public PositionDto.PositionResponse findOne(Long positionId) {
 
         Position position = positionRepository.findById(positionId)
                 .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
         return new PositionDto.PositionResponse(position);
+    }
+
+    public Long deletePosition(Long userId, Long positionId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        Position position = positionRepository.findById(positionId)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        positionRepository.delete(position);
+        return 1L;
     }
 }
