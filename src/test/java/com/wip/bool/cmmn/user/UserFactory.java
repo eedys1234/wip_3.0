@@ -21,7 +21,7 @@ public class UserFactory {
         String password = "test1234";
         String profiles = "";
         UserType userType = UserType.WIP;
-        Role role = Role.ROLE_NORMAL;
+        Role role = Role.ROLE_ADMIN;
         User user = User.createUser(email, password, profiles, userType, role);
         return user;
     }
