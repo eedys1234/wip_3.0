@@ -21,14 +21,15 @@ public class DeptController {
     private final DeptService deptService;
 
     @PostMapping(value = "/dept")
-    public ResponseEntity<Long> add(@RequestBody @Valid DeptDto.DeptSaveRequest requestDto
-                                    , Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Long> saveDept(@RequestBody @Valid DeptDto.DeptSaveRequest requestDto,
+                                         @RequestHeader("userId") Long userId,
+                                         Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = deptService.add(requestDto);
+        Long id = deptService.saveDept(userId, requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
@@ -37,17 +38,27 @@ public class DeptController {
 
     @GetMapping(value = "/depts")
     public ResponseEntity<List<DeptDto.DeptResponse>> findAll() {
-        return new ResponseEntity<>(deptService.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok(deptService.findAll());
     }
 
-    @PutMapping(value = "/dept/{id}")
-    public ResponseEntity<Long> update(@PathVariable("id") Long deptId,
-                                       @RequestBody @Valid DeptDto.DeptUpdateRequest requestDto,
-                                       Errors errors) {
+    @PutMapping(value = "/dept/{deptId:[\\d]+}")
+    public ResponseEntity<Long> updateDept(@PathVariable Long deptId,
+                                           @RequestHeader("userId") Long userId,
+                                           @RequestBody @Valid DeptDto.DeptUpdateRequest requestDto,
+                                           Errors errors) {
+
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(deptService.update(deptId, requestDto), HttpStatus.OK);
+        return ResponseEntity.ok(deptService.updateDept(userId, deptId, requestDto));
     }
+
+    @DeleteMapping(value = "/dept/{deptId:[\\d]+}")
+    public ResponseEntity<Long> deleteDept(@PathVariable Long deptId,
+                                           @RequestHeader("userId") Long userId) {
+
+        return ResponseEntity.ok(deptService.deleteDept(userId, deptId));
+    }
+
 }
