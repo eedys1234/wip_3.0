@@ -27,7 +27,7 @@ public class Position {
         this.positionName = positionName;
     }
 
-    public void update(String positionName) {
+    public void updatePositionName(String positionName) {
 
         if(!Objects.isNull(positionName)) {
             this.positionName = positionName;

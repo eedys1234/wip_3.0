@@ -1,1 +1,6 @@
-[INFO ] 2021-05-16 13:58:12.727 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-16 19:12:29.019 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-16 19:12:29.037 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-16 19:12:29.037 [main] TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] 2021-05-16 19:12:29.122 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-16 19:12:29.122 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-16 19:12:29.122 [main] TestDispatcherServlet - Completed initialization in 0 ms

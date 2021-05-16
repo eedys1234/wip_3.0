@@ -22,21 +22,23 @@ public class PositionController {
 
     @PostMapping(value = "/position")
     public ResponseEntity<Long> add(@RequestBody @Valid PositionDto.PositionSaveRequest requestDto,
-                                    Errors erorrs, UriComponentsBuilder uriComponentsBuilder) {
+                                    @RequestHeader("userId") Long userId,
+                                    Errors errors,
+                                    UriComponentsBuilder uriComponentsBuilder) {
 
-        if(erorrs.hasErrors()) {
+        if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = positionService.add(requestDto);
+        Long id = positionService.savePosition(userId, requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
-
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/position/{id}")
     public ResponseEntity<Long> update(@RequestBody @Valid PositionDto.PositionUpdateRequest requestDto,
+                                       @RequestHeader("userId") Long userId,
                                        @PathVariable("id") Long positionId,
                                        Errors errors) {
 
@@ -44,11 +46,18 @@ public class PositionController {
             return ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(positionService.update(positionId, requestDto), HttpStatus.OK);
+        return ResponseEntity.ok(positionService.updatePosition(userId, positionId, requestDto));
     }
 
     @GetMapping(value = "/positions")
     public ResponseEntity<List<PositionDto.PositionResponse>> findAll() {
-        return new ResponseEntity<>(positionService.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok(positionService.findAll());
+    }
+
+    @DeleteMapping(value = "/position/{positionId:[\\d]+}")
+    public ResponseEntity<Long> deletePosition(@PathVariable Long positionId,
+                                               @RequestHeader("userId") Long userId) {
+
+        return ResponseEntity.ok(positionService.deletePosition(userId, positionId));
     }
 }
