@@ -2,8 +2,10 @@ package com.wip.bool.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.cmmn.group.GroupFactory;
+import com.wip.bool.cmmn.group.GroupMemberFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.group.domain.Group;
+import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.dto.GroupDto;
 import com.wip.bool.group.service.GroupService;
 import com.wip.bool.user.domain.User;
@@ -70,6 +72,12 @@ public class GroupControllerTest {
         Group group = getGroup(groupName, user);
         ReflectionTestUtils.setField(group, "id", id);
         return group;
+    }
+
+    private GroupMember getGroupMember(Group group, User user, Long id) {
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
+        ReflectionTestUtils.setField(groupMember, "id", id);
+        return groupMember;
     }
 
 
@@ -177,7 +185,7 @@ public class GroupControllerTest {
         params.add("size", String.valueOf(size));
 
         //when
-        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups-master")
+        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/master/groups")
         .header("userId", user.getId())
         .params(params)
         .contentType(MediaType.APPLICATION_JSON));
@@ -187,6 +195,56 @@ public class GroupControllerTest {
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
                                                 .andReturn();
+
+    }
+
+
+    @DisplayName("그룹_리스트_조회")
+    @Test
+    public void 그룹_리스트_조회_Controller() throws Exception {
+
+        //given
+        User user = getUser();
+        List<Group> groups = new ArrayList<>();
+        List<String> groupNames = new ArrayList<>();
+
+        String order = "ASC";
+        int size = 10;
+        int offset = 0;
+        int cnt = 10;
+
+        for(int i=1;i<=cnt;i++)
+        {
+            String groupName = "테스트그룹_" + i;
+            Group group = addGroup(groupName, user, (long)i);
+            GroupMember groupMember = getGroupMember(group, user, (long)i);
+            groupNames.add(groupName);
+            groups.add(group);
+        }
+
+        doReturn(groups.stream()
+                        .map(GroupDto.GroupResponse::new)
+                        .collect(Collectors.toList())).when(groupService).findAllByUser(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+        params.add("order", order);
+        params.add("size", String.valueOf(size));
+        params.add("offset", String.valueOf(offset));
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/groups")
+        .header("userId", 1L)
+        .contentType(MediaType.APPLICATION_JSON)
+        .params(params));
+
+        //then
+        final MvcResult mvcResult = resultActions.andDo(print())
+                                                .andExpect(status().isOk())
+                                                .andExpect(jsonPath("$").isArray())
+                                                .andReturn();
+
+        verify(groupService, times(1)).findAllByUser(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
 
     }
 

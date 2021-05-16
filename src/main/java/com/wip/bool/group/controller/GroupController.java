@@ -60,7 +60,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.deleteGroup(userId, groupId));
     }
 
-    @GetMapping(value = "/groups-master")
+    @GetMapping(value = "/master/groups")
     public ResponseEntity<List<GroupDto.GroupResponse>> findAllByMaster(@RequestHeader("userId") Long userId,
                                                                         @RequestParam String order,
                                                                         @RequestParam int size,
@@ -68,7 +68,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.findAllByMaster(userId, order, size, offset));
     }
 
-    @GetMapping(value = "/groups-user")
+    @GetMapping(value = "/user/groups")
     public ResponseEntity<List<GroupDto.GroupResponse>> findAllByUser(@RequestHeader("userId") Long userId,
                                                                       @RequestParam String order,
                                                                       @RequestParam int size,

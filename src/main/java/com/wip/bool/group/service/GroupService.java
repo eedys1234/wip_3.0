@@ -92,6 +92,9 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<GroupDto.GroupResponse> findAllByUser(Long userId, String order, int size, int offset) {
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
+
         OrderType orderType = OrderType.valueOf(order);
         return groupRepository.findAllByUser(userId, orderType, size, offset)
                 .stream()

@@ -2,11 +2,14 @@ package com.wip.bool.group.repository;
 
 
 import com.wip.bool.cmmn.group.GroupFactory;
+import com.wip.bool.cmmn.group.GroupMemberFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.util.WIPProperty;
 import com.wip.bool.configure.TestConfig;
 import com.wip.bool.group.domain.Group;
+import com.wip.bool.group.domain.GroupMember;
+import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -33,7 +36,11 @@ public class GroupRepositoryTest {
     private GroupRepository groupRepository;
 
     @Autowired
+    private GroupMemberRepository groupMemberRepository;
+
+    @Autowired
     private UserRepository userRepository;
+
 
     private User getNormalUser() {
         User user = UserFactory.getNormalUser();
@@ -58,6 +65,18 @@ public class GroupRepositoryTest {
     private void addGroup(String groupName, User user) {
         Group group = getGroup(groupName, user);
         groupRepository.save(group);
+    }
+
+    private Group addGroupReturnGroup(String groupName, User user) {
+        Group group = getGroup(groupName, user);
+        groupRepository.save(group);
+        return group;
+    }
+
+    private GroupMember getGroupMember(Group group, User user) {
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
+        groupMemberRepository.save(groupMember);
+        return groupMember;
     }
 
     @DisplayName("그룹추가")
@@ -143,4 +162,35 @@ public class GroupRepositoryTest {
         assertThat(groups).extracting(Group::getGroupName).containsAll(groupNames);
     }
 
+    @DisplayName("그룹 리스트 조회 by User")
+    @Test
+    public void 그룹_리스트_조회_byUser_Repository() throws Exception {
+
+        //given
+        int cnt = 10;
+        int size = 10;
+        int offset = 0;
+
+        User user = getNormalUser();
+        User addUser = userRepository.save(user);
+        List<String> groupNames = new ArrayList<>();
+        List<Group> groups = new ArrayList<>();
+
+        for (int i = 1; i <= cnt; i++)
+        {
+            String groupName = "테스트그룹_" + i;
+            Group group = addGroupReturnGroup(groupName, user);
+            GroupMember groupMember = getGroupMember(group, user);
+            groupNames.add(groupName);
+            groups.add(group);
+        }
+
+        //when
+        List<Group> values = groupRepository.findAllByUser(user.getId(), OrderType.ASC, size, offset);
+
+        //then
+        assertThat(values.size()).isEqualTo(cnt);
+        assertThat(values).extracting(Group::getGroupName).containsAll(groupNames);
+
+    }
 }
