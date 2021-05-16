@@ -1,5 +1,6 @@
 package com.wip.bool.dept.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.dept.domain.Dept;
 import lombok.Builder;
@@ -14,6 +15,7 @@ public class DeptDto {
     @NoArgsConstructor
     public static class DeptSaveRequest {
 
+        @JsonProperty(value = "dept_name")
         @NotBlank
         protected String deptName;
 
@@ -33,6 +35,8 @@ public class DeptDto {
     @NoArgsConstructor
     public static class DeptUpdateRequest {
 
+        @JsonProperty(value = "dept_name")
+        @NotBlank
         protected String deptName;
 
         @Builder
@@ -45,8 +49,10 @@ public class DeptDto {
     @NoArgsConstructor
     public static class DeptResponse implements CodeModel {
 
+        @JsonProperty(value = "dept_id")
         private Long deptId;
 
+        @JsonProperty(value = "dept_name")
         @NotBlank
         protected String deptName;
 
