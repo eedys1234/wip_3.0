@@ -1,5 +1,6 @@
 package com.wip.bool.userbox.dto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 public class UserBoxSongDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserBoxSongSaveRequest {
 
         @Positive
@@ -20,7 +21,7 @@ public class UserBoxSongDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserBoxSongResponse {
 
         private Long userBoxSongId;

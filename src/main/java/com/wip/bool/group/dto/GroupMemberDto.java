@@ -2,6 +2,7 @@ package com.wip.bool.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.group.domain.GroupMember;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.validation.constraints.Positive;
 public class GroupMemberDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class GroupMemberSaveRequest {
 
         @JsonProperty(value = "group_id")
@@ -19,7 +20,7 @@ public class GroupMemberDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class GroupMemberResponse {
 
         @JsonProperty(value = "group_member_id")

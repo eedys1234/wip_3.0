@@ -3,6 +3,7 @@ package com.wip.bool.dept.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.dept.domain.Dept;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 public class DeptDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DeptSaveRequest {
 
         @JsonProperty(value = "dept_name")
@@ -32,7 +33,7 @@ public class DeptDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DeptUpdateRequest {
 
         @JsonProperty(value = "dept_name")
@@ -46,7 +47,7 @@ public class DeptDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DeptResponse implements CodeModel {
 
         @JsonProperty(value = "dept_id")

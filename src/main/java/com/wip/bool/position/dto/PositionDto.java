@@ -3,6 +3,7 @@ package com.wip.bool.position.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.position.domain.Position;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class PositionDto {
 
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PositionSaveRequest {
 
         @JsonProperty(value = "position_name")
@@ -33,7 +34,7 @@ public class PositionDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PositionUpdateRequest {
 
         @JsonProperty(value = "position_name")
@@ -47,7 +48,7 @@ public class PositionDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PositionResponse implements CodeModel {
 
         @JsonProperty(value = "position_id")

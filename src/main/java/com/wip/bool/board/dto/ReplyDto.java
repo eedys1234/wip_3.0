@@ -3,6 +3,7 @@ package com.wip.bool.board.dto;
 import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.domain.Reply;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public class ReplyDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ReplySaveRequest {
 
         @NotBlank
@@ -30,7 +31,7 @@ public class ReplyDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ReplyResponse {
 
         private Long replyId;

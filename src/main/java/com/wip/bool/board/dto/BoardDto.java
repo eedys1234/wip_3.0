@@ -3,6 +3,7 @@ package com.wip.bool.board.dto;
 import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class BoardDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class BoardSaveRequest {
 
         @NotBlank
@@ -33,7 +34,7 @@ public class BoardDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class BoardSimpleResponse {
 
         private Long boardId;
@@ -50,7 +51,7 @@ public class BoardDto {
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class BoardResponse {
 
         private Long boardId;

@@ -1,6 +1,7 @@
 package com.wip.bool.calendar.dto;
 
 import com.wip.bool.cmmn.type.ShareType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 public class CalendarDto {
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CalendarSaveRequest {
 
         @NotBlank
@@ -26,17 +27,10 @@ public class CalendarDto {
         @Positive
         private Long calendarDate;
 
-//        @Builder
-//        public CalendarSaveRequest(String title, String content, String shareType, Long calendarDate) {
-//            this.title = title;
-//            this.content = content;
-//            this.shareType = shareType;
-//            this.calendarDate = calendarDate;
-//        }
     }
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CalendarResponse {
 
         private Long calendarId;
