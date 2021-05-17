@@ -1,6 +1,7 @@
 package com.wip.bool.user.service;
 
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserConfig;
 import com.wip.bool.user.domain.UserConfigRepository;
@@ -22,7 +23,7 @@ public class UserConfigService {
     public Long update(Long userId, UserConfigDto.UserConfigUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         UserConfig userConfig = user.getUserConfig();
 
@@ -36,7 +37,7 @@ public class UserConfigService {
     public UserConfigDto.UserConfigResponse findOne(Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         return new UserConfigDto.UserConfigResponse(user.getUserConfig());
     }

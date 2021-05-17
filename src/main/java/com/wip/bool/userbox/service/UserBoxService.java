@@ -4,8 +4,8 @@ package com.wip.bool.userbox.service;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.exception.excp.AuthorizationException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserBoxException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -32,7 +32,7 @@ public class UserBoxService {
     public Long addUserBox(Long userId, UserBoxDto.UserBoxSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         UserBox userBox = UserBox.createUserBox(user, requestDto.getUserBoxName());
         return userBoxRepository.save(userBox).getId();
@@ -41,19 +41,19 @@ public class UserBoxService {
     public Long updateUserBox(Long userId, Long userBoxId, UserBoxDto.UserBoxUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         UserBox userBox = null;
         Role role = user.getRole();
 
         if(role == Role.ROLE_ADMIN) {
             userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
+                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
         }
         else if(role == Role.ROLE_NORMAL) {
 
             userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
+                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
         }
         else {
             throw new AuthorizationException();
@@ -66,18 +66,18 @@ public class UserBoxService {
     public Long deleteUserBox(Long userId, Long userBoxId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         UserBox userBox = null;
         Role role = user.getRole();
 
         if(role == Role.ROLE_ADMIN) {
             userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
+                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
         }
         else if(role == Role.ROLE_NORMAL) {
             userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new NotFoundUserBoxException(userBoxId));
+                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
         }
         else {
             throw new AuthorizationException();

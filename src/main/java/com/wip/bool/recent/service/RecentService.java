@@ -1,13 +1,14 @@
 package com.wip.bool.recent.service;
 
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.recent.domain.Recent;
 import com.wip.bool.recent.domain.RecentRepository;
+import com.wip.bool.recent.dto.RecentDto;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.recent.dto.RecentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +27,10 @@ public class RecentService {
     public Long save(Long userId, RecentDto.RecentSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         SongDetail songDetail = songDetailRepository.findById(requestDto.getSongDetailId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + requestDto.getSongDetailId()));
+                .orElseThrow(() -> new EntityNotFoundException(requestDto.getSongDetailId(), ErrorCode.NOT_FOUND_SONG));
 
 
         Recent recent = Recent.createRecent(songDetail, user);

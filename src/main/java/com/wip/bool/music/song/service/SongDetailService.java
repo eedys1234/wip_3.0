@@ -1,13 +1,12 @@
 package com.wip.bool.music.song.service;
 
-import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.cmmn.type.SortType;
 import com.wip.bool.bible.domain.WordsMaster;
 import com.wip.bool.bible.domain.WordsMasterRepository;
 import com.wip.bool.cmmn.dictionary.SearchStore;
-import com.wip.bool.exception.excp.not_found.NotFoundGuitarCodeException;
-import com.wip.bool.exception.excp.not_found.NotFoundSongException;
-import com.wip.bool.exception.excp.not_found.NotFoundSongMasterException;
+import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.cmmn.type.SortType;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
 import com.wip.bool.music.mp3.domain.SongMP3;
@@ -146,7 +145,7 @@ public class SongDetailService {
     @Transactional(readOnly = true)
     public SongDetailDto.SongDetailResponse get(Long songDetailId, Long userId) {
         return songDetailRepository.findById(songDetailId, userId)
-                .orElseThrow(() -> new NotFoundSongException());
+                .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_SONG));
     }
 
     public List<SongDetailDto.SongDetailSimpleResponse> search(String keyword) {
@@ -158,7 +157,7 @@ public class SongDetailService {
 
     private SongDetail selectedSongDetail(Long songDetailId) {
         return songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new NotFoundSongException(songDetailId));
+                .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_SONG));
     }
 
     private WordsMaster selectedWordsMaster(Long wordsMasterId) {
@@ -168,11 +167,11 @@ public class SongDetailService {
 
     private GuitarCode selectedGuitarCode(Long guitarCodeId) {
         return guitarCodeRepository.findById(guitarCodeId)
-                .orElseThrow(() -> new NotFoundGuitarCodeException());
+                .orElseThrow(() -> new EntityNotFoundException(guitarCodeId, ErrorCode.NOT_FOUND_GUITAR_CODE));
     }
 
     private SongMaster selectedSongMaster(Long songMasterId) {
         return  songMasterRepository.findById(songMasterId)
-                .orElseThrow(() -> new NotFoundSongMasterException(songMasterId));
+                .orElseThrow(() -> new EntityNotFoundException(songMasterId, ErrorCode.NOT_FOUND_SONG_MASTER));
     }
 }

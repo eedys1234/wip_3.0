@@ -2,8 +2,8 @@ package com.wip.bool.group.service;
 
 import com.wip.bool.cmmn.auth.AuthExecutor;
 import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.exception.excp.not_found.NotFoundGroupException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
@@ -30,7 +30,7 @@ public class GroupService {
     public Long saveGroup(Long userId, GroupDto.GroupSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Group group = Group.createGroup(requestDto.getGroupName(), user);
         Long id = groupRepository.save(group).getId();
@@ -44,15 +44,15 @@ public class GroupService {
     public Long updateGroup(Long userId, Long groupId, GroupDto.GroupUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         AuthExecutor<Long, Group> authExecutor = new AuthExecutor<>();
 
         Group group = authExecutor.execute(user, groupId,
                 gid -> groupRepository.findById(gid)
-                .orElseThrow(() -> new NotFoundGroupException(groupId)),
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)),
                 (uid, gid) -> groupRepository.findById(uid, gid)
-                .orElseThrow(() -> new NotFoundGroupException(groupId)));
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)));
 
         group.updateGroupName(requestDto.getGroupName());
         return groupRepository.save(group).getId();
@@ -62,15 +62,15 @@ public class GroupService {
     public Long deleteGroup(Long userId, Long groupId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+            .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         AuthExecutor<Long, Group> authExecutor = new AuthExecutor<>();
 
         Group group = authExecutor.execute(user, groupId,
                 gid -> groupRepository.findById(gid)
-                .orElseThrow(() -> new NotFoundGroupException(groupId)),
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)),
                 (uid, gid) -> groupRepository.findById(uid, gid)
-                .orElseThrow(() -> new NotFoundGroupException(groupId)));
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)));
 
         return groupRepository.delete(group);
     }
@@ -79,7 +79,7 @@ public class GroupService {
     public List<GroupDto.GroupResponse> findAllByMaster(Long userId, String order, int size, int offset) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+            .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         OrderType orderType = OrderType.valueOf(order);
         return groupRepository.findAllByMaster(userId, orderType, size, offset)
@@ -95,7 +95,7 @@ public class GroupService {
     public List<GroupDto.GroupResponse> findAllByUser(Long userId, String order, int size, int offset) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+            .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         OrderType orderType = OrderType.valueOf(order);
         return groupRepository.findAllByUser(userId, orderType, size, offset)

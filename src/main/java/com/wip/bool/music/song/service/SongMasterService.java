@@ -1,7 +1,8 @@
 package com.wip.bool.music.song.service;
 
 import com.wip.bool.cmmn.CodeMapper;
-import com.wip.bool.exception.excp.not_found.NotFoundSongMasterException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.song.domain.SongMaster;
 import com.wip.bool.music.song.domain.SongMasterRepository;
 import com.wip.bool.music.song.dto.SongMasterDto;
@@ -36,7 +37,7 @@ public class SongMasterService {
     public Long delete(Long songMasterId) {
 
         SongMaster songMaster = songMasterRepository.findById(songMasterId)
-                .orElseThrow(() -> new NotFoundSongMasterException(songMasterId));
+                .orElseThrow(() -> new EntityNotFoundException(songMasterId, ErrorCode.NOT_FOUND_SONG_MASTER));
 
         return songMasterRepository.delete(songMaster);
     }

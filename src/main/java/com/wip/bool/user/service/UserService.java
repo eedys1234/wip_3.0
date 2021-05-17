@@ -2,12 +2,11 @@ package com.wip.bool.user.service;
 
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.dept.domain.DeptRepository;
-import com.wip.bool.exception.excp.not_found.NotFoundDeptException;
-import com.wip.bool.exception.excp.not_found.NotFoundPositionException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
 import com.wip.bool.user.domain.*;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
 import com.wip.bool.user.dto.OAuthAttributes;
 import com.wip.bool.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -58,18 +57,18 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
     public Long update(Long userId, UserDto.UserUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new NotFoundUserException(userId));
+                .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         if(!Objects.isNull(requestDto.getDeptId())) {
             Dept dept = deptRepository.findById(requestDto.getDeptId())
-                    .orElseThrow(()-> new NotFoundDeptException(requestDto.getDeptId()));
+                    .orElseThrow(()-> new EntityNotFoundException(requestDto.getDeptId(), ErrorCode.NOT_FOUND_DEPT));
 
             user.updateDept(dept);
         }
 
         if(!Objects.isNull(requestDto.getPositionId())) {
             Position position = positionRepository.findById(requestDto.getPositionId())
-                    .orElseThrow(()-> new NotFoundPositionException(requestDto.getPositionId()));
+                    .orElseThrow(()-> new EntityNotFoundException(requestDto.getPositionId(), ErrorCode.NOT_FOUND_POSITION));
 
             user.updatePosition(position);
         }
@@ -81,7 +80,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
         User user = userRepository.findById(userId)
                 .map(entity -> entity.approve())
-                .orElseThrow(()-> new NotFoundUserException(userId));
+                .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         return userRepository.save(user).getId();
     }
@@ -89,7 +88,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
     public Long delete(Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new NotFoundUserException(userId));
+                .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         return userRepository.delete(user);
     }
@@ -160,7 +159,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
         return userRepository.findByEmail(email)
                 .map(u -> new CustomUser(u, Collections.singleton(new SimpleGrantedAuthority(u.getRole().getKey()))))
-                .orElseThrow(() -> new NotFoundUserException());
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_USER));
     }
 }
 

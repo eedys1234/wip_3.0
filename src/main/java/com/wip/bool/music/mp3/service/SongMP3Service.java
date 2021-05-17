@@ -1,11 +1,11 @@
 package com.wip.bool.music.mp3.service;
 
-import com.wip.bool.exception.excp.not_found.NotFoundMP3Exception;
-import com.wip.bool.exception.excp.not_found.NotFoundSongException;
-import com.wip.bool.music.song.domain.SongDetail;
-import com.wip.bool.music.song.domain.SongDetailRepository;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.mp3.domain.SongMP3;
 import com.wip.bool.music.mp3.domain.SongMP3Repository;
+import com.wip.bool.music.song.domain.SongDetail;
+import com.wip.bool.music.song.domain.SongDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class SongMP3Service {
     public Long save(Long songDetailId, String orgFileName, byte[] mp3File) {
 
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new NotFoundSongException(songDetailId));
+                .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_SONG));
 
         SongMP3 songMP3 = SongMP3.createSongMP3(songDetail, mp3FilePath, orgFileName, mp3File);
 
@@ -48,7 +48,7 @@ public class SongMP3Service {
     public Long delete(Long songMP3Id) {
 
         SongMP3 songMP3 = songMP3Repository.findById(songMP3Id)
-            .orElseThrow(() -> new NotFoundMP3Exception(songMP3Id));
+            .orElseThrow(() -> new EntityNotFoundException(songMP3Id, ErrorCode.NOT_FOUND_MP3));
 
         songMP3Repository.delete(songMP3);
 
@@ -63,7 +63,7 @@ public class SongMP3Service {
     public byte[] getFile(Long songMP3Id) {
 
         SongMP3 songMP3 = songMP3Repository.findById(songMP3Id)
-                .orElseThrow(() -> new NotFoundMP3Exception(songMP3Id));
+                .orElseThrow(() -> new EntityNotFoundException(songMP3Id, ErrorCode.NOT_FOUND_MP3));
 
         return songMP3.getFile(mp3FilePath);
     }

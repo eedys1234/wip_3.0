@@ -1,6 +1,7 @@
 package com.wip.bool.music.guitar.service;
 
-import com.wip.bool.exception.excp.not_found.NotFoundGuitarCodeException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
 import com.wip.bool.music.guitar.dto.GuitarCodeDto;
@@ -36,7 +37,7 @@ public class GuitarCodeService {
     @Transactional
     public Long deleteGuitarCode(Long guitarCodeId) {
         GuitarCode guitarCode = guitarCodeRepository.findById(guitarCodeId)
-                    .orElseThrow(() -> new NotFoundGuitarCodeException(guitarCodeId));
+                    .orElseThrow(() -> new EntityNotFoundException(guitarCodeId, ErrorCode.NOT_FOUND_GUITAR_CODE));
         return guitarCodeRepository.delete(guitarCode);
     }
 

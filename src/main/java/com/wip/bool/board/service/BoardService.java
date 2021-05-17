@@ -6,8 +6,8 @@ import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.exception.excp.AuthorizationException;
-import com.wip.bool.exception.excp.not_found.NotFoundBoardException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -37,7 +37,7 @@ public class BoardService {
     public Long saveBoard(Long userId, BoardDto.BoardSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         BoardType boardType = BoardType.valueOf(requestDto.getBoardType());
 
@@ -75,17 +75,17 @@ public class BoardService {
     public Long deleteBoard(Long userId, Long boardId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
         Board board = null;
         if(role == Role.ROLE_ADMIN) {
             board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new NotFoundBoardException(boardId));
+                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
         }
         else if(role == Role.ROLE_NORMAL){
             board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new NotFoundBoardException(boardId));
+                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
         }
         else {
             throw new AuthorizationException();
@@ -99,17 +99,17 @@ public class BoardService {
     public Long hiddenBoard(Long userId, Long boardId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
         Board board = null;
         if(role == Role.ROLE_ADMIN) {
             board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new NotFoundBoardException(boardId));
+                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
         }
         else if(role == Role.ROLE_NORMAL){
             board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new NotFoundBoardException(boardId));
+                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
         }
         else {
             throw new AuthorizationException();

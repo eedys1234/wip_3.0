@@ -2,9 +2,8 @@ package com.wip.bool.group.service;
 
 import com.wip.bool.cmmn.auth.AuthExecutor;
 import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.exception.excp.not_found.NotFoundGroupException;
-import com.wip.bool.exception.excp.not_found.NotFoundGroupMemberException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
@@ -31,10 +30,10 @@ public class GroupMemberService {
     public Long saveGroupMember(Long userId, GroupMemberDto.GroupMemberSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Group group = groupRepository.findById(requestDto.getGroupId())
-                .orElseThrow(() -> new NotFoundGroupException(requestDto.getGroupId()));
+                .orElseThrow(() -> new EntityNotFoundException(requestDto.getGroupId(), ErrorCode.NOT_FOUND_GROUP));
 
         GroupMember groupMember = GroupMember.createGroupMember(group, user);
         return groupMemberRepository.save(groupMember).getId();
@@ -44,15 +43,15 @@ public class GroupMemberService {
     public Long deleteGroupMember(Long userId, Long groupMemberId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         AuthExecutor<Long, GroupMember> authExecutor = new AuthExecutor<>();
 
         GroupMember groupMember = authExecutor.execute(user, groupMemberId,
                 gid -> groupMemberRepository.findById(gid)
-                        .orElseThrow(() -> new NotFoundGroupMemberException(groupMemberId)),
+                        .orElseThrow(() -> new EntityNotFoundException(groupMemberId, ErrorCode.NOT_FOUND_GROUP)),
                 (uid, gid) -> groupMemberRepository.findById(uid, gid)
-                        .orElseThrow(() -> new NotFoundGroupMemberException(groupMemberId)));
+                        .orElseThrow(() -> new EntityNotFoundException(groupMemberId, ErrorCode.NOT_FOUND_GROUP)));
 
         return groupMemberRepository.delete(groupMember);
     }

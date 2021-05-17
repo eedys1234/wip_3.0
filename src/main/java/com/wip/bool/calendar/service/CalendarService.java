@@ -1,11 +1,11 @@
 package com.wip.bool.calendar.service;
 
-import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.domain.Calendar;
 import com.wip.bool.calendar.domain.CalendarRepository;
+import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.cmmn.type.ShareType;
-import com.wip.bool.exception.excp.not_found.NotFoundCalendarException;
-import com.wip.bool.exception.excp.not_found.NotFoundUserException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class CalendarService {
     public List<CalendarDto.CalendarResponse> getDeptCalendars(Long userId, Long from, Long to) {
 
         User user = userRepository.deptByUser(userId)
-                .orElseThrow(()-> new NotFoundUserException(userId));
+                .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         if(isGreaterOneMonth(from, to)) {
             throw new IllegalArgumentException("조회시작일자와 마지막일자가 한달이상 차이납니다.");
@@ -84,14 +84,14 @@ public class CalendarService {
     public Long delete(Long userId, Long calendarId) {
 
         Calendar calendar = calendarRepository.findByIdAndUserId(userId, calendarId)
-                .orElseThrow(() -> new NotFoundCalendarException(calendarId));
+                .orElseThrow(() -> new EntityNotFoundException(calendarId, ErrorCode.NOT_FOUND_CALENDAR));
 
         return calendarRepository.delete(calendar);
     }
 
     private User selectUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(()-> new NotFoundUserException(userId));
+                .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
     }
 
     private boolean isGreaterOneMonth(long from, long to) {
