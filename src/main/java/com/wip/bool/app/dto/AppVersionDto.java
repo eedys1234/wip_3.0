@@ -1,7 +1,6 @@
 package com.wip.bool.app.dto;
 
 import com.wip.bool.app.domain.AppVersion;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class AppVersionDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class AppVersionSaveRequest {
 
         @NotBlank
@@ -21,7 +20,7 @@ public class AppVersionDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class AppVersionResponse {
 
         private Long appVersionId;

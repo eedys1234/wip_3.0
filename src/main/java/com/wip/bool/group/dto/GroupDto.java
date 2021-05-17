@@ -2,7 +2,6 @@ package com.wip.bool.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.group.domain.Group;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 public class GroupDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class GroupSaveRequest {
 
         @JsonProperty(value = "group_name")
@@ -23,7 +22,7 @@ public class GroupDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class GroupUpdateRequest {
 
         @JsonProperty(value = "group_name")
@@ -32,7 +31,7 @@ public class GroupDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class GroupResponse {
 
         @JsonProperty(value = "group_id")

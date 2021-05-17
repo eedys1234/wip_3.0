@@ -12,11 +12,12 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "right")
+@Table(name = "rights")
 public class Right extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "right_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -27,6 +28,7 @@ public class Right extends BaseEntity {
     private Long targetId;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "authority")
     private Authority authority;
 
     @Column(name = "authority_id")

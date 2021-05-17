@@ -1,9 +1,8 @@
 package com.wip.bool.music.song.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.bookmark.domain.BookMark;
-import lombok.AccessLevel;
+import com.wip.bool.music.song.domain.SongDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 public class SongDetailDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongDetailSaveRequest {
 
         @NotBlank
@@ -44,7 +43,7 @@ public class SongDetailDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongDetailUpdateRequest {
 
         private String title;
@@ -69,7 +68,7 @@ public class SongDetailDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongDetailsRequest {
 
         private Long songMasterId;
@@ -78,7 +77,7 @@ public class SongDetailDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongDetailSimpleResponse {
 
         private Long id;
@@ -104,7 +103,7 @@ public class SongDetailDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongDetailResponse {
 
         private Long id;

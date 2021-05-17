@@ -1,14 +1,13 @@
 package com.wip.bool.user.dto;
 
 import com.wip.bool.user.domain.UserConfig;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class UserConfigDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserConfigUpdateRequest {
 
         private String fontSize;
@@ -18,7 +17,7 @@ public class UserConfigDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserConfigResponse {
 
         private String fontSize;

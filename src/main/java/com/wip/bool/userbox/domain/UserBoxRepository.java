@@ -3,7 +3,6 @@ package com.wip.bool.userbox.domain;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.cmmn.type.ShareType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -38,9 +37,9 @@ public class UserBoxRepository {
                 );
     }
 
-    public List<UserBox> findAll(Long userId, OrderType orderType, List<ShareType> shareType, int size, int offset) {
+    public List<UserBox> findAll(Long userId, OrderType orderType, int size, int offset) {
         return queryFactory.selectFrom(userBox)
-                            .where(userBox.user.id.eq(userId), userBox.shareType.in(shareType))
+                            .where(userBox.user.id.eq(userId))
                             .orderBy(getOrder(orderType))
                             .offset(offset)
                             .limit(size)

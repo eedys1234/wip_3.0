@@ -1,7 +1,6 @@
 package com.wip.bool.music.mp3.controller;
 
 import com.wip.bool.exception.excp.BusinessException;
-import com.wip.bool.exception.excp.not_found.NotFoundFileException;
 import com.wip.bool.music.mp3.service.SongMP3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +27,7 @@ public class SongMP3Controller {
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
     public ResponseEntity<Long> saveSongMP3(@PathVariable("songDetailId") Long songDetailId,
                                             MultipartHttpServletRequest multipartHttpServletRequest,
-                                            UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException
+                                            UriComponentsBuilder uriComponentsBuilder) throws IOException
     {
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)

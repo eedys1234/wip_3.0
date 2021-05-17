@@ -1,7 +1,6 @@
 package com.wip.bool.music.song.dto;
 
 import com.wip.bool.music.song.domain.SongMaster;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class SongMasterDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongMasterSaveRequest {
 
         @NotBlank
@@ -18,7 +17,7 @@ public class SongMasterDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongMasterUpdateRequest {
 
         @NotBlank
@@ -26,7 +25,7 @@ public class SongMasterDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class SongMasterResponse {
 
         private Long id;

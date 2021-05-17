@@ -189,7 +189,7 @@ public class UserBoxServiceTest {
         int offset = 0;
 
         //when
-        doReturn(userBoxResponses).when(userBoxRepository).findAll(any(Long.class), any(OrderType.class), any(List.class), any(Integer.class), any(Integer.class));
+        doReturn(userBoxResponses).when(userBoxRepository).findAll(any(Long.class), any(OrderType.class), any(Integer.class), any(Integer.class));
 //        List<UserBoxDto.UserBoxResponse> values = userBoxService.findAll(user.getId(), order, share, size, offset);
 
         //then

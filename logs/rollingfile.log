@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-[INFO ] 2021-05-16 10:12:00.333 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
-[INFO ] 2021-05-16 10:12:00.349 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-[INFO ] 2021-05-16 10:12:00.349 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-05-16 10:12:00.365 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
-[INFO ] 2021-05-16 10:41:03.392 [main] Version - HV000001: Hibernate Validator 6.0.18.Final
-[INFO ] 2021-05-16 10:41:04.688 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-16 10:41:04.688 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-16 10:41:04.704 [main] TestDispatcherServlet - Completed initialization in 16 ms
-=======
-[INFO ] 2021-05-16 13:58:12.727 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
->>>>>>> b684b121827d5800bb2783538ed9cf342ab9c9fd
-=======
-[INFO ] 2021-05-16 19:12:29.019 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-16 19:12:29.037 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-16 19:12:29.037 [main] TestDispatcherServlet - Completed initialization in 0 ms
-[INFO ] 2021-05-16 19:12:29.122 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-16 19:12:29.122 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-16 19:12:29.122 [main] TestDispatcherServlet - Completed initialization in 0 ms
->>>>>>> b3850bc58a58fb5e30eb3398b2d44a0e6397c679
+[INFO ] 2021-05-17 22:47:54.683 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-17 22:47:54.713 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-17 22:47:54.714 [main] TestDispatcherServlet - Completed initialization in 0 ms

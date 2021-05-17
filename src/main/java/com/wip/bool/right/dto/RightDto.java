@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.auth.Authority;
 import com.wip.bool.cmmn.auth.Target;
 import com.wip.bool.right.domain.Right;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,7 @@ import javax.validation.constraints.Positive;
 public class RightDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class RightSaveRequest {
 
         @JsonProperty(value = "target_id")

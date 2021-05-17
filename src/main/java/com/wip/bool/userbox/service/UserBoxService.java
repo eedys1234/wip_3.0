@@ -2,7 +2,6 @@ package com.wip.bool.userbox.service;
 
 
 import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.exception.excp.EntityNotFoundException;
 import com.wip.bool.exception.excp.ErrorCode;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -87,15 +85,11 @@ public class UserBoxService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserBoxDto.UserBoxResponse> findAllByUserId(Long userId, String order, String share, int size, int offset) {
+    public List<UserBoxDto.UserBoxResponse> findAllByUserId(Long userId, String order, int size, int offset) {
 
         OrderType orderType = OrderType.valueOf(order);
 
-        List<ShareType> shareTypes = Stream.of(share.split(","))
-                                    .map(type -> ShareType.valueOf(type))
-                                    .collect(Collectors.toList());
-
-        return userBoxRepository.findAll(userId, orderType, shareTypes, size, offset)
+        return userBoxRepository.findAll(userId, orderType, size, offset)
                 .stream()
                 .map(UserBoxDto.UserBoxResponse::new)
                 .collect(Collectors.toList());

@@ -1,7 +1,6 @@
 package com.wip.bool.user.dto;
 
 import com.wip.bool.user.domain.User;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 public class UserDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserBase {
 
         @NotBlank
@@ -19,7 +18,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserSaveRequest extends UserBase {
 
         @NotBlank
@@ -29,7 +28,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserUpdateRequest {
 
         private String userPassword;
@@ -42,7 +41,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserLoginRequest extends UserBase {
 
         @NotBlank
@@ -51,7 +50,7 @@ public class UserDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserResponse {
 
         private Long id;

@@ -57,10 +57,9 @@ public class UserBoxController {
 
     @GetMapping(value = "/userboxes")
     public ResponseEntity<List<UserBoxDto.UserBoxResponse>> gets(@RequestHeader("userId") Long userId,
-                                                                 @RequestParam String share,
                                                                  @RequestParam String order,
                                                                  @RequestParam int size,
                                                                  @RequestParam int offset) {
-        return ResponseEntity.ok(userBoxService.findAllByUserId(userId, order, share, size, offset));
+        return ResponseEntity.ok(userBoxService.findAllByUserId(userId, order, size, offset));
     }
 }

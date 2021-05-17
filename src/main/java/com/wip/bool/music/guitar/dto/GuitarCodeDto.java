@@ -1,7 +1,6 @@
 package com.wip.bool.music.guitar.dto;
 
 import com.wip.bool.music.guitar.domain.GuitarCode;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class GuitarCodeDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class GuitarCodeSaveRequest {
 
         @NotBlank
@@ -18,7 +17,7 @@ public class GuitarCodeDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class GuitarCodeResponse {
 
         private Long guitarCodeId;

@@ -2,7 +2,6 @@ package com.wip.bool.userbox.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.userbox.domain.UserBox;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 public class UserBoxDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserBoxSaveRequest {
 
         @JsonProperty(value = "user_box_name")
@@ -24,7 +23,7 @@ public class UserBoxDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserBoxUpdateRequest {
 
         @JsonProperty(value = "user_box_name")
@@ -33,7 +32,7 @@ public class UserBoxDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class UserBoxResponse {
 
         @JsonProperty(value = "user_box_name")

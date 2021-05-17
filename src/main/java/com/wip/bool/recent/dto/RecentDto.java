@@ -1,6 +1,5 @@
 package com.wip.bool.recent.dto;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 public class RecentDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class RecentSaveRequest {
 
         @Positive
@@ -18,7 +17,7 @@ public class RecentDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class RecentResponse {
 
         private Long recentId;
