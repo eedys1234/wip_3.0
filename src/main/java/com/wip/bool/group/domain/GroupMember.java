@@ -1,6 +1,6 @@
 package com.wip.bool.group.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;

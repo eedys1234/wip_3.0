@@ -1,7 +1,7 @@
 package com.wip.bool.music.song.domain;
 
 import com.wip.bool.bible.domain.WordsMaster;
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.mp3.domain.SongMP3;
 import com.wip.bool.music.sheet.domain.SongSheet;

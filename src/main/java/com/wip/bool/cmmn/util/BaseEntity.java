@@ -1,4 +1,4 @@
-package com.wip.bool.cmmn;
+package com.wip.bool.cmmn.util;
 
 
 import lombok.Getter;

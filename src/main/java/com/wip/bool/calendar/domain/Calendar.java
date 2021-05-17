@@ -1,6 +1,6 @@
 package com.wip.bool.calendar.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;

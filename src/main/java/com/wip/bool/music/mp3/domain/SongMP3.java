@@ -1,6 +1,6 @@
 package com.wip.bool.music.mp3.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.file.FileManager;
 import com.wip.bool.cmmn.file.FileNIOManager;
 import com.wip.bool.cmmn.retry.Retry;

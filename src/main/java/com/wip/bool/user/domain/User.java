@@ -1,6 +1,6 @@
 package com.wip.bool.user.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.userbox.domain.UserBox;
