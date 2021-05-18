@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wip.bool.right.domain.QRight.right;
+import static com.wip.bool.rights.domain.QRights.rights;
 import static com.wip.bool.userbox.domain.QUserBox.userBox;
 
 @Repository
@@ -38,11 +38,11 @@ public class UserBoxRepository {
                 );
     }
 
-    public List<UserBox> findAll(OrderType orderType, int size, int offset, Long... authorityId) {
-        return queryFactory.selectFrom(userBox)
-                .innerJoin(right)
-                .on(userBox.id.eq(right.targetId))
-                .where(right.authorityId.in(authorityId))
+    public List<UserBox> findAll(OrderType orderType, int size, int offset, Long authorityId) {
+        return queryFactory.select(userBox)
+                .from(userBox)
+                .innerJoin(rights)
+                .on(userBox.id.eq(rights.targetId), rights.authorityId.eq(authorityId))
                 .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)
@@ -51,9 +51,9 @@ public class UserBoxRepository {
 
     public List<UserBox> findAll(OrderType orderType, int size, int offset, List<Long> authorityId) {
         return queryFactory.selectFrom(userBox)
-                .innerJoin(right)
-                .on(userBox.id.eq(right.targetId))
-                .where(right.authorityId.in(authorityId))
+                .innerJoin(rights)
+                .on(userBox.id.eq(rights.targetId))
+                .where(rights.authorityId.in(authorityId))
                 .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)

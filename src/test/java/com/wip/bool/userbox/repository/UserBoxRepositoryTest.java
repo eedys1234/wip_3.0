@@ -1,10 +1,13 @@
 package com.wip.bool.userbox.repository;
 
+import com.wip.bool.cmmn.auth.Authority;
+import com.wip.bool.cmmn.auth.Target;
 import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.userbox.UserBoxFactory;
 import com.wip.bool.configure.TestConfig;
+import com.wip.bool.rights.domain.Rights;
+import com.wip.bool.rights.domain.RightsRepository;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import com.wip.bool.userbox.domain.UserBox;
@@ -34,6 +37,9 @@ public class UserBoxRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RightsRepository rightsRepository;
+
     private User getUser() {
         return UserFactory.getNormalUser();
     }
@@ -46,6 +52,11 @@ public class UserBoxRepositoryTest {
     private UserBox getUserBox(User user, String userBoxName) {
         UserBox userBox = UserBoxFactory.getUserBox(user, userBoxName);
         return userBox;
+    }
+
+    private Rights getRights(Long targetId, Long authorityId) {
+        Rights rights = Rights.of(Target.USERBOX, targetId, Authority.USER, authorityId);
+        return rights;
     }
     
     @DisplayName("사용자박스 추가")
@@ -108,24 +119,25 @@ public class UserBoxRepositoryTest {
         String userBoxName = "사용자박스_";
         List<UserBox> userBoxes = new ArrayList<>();
         List<String> userBoxNames = new ArrayList<>();
-        List<ShareType> shareTypes = new ArrayList<>();
-        shareTypes.add(ShareType.PRIVATE);
+
         int size = 10;
         int offset = 0;
         for(int i=1;i<=10;i++)
         {
             userBoxNames.add(userBoxName + i);
             UserBox userBox = getUserBox(addUser, userBoxName + i);
-
             userBoxes.add(userBoxRepository.save(userBox));
         }
+
+        Rights rights = getRights(userBoxes.get(0).getId(), user.getId());
+        rightsRepository.save(rights);
 
         //when
         List<UserBox> values = userBoxRepository.findAll(OrderType.ASC, size, offset, addUser.getId());
 
         //then
-        assertThat(values.size()).isEqualTo(userBoxes.size());
-        assertThat(values).extracting(UserBox::getUserBoxName).containsAll(userBoxNames);
+        assertThat(values.size()).isEqualTo(1);
+        assertThat(values).extracting(UserBox::getUserBoxName).contains(userBoxNames.get(0));
     }
 
 

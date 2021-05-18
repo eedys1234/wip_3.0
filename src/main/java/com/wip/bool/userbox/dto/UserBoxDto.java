@@ -16,10 +16,6 @@ public class UserBoxDto {
         @JsonProperty(value = "user_box_name")
         @NotBlank
         private String userBoxName;
-
-        @JsonProperty(value = "share_type")
-        @NotBlank
-        private String shareType;
     }
 
     @Getter

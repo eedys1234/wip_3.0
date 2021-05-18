@@ -13,8 +13,8 @@ import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
-import com.wip.bool.right.domain.Right;
-import com.wip.bool.right.domain.RightRepository;
+import com.wip.bool.rights.domain.Rights;
+import com.wip.bool.rights.domain.RightsRepository;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -44,7 +44,7 @@ public class UserBoxService {
 
     private final GroupRepository groupRepository;
     
-    private final RightRepository rightRepository;
+    private final RightsRepository rightRepository;
 
     public Long addUserBox(Long userId, UserBoxDto.UserBoxSaveRequest requestDto) {
 
@@ -53,7 +53,7 @@ public class UserBoxService {
 
         UserBox userBox = UserBox.createUserBox(user, requestDto.getUserBoxName());
         Long id = userBoxRepository.save(userBox).getId();
-        rightRepository.save(Right.of(Target.USERBOX, id, Authority.USER, userId));
+        rightRepository.save(Rights.of(Target.USERBOX, id, Authority.USER, userId));
 
         return id;
     }
@@ -103,7 +103,7 @@ public class UserBoxService {
             throw new AuthorizationException();
         }
 
-        Right right = rightRepository.findByTargetIdAndTarget(Target.USERBOX, userBox.getId())
+        Rights right = rightRepository.findByTargetIdAndTarget(Target.USERBOX, userBox.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_RIGHT));
 
         rightRepository.delete(right);
@@ -144,7 +144,7 @@ public class UserBoxService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserBoxDto.UserBoxResponse> findALlByGroup(Long userId, String groupId, String order, int size, int offset) {
+    public List<UserBoxDto.UserBoxResponse> findAllByGroup(Long userId, String groupId, String order, int size, int offset) {
 
         User user = userRepository.deptByUser(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));

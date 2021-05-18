@@ -61,6 +61,7 @@ public class UserBoxController {
                                                                  @RequestParam String order,
                                                                  @RequestParam int size,
                                                                  @RequestParam int offset) {
+
         return ResponseEntity.ok(userBoxService.findAllByUser(userId, order, size, offset));
     }
 
@@ -70,6 +71,7 @@ public class UserBoxController {
                                                                           @RequestParam String order,
                                                                           @RequestParam int size,
                                                                           @RequestParam int offset) {
+
         return ResponseEntity.ok(userBoxService.findAllByDept(userId, deptId, order, size, offset));
     }
 
@@ -79,7 +81,8 @@ public class UserBoxController {
                                                                            @RequestParam String order,
                                                                            @RequestParam int size,
                                                                            @RequestParam int offset) {
-        return ResponseEntity.ok(userBoxService.findALlByGroup(userId, groupId, order, size, offset));
+
+        return ResponseEntity.ok(userBoxService.findAllByGroup(userId, groupId, order, size, offset));
     }
 
     @GetMapping(value = "total-userboxes")
