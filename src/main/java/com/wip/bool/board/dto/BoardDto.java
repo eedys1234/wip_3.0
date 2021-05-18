@@ -1,5 +1,6 @@
 package com.wip.bool.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.cmmn.status.DeleteStatus;
@@ -23,11 +24,14 @@ public class BoardDto {
         @NotBlank
         private String content;
 
+        @JsonProperty(value = "board_type")
         @NotBlank
         private String boardType;
 
+        @JsonProperty(value = "org_file_names")
         private String orgFileNames;
 
+        @JsonProperty(value = "temp_file_names")
         private String tempFileNames;
 
     }
@@ -36,10 +40,12 @@ public class BoardDto {
     @NoArgsConstructor
     public static class BoardSimpleResponse {
 
+        @JsonProperty(value = "board_id")
         private Long boardId;
 
         private String title;
 
+        @JsonProperty(value = "board_type")
         private BoardType boardType;
 
         public BoardSimpleResponse(Long boardId, String title, DeleteStatus isDeleted, BoardType boardType) {
@@ -53,12 +59,14 @@ public class BoardDto {
     @NoArgsConstructor
     public static class BoardResponse {
 
+        @JsonProperty(value = "board_id")
         private Long boardId;
 
         private String title;
 
         private String content;
 
+        @JsonProperty(value = "board_type")
         private BoardType boardType;
 
         private List<ImageFileDto.ImageFileResponse> images;

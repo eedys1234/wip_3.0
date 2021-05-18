@@ -1,5 +1,6 @@
 package com.wip.bool.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.user.domain.UserConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,13 @@ public class UserConfigDto {
     @NoArgsConstructor
     public static class UserConfigUpdateRequest {
 
+        @JsonProperty(value = "font_size")
         private String fontSize;
+
+        @JsonProperty(value = "view_type")
         private String viewType;
+
+        @JsonProperty(value = "recv_alaram")
         private String recvAlaram;
 
     }
@@ -20,8 +26,13 @@ public class UserConfigDto {
     @NoArgsConstructor
     public static class UserConfigResponse {
 
+        @JsonProperty(value = "font_size")
         private String fontSize;
+
+        @JsonProperty(value = "view_type")
         private String viewType;
+
+        @JsonProperty(value = "recv_alaram")
         private String recvAlaram;
 
         public UserConfigResponse(UserConfig userConfig) {

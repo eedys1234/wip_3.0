@@ -152,7 +152,7 @@ public class BoardControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0].boardId").value(1L))
+                                                .andExpect(jsonPath("$[0].board_id").value(1L))
                                                 .andExpect(jsonPath("$[0].title").value("숨김처리된 게시글입니다."))
                                                 .andReturn();
 
@@ -175,10 +175,10 @@ public class BoardControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.boardId").value(detailBoards.get(0).getBoardId()))
+                .andExpect(jsonPath("$.board_id").value(detailBoards.get(0).getBoardId()))
                 .andExpect(jsonPath("$.title").value(detailBoards.get(0).getTitle()))
                 .andExpect(jsonPath("$.content").value(detailBoards.get(0).getContent()))
-                .andExpect(jsonPath("$.boardType").value(String.valueOf(detailBoards.get(0).getBoardType())))
+                .andExpect(jsonPath("$.board_type").value(String.valueOf(detailBoards.get(0).getBoardType())))
                 .andReturn();
 
         //verify

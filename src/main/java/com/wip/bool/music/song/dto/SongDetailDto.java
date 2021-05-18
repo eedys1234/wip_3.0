@@ -1,6 +1,7 @@
 package com.wip.bool.music.song.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.bookmark.domain.BookMark;
 import com.wip.bool.music.song.domain.SongDetail;
 import lombok.Builder;
@@ -23,12 +24,15 @@ public class SongDetailDto {
         @NotBlank
         private String lyrics;
 
+        @JsonProperty(value = "song_master_id")
         @NotNull
         private Long codeId;
 
+        @JsonProperty(value = "guitar_code_id")
         @NotNull
         private Long guitarCodeId;
 
+        @JsonProperty(value = "words_master_id")
         @NotNull
         private Long wordsMasterId;
 
@@ -52,8 +56,10 @@ public class SongDetailDto {
 
         private Long codeId;
 
+        @JsonProperty(value = "guitar_code_id")
         private Long guitarCodeId;
 
+        @JsonProperty(value = "words_master_id")
         private Long wordsMasterId;
 
         @Builder
@@ -71,8 +77,11 @@ public class SongDetailDto {
     @NoArgsConstructor
     public static class SongDetailsRequest {
 
+        @JsonProperty(value = "song_master_id")
         private Long songMasterId;
         private String order;
+
+        @JsonProperty(value = "sort_type")
         private String sortType;
     }
 
@@ -110,16 +119,22 @@ public class SongDetailDto {
 
         private String title;
 
+        @JsonProperty(value = "song_master_id")
         private Long codeId;
 
+        @JsonProperty(value = "guitar_code_id")
         private Long guitarCodeId;
 
+        @JsonProperty(value = "guitar_code")
         private String guitarCode;
 
+        @JsonProperty(value = "bookmark_id")
         private Long bookmarkId;
 
+        @JsonProperty(value = "create_date")
         private LocalDateTime createDate;
 
+        @JsonProperty(value = "modify_date")
         private LocalDateTime modifyDate;
 
 
