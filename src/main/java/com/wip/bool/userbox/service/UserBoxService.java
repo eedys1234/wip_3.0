@@ -103,6 +103,11 @@ public class UserBoxService {
             throw new AuthorizationException();
         }
 
+        Right right = rightRepository.findByTargetIdAndTarget(Target.USERBOX, userBox.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_RIGHT));
+
+        rightRepository.delete(right);
+
         return userBoxRepository.delete(userBox);
     }
 

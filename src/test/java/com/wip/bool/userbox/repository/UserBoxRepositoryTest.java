@@ -121,7 +121,7 @@ public class UserBoxRepositoryTest {
         }
 
         //when
-        List<UserBox> values = userBoxRepository.findAll(addUser.getId(), OrderType.ASC, size, offset);
+        List<UserBox> values = userBoxRepository.findAll(OrderType.ASC, size, offset, addUser.getId());
 
         //then
         assertThat(values.size()).isEqualTo(userBoxes.size());
