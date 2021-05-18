@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static com.wip.bool.right.domain.QRight.right;
 import static com.wip.bool.userbox.domain.QUserBox.userBox;
 
 @Repository
@@ -37,13 +38,26 @@ public class UserBoxRepository {
                 );
     }
 
-    public List<UserBox> findAll(Long userId, OrderType orderType, int size, int offset) {
+    public List<UserBox> findAll(OrderType orderType, int size, int offset, Long... authorityId) {
         return queryFactory.selectFrom(userBox)
-                            .where(userBox.user.id.eq(userId))
-                            .orderBy(getOrder(orderType))
-                            .offset(offset)
-                            .limit(size)
-                            .fetch();
+                .innerJoin(right)
+                .on(userBox.id.eq(right.targetId))
+                .where(right.authorityId.in(authorityId))
+                .orderBy(getOrder(orderType))
+                .offset(offset)
+                .limit(size)
+                .fetch();
+    }
+
+    public List<UserBox> findAll(OrderType orderType, int size, int offset, List<Long> authorityId) {
+        return queryFactory.selectFrom(userBox)
+                .innerJoin(right)
+                .on(userBox.id.eq(right.targetId))
+                .where(right.authorityId.in(authorityId))
+                .orderBy(getOrder(orderType))
+                .offset(offset)
+                .limit(size)
+                .fetch();
     }
 
     public Long delete(UserBox userBox) {

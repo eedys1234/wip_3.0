@@ -1,5 +1,6 @@
 package com.wip.bool.group.domain;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import lombok.RequiredArgsConstructor;
@@ -48,10 +49,20 @@ public class GroupMemberRepository {
                 .innerJoin(groupMember.user, user)
                 .fetchJoin()
                 .where(groupMember.group.id.eq(groupId))
+                .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)
                 .fetch();
    }
 
+   public List<GroupMember> findAllByGroup(List<Long> groupIds) {
+        return queryFactory.selectFrom(groupMember)
+                            .where(groupMember.group.id.in(groupIds))
+                            .fetch();
+   }
+
+   private OrderSpecifier getOrder(OrderType orderType) {
+        return orderType == OrderType.ASC ? groupMember.createDate.asc() : groupMember.createDate.desc();
+   }
 
 }

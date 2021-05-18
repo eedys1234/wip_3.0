@@ -64,6 +64,18 @@ public class GroupRepository {
                 .fetch();
     }
 
+    public List<Group> findAllByUser(Long userId) {
+        return queryFactory.select(group)
+                .from(group)
+                .innerJoin(group.groupMembers, groupMember)
+                .fetchJoin()
+                .innerJoin(group.user, user)
+                .fetchJoin()
+                .where(groupMember.user.id.eq(userId))
+                .fetch();
+    }
+
+
     public Long delete(Group group) {
         entityManager.remove(group);
         return 1L;
