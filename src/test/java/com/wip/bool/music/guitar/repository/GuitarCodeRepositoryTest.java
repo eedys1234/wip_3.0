@@ -1,6 +1,6 @@
 package com.wip.bool.music.guitar.repository;
 
-import com.wip.bool.cmmn.song.guitarcode.GuitarCodeFactory;
+import com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory;
 import com.wip.bool.configure.TestConfig;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import com.wip.bool.music.guitar.domain.GuitarCodeRepository;
