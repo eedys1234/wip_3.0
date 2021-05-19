@@ -3,6 +3,7 @@ package com.wip.bool.cmmn.rights;
 import com.wip.bool.cmmn.auth.Authority;
 import com.wip.bool.cmmn.auth.Target;
 import com.wip.bool.rights.domain.Rights;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class RightsFactory {
 
@@ -14,5 +15,16 @@ public class RightsFactory {
     public static Rights getRights(Target target, Long targetId, Authority authority, Long authorityId) {
         Rights right = Rights.of(target, targetId, authority, authorityId);
         return right;
+    }
+
+    public static Rights getUserBoxRightsWithUser(Long targetId, Long authorityId) {
+        Rights rights = Rights.of(Target.USERBOX, targetId, Authority.USER, authorityId);
+        return rights;
+    }
+
+    public static Rights getUserBoxRightsWithUser(Long targetId, Long authorityId, Long id) {
+        Rights rights = Rights.of(Target.USERBOX, targetId, Authority.USER, authorityId);
+        ReflectionTestUtils.setField(rights, "id", id);
+        return rights;
     }
 }

@@ -1,7 +1,6 @@
 package com.wip.bool.userbox.repository;
 
-import com.wip.bool.cmmn.auth.Authority;
-import com.wip.bool.cmmn.auth.Target;
+import com.wip.bool.cmmn.rights.RightsFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.userbox.UserBoxFactory;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,32 +38,13 @@ public class UserBoxRepositoryTest {
     @Autowired
     private RightsRepository rightsRepository;
 
-    private User getUser() {
-        return UserFactory.getNormalUser();
-    }
-
-    private UserBox getUserBox(User user) {
-        UserBox userBox = UserBoxFactory.getUserBox(user);
-        return userBox;
-    }
-
-    private UserBox getUserBox(User user, String userBoxName) {
-        UserBox userBox = UserBoxFactory.getUserBox(user, userBoxName);
-        return userBox;
-    }
-
-    private Rights getRights(Long targetId, Long authorityId) {
-        Rights rights = Rights.of(Target.USERBOX, targetId, Authority.USER, authorityId);
-        return rights;
-    }
-    
     @DisplayName("사용자박스 추가")
     @Test
     public void 사용자박스_추가_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        UserBox userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser();
+        UserBox userBox = UserBoxFactory.getUserBox(user);
 
         //when
         UserBox addUserBox = userBoxRepository.save(userBox);
@@ -79,8 +58,8 @@ public class UserBoxRepositoryTest {
     public void 사용자박스_수정_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        UserBox userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser();
+        UserBox userBox = UserBoxFactory.getUserBox(user);
         UserBox addUserBox = userBoxRepository.save(userBox);
         String updateUserBoxName = "사용자박스_2";
 
@@ -97,8 +76,8 @@ public class UserBoxRepositoryTest {
     public void 사용자박스_삭제_Repository() throws Exception {
 
         //given
-        User user = getUser();
-        UserBox userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser();
+        UserBox userBox = UserBoxFactory.getUserBox(user);
         UserBox addUserBox = userBoxRepository.save(userBox);
 
         //when
@@ -114,22 +93,20 @@ public class UserBoxRepositoryTest {
     public void 사용자박스_리스트_조회_Repository() throws Exception {
 
         //given
-        User user = getUser();
+        User user = UserFactory.getNormalUser();
         User addUser = userRepository.save(user);
-        String userBoxName = "사용자박스_";
-        List<UserBox> userBoxes = new ArrayList<>();
-        List<String> userBoxNames = new ArrayList<>();
+        List<UserBox> userBoxes = UserBoxFactory.getUserBoxes(user);
+        List<String> userBoxNames = UserBoxFactory.getUserBoxNames();
 
         int size = 10;
         int offset = 0;
-        for(int i=1;i<=10;i++)
+
+        for(UserBox userBox : userBoxes)
         {
-            userBoxNames.add(userBoxName + i);
-            UserBox userBox = getUserBox(addUser, userBoxName + i);
-            userBoxes.add(userBoxRepository.save(userBox));
+            userBoxRepository.save(userBox);
         }
 
-        Rights rights = getRights(userBoxes.get(0).getId(), user.getId());
+        Rights rights = RightsFactory.getUserBoxRightsWithUser(userBoxes.get(0).getId(), user.getId());
         rightsRepository.save(rights);
 
         //when
