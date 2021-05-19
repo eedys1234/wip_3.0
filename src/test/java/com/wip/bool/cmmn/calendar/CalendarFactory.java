@@ -1,6 +1,6 @@
 package com.wip.bool.cmmn.calendar;
 
-import com.wip.bool.calendar.domain.Calendar;
+import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 

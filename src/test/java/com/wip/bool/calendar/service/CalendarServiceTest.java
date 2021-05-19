@@ -1,8 +1,8 @@
 package com.wip.bool.calendar.service;
 
 import com.wip.bool.calendar.dto.CalendarDto;
-import com.wip.bool.calendar.domain.Calendar;
-import com.wip.bool.calendar.domain.CalendarRepository;
+import com.wip.bool.calendar.repository.Calendar;
+import com.wip.bool.calendar.repository.CalendarRepository;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.dept.domain.Dept;
@@ -112,7 +112,7 @@ public class CalendarServiceTest {
         return dept;
     }
 
-    @DisplayName("일정_추가하기")
+    @DisplayName("일정 추가")
     @Test
     public void 일정_추가_Service() throws Exception {
 
@@ -136,6 +136,7 @@ public class CalendarServiceTest {
 
     }
 
+    @DisplayName("일정 리스트 가져오기 부서")
     @Test
     public void 일정_리스트_가져오기_부서_Service() throws Exception {
 
@@ -178,6 +179,7 @@ public class CalendarServiceTest {
                 any(LocalDateTime.class));
     }
 
+    @DisplayName("일정 리스트 가져오기 개인")
     @Test
     public void 일정_리스트_가져오기_개인_Service() throws Exception {
 
@@ -213,6 +215,7 @@ public class CalendarServiceTest {
                 any(LocalDateTime.class), any(LocalDateTime.class));
     }
 
+    @DisplayName("일정 삭제")
     @Test
     public void 일정_삭제_Service() throws Exception {
 

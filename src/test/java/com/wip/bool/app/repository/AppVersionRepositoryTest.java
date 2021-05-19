@@ -3,6 +3,7 @@ package com.wip.bool.app.repository;
 import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.domain.AppVersionRepository;
 import com.wip.bool.configure.TestConfig;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,7 @@ public class AppVersionRepositoryTest {
         return appVersion;
     }
 
+    @DisplayName("app 정보 추가")
     @Test
     public void app_정보_추가_Repository() throws Exception {
 
@@ -42,6 +44,7 @@ public class AppVersionRepositoryTest {
         assertThat(addAppVersion.getId()).isGreaterThan(0L);
     }
 
+    @DisplayName("app 정보 삭제")
     @Test
     public void app_정보_삭제_Repository() throws Exception {
 

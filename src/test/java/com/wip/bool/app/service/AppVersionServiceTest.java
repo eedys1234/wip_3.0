@@ -3,6 +3,7 @@ package com.wip.bool.app.service;
 import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.domain.AppVersionRepository;
 import com.wip.bool.app.dto.AppVersionDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,6 +57,7 @@ public class AppVersionServiceTest {
         );
     }
 
+    @DisplayName("app 정보 추가")
     @Test
     public void app_정보_추가_Service() throws Exception {
 
@@ -73,6 +75,7 @@ public class AppVersionServiceTest {
         verify(appVersionRepository, times(1)).save(any(AppVersion.class));
     }
 
+    @DisplayName("app 정보 리스트 조회")
     @Test
     public void app_정보_리스트_조회_Service() throws Exception {
 
@@ -95,6 +98,7 @@ public class AppVersionServiceTest {
         verify(appVersionRepository, times(1)).findAll();
     }
 
+    @DisplayName("app 정보 조회")
     @Test
     public void app_정보_조회_Service() throws Exception {
 
@@ -109,10 +113,11 @@ public class AppVersionServiceTest {
         assertThat(values.getName()).isEqualTo(appVersion.getName());
         assertThat(values.getVersion()).isEqualTo(appVersion.getVersion());
 
-        //verfiy
+        //verify
         verify(appVersionRepository, times(1)).findOne(any(String.class));
     }
 
+    @DisplayName("app 정보 삭제")
     @Test
     public void app_정보_삭제_Service() throws Exception {
 

@@ -1,4 +1,4 @@
-package com.wip.bool.calendar.domain;
+package com.wip.bool.calendar.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wip.bool.calendar.domain.QCalendar.calendar;
+import static com.wip.bool.calendar.repository.QCalendar.calendar;
 import static com.wip.bool.user.domain.QUser.user;
 
 @Repository

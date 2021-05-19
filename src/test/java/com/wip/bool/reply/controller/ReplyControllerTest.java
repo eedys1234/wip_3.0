@@ -54,7 +54,6 @@ public class ReplyControllerTest {
         return user;
     }
 
-
     private Board getBoard(User user) {
         Board board = BoardFactory.getBoard(user);
         ReflectionTestUtils.setField(board, "id", 1L);
@@ -75,7 +74,7 @@ public class ReplyControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    @DisplayName("댓글 추가 by 게시물 Controller")
+    @DisplayName("댓글 추가 by 게시물")
     @Test
     public void 댓글_추가_by게시물_Controller() throws Exception {
 
@@ -101,7 +100,7 @@ public class ReplyControllerTest {
 
     }
 
-    @DisplayName("댓글 추가 by 댓글 Controller")
+    @DisplayName("댓글 추가 by 댓글")
     @Test
     public void 댓글_추가_by댓글_Controller() throws Exception {
 
@@ -128,7 +127,7 @@ public class ReplyControllerTest {
 
     }
 
-    @DisplayName("댓글 리스트 조회 by 게시물 Controller")
+    @DisplayName("댓글 리스트 조회 by 게시물")
     @Test
     public void 댓글_리스트_조회_by게시물_Controller() throws Exception {
 
@@ -157,7 +156,7 @@ public class ReplyControllerTest {
         verify(replyService, times(1)).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
     }
 
-    @DisplayName("댓글 리스트 조회 by 댓글 Controller")
+    @DisplayName("댓글 리스트 조회 by 댓글")
     @Test
     public void 댓글_리스트_조회_by댓글_Controller() throws Exception {
 
@@ -186,7 +185,7 @@ public class ReplyControllerTest {
         verify(replyService, times(1)).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
     }
 
-    @DisplayName("댓글 삭제 Controller")
+    @DisplayName("댓글 삭제")
     @Test
     public void 댓글_삭제_Controller() throws Exception {
 

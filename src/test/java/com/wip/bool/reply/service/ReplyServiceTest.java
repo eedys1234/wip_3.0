@@ -67,7 +67,7 @@ public class ReplyServiceTest {
         return ReplyFactory.getRepliesByReplies(board, user);
     }
 
-    @DisplayName("댓글 추가 by 게시물 Service")
+    @DisplayName("댓글 추가 by 게시물")
     @Test
     public void 댓글_추가_by게시물_Service() throws Exception {
 
@@ -94,7 +94,7 @@ public class ReplyServiceTest {
         verify(replyRepository, times(1)).save(any(Reply.class));
     }
 
-    @DisplayName("댓글 추가 by 댓글 Service")
+    @DisplayName("댓글 추가 by 댓글")
     @Test
     public void 댓글_추가_by댓글_Service() throws Exception {
 
@@ -126,7 +126,7 @@ public class ReplyServiceTest {
         verify(replyRepository, times(1)).save(any(Reply.class));
     }
 
-    @DisplayName("댓글 리스트 조회 by 게시물 Service")
+    @DisplayName("댓글 리스트 조회 by 게시물")
     @Test
     public void 댓글_리스트_조회_by게시물_Service() throws Exception {
 
@@ -148,7 +148,7 @@ public class ReplyServiceTest {
         verify(replyRepository, times(1)).findAllByBoard(any(Long.class), any(Integer.class), any(Integer.class));
     }
 
-    @DisplayName("댓글 리스트 조회 by 댓글 Service")
+    @DisplayName("댓글 리스트 조회 by 댓글")
     @Test
     public void 댓글_리스트_조회_by댓글_Service() throws Exception {
 
@@ -172,7 +172,7 @@ public class ReplyServiceTest {
         verify(replyRepository, times(1)).findAllByReply(any(Long.class), any(Integer.class), any(Integer.class));
     }
 
-    @DisplayName("댓글 삭제 Service")
+    @DisplayName("댓글 삭제")
     @Test
     public void 댓글_삭제_Service() throws Exception {
 

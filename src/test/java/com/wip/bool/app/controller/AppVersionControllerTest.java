@@ -5,6 +5,7 @@ import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.dto.AppVersionDto;
 import com.wip.bool.app.service.AppVersionService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,10 +37,9 @@ public class AppVersionControllerTest {
     @Mock
     private AppVersionService appVersionService;
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    ObjectMapper objectMapper;
-
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void init() throws Exception {
@@ -76,6 +76,7 @@ public class AppVersionControllerTest {
         );
     }
 
+    @DisplayName("app 정보 추가")
     @Test
     public void app_정보_추가_Controller() throws Exception {
 
@@ -95,6 +96,7 @@ public class AppVersionControllerTest {
         assertThat(id).isEqualTo(1L);
     }
 
+    @DisplayName("app 정보 리스트 조회")
     @Test
     public void app_정보_리스트_조회_Controller() throws Exception {
 
@@ -112,6 +114,7 @@ public class AppVersionControllerTest {
         assertThat(values.size()).isEqualTo(1);
     }
 
+    @DisplayName("app 정보 조회")
     @Test
     public void app_정보_조회_Controller() throws Exception {
 
@@ -133,6 +136,7 @@ public class AppVersionControllerTest {
         assertThat(values.getName()).isEqualTo(appVersion.getName());
     }
 
+    @DisplayName("app 정보 삭제")
     @Test
     public void app_정보_삭제_Controller() throws Exception {
 

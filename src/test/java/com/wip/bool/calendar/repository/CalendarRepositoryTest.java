@@ -1,4 +1,4 @@
-package com.wip.bool.calendar.domain;
+package com.wip.bool.calendar.repository;
 
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.cmmn.type.ShareType;
@@ -159,7 +159,7 @@ public class CalendarRepositoryTest {
         assertThat(calendars.get(0).getCalendarId()).isGreaterThan(0L);
     }
 
-    @DisplayName("일정_삭제")
+    @DisplayName("일정 삭제")
     @Test
     public void 일정_삭제_Repository() throws Exception {
 
