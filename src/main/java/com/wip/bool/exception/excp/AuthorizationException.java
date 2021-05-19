@@ -1,16 +1,12 @@
 package com.wip.bool.exception.excp;
 
-public class AuthorizationException extends RuntimeException {
+public class AuthorizationException extends BusinessException {
 
     public AuthorizationException() {
-        this("권한이 존재하지 않습니다.");
+        this(ErrorCode.AUTHORIZATION);
     }
 
-    public AuthorizationException(String message) {
-        this(message, null);
-    }
-
-    public AuthorizationException(String message, Throwable throwable) {
-        super(message, throwable);
+    public AuthorizationException(final ErrorCode errorCode) {
+        super(errorCode);
     }
 }

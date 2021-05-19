@@ -3,6 +3,8 @@ package com.wip.bool.board.service;
 import com.wip.bool.board.domain.*;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
@@ -33,16 +35,16 @@ public class ReplyService {
     public Long saveReply(Long userId, Long boardId, ReplyDto.ReplySaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id =" + boardId));
+                .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
 
         Reply reply = Reply.createReply(requestDto.getContent(), board, user);
 
         if(!Objects.isNull(requestDto.getParentId())) {
             Reply parent = replyRepository.findById(requestDto.getParentId())
-                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글이 존재하지 않습니다. id = " + requestDto.getParentId()));
+                    .orElseThrow(() -> new EntityNotFoundException("부모 댓글이 존재하지 않습니다. id = " + requestDto.getParentId(), ErrorCode.NOT_FOUND_REPLY));
 
             reply.updateParentReply(parent);
         }
@@ -77,18 +79,18 @@ public class ReplyService {
     public Long deleteReply(Long userId, Long replyId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
         Reply reply = null;
 
         if(role == Role.ROLE_ADMIN) {
             reply = replyRepository.findById(replyId)
-                    .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다. id = " + replyId));
+                    .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
         }
         else if(role == Role.ROLE_NORMAL) {
             reply = replyRepository.findById(userId, replyId)
-                    .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다. id = " + replyId));
+                    .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
 
         }
 

@@ -21,9 +21,10 @@ public class UserBoxController {
     private final UserBoxService userBoxService;
 
     @PostMapping(value = "/userbox")
-    public ResponseEntity<Long> save(@Valid @RequestBody UserBoxDto.UserBoxSaveRequest requestDto,
+    public ResponseEntity<Long> addUserBox(@Valid @RequestBody UserBoxDto.UserBoxSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+                                     Errors errors,
+                                     UriComponentsBuilder uriComponentsBuilder) {
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
@@ -37,7 +38,8 @@ public class UserBoxController {
     }
 
     @PutMapping(value = "/userbox/{userBoxId:[\\d]+}")
-    public ResponseEntity<Long> update(@PathVariable("userBoxId") Long userBoxId,
+    public ResponseEntity<Long> updateUserBox(@PathVariable Long userBoxId,
+                                       @RequestHeader("userId") Long userId,
                                        @Valid @RequestBody UserBoxDto.UserBoxUpdateRequest requestDto,
                                        Errors errors) {
 
@@ -45,16 +47,50 @@ public class UserBoxController {
             return ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(userBoxService.updateUserBox(userBoxId, requestDto), HttpStatus.OK);
+        return ResponseEntity.ok(userBoxService.updateUserBox(userId, userBoxId, requestDto));
     }
 
     @DeleteMapping(value = "/userbox/{userBoxId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("userBoxId") Long userBoxId) {
-        return new ResponseEntity<>(userBoxService.deleteUserBox(userBoxId), HttpStatus.OK);
+    public ResponseEntity<Long> deleteUserBox(@PathVariable Long userBoxId,
+                                       @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(userBoxService.deleteUserBox(userId, userBoxId));
     }
 
-    @GetMapping(value = "/userboxes")
-    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> gets(@RequestHeader("userId") Long userId) {
-        return new ResponseEntity<>(userBoxService.findAllByUserId(userId), HttpStatus.OK);
+    @GetMapping(value = "/user-userboxes")
+    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByUser(@RequestHeader("userId") Long userId,
+                                                                 @RequestParam String order,
+                                                                 @RequestParam int size,
+                                                                 @RequestParam int offset) {
+
+        return ResponseEntity.ok(userBoxService.findAllByUser(userId, order, size, offset));
+    }
+
+    @GetMapping(value = "/dept-userboxes")
+    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByDept(@RequestHeader("userId") Long userId,
+                                                                          @RequestParam Long deptId,
+                                                                          @RequestParam String order,
+                                                                          @RequestParam int size,
+                                                                          @RequestParam int offset) {
+
+        return ResponseEntity.ok(userBoxService.findAllByDept(userId, deptId, order, size, offset));
+    }
+
+    @GetMapping(value = "/group-userboxes")
+    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByGroup(@RequestHeader("userId") Long userId,
+                                                                           @RequestParam String groupId,
+                                                                           @RequestParam String order,
+                                                                           @RequestParam int size,
+                                                                           @RequestParam int offset) {
+
+        return ResponseEntity.ok(userBoxService.findAllByGroup(userId, groupId, order, size, offset));
+    }
+
+    @GetMapping(value = "total-userboxes")
+    public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByTotal(@RequestHeader("userId") Long userId,
+                                                                           @RequestParam String order,
+                                                                           @RequestParam int size,
+                                                                           @RequestParam int offset) {
+
+        return ResponseEntity.ok(userBoxService.findALlByTotal(userId, order, size, offset));
     }
 }

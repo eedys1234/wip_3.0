@@ -109,7 +109,7 @@ public class GuitarCodeControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0]['guitarCodeId']").value(1L))
+                                                .andExpect(jsonPath("$[0]['guitar_code_id']").value(1L))
                                                 .andReturn();
 
     }

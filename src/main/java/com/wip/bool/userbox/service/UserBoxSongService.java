@@ -2,6 +2,8 @@ package com.wip.bool.userbox.service;
 
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.userbox.domain.UserBox;
@@ -31,11 +33,10 @@ public class UserBoxSongService {
     public Long save(UserBoxSongDto.UserBoxSongSaveRequest requestDto) {
 
         UserBox userBox = userBoxRepository.findById(requestDto.getUserBoxId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자 box가 존재하지 않습니다. id = "
-                        + requestDto.getUserBoxId()));
+                .orElseThrow(() -> new EntityNotFoundException(requestDto.getUserBoxId(), ErrorCode.NOT_FOUND_USER_BOX));
 
         SongDetail songDetail = songDetailRepository.findById(requestDto.getSongDetailId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + requestDto.getSongDetailId()));
+                .orElseThrow(() -> new EntityNotFoundException(requestDto.getSongDetailId(), ErrorCode.NOT_FOUND_SONG));
 
         UserBoxSong userBoxSong = UserBoxSong.createUserBoxSong(songDetail, userBox);
         return userBoxSongRepository.save(userBoxSong).getId();
@@ -57,7 +58,7 @@ public class UserBoxSongService {
     @Transactional
     public Long delete(Long userBoxSongId) {
         UserBoxSong userBoxSong = userBoxSongRepository.findById(userBoxSongId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + userBoxSongId));
+                .orElseThrow(() -> new EntityNotFoundException(userBoxSongId, ErrorCode.NOT_FOUND_SONG));
 
         return userBoxSongRepository.delete(userBoxSong);
     }

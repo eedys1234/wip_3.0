@@ -1,6 +1,6 @@
 package com.wip.bool.music.mp3.controller;
 
-import com.wip.bool.exception.excp.NotFoundFileException;
+import com.wip.bool.exception.excp.BusinessException;
 import com.wip.bool.music.mp3.service.SongMP3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
 
+import static com.wip.bool.exception.excp.ErrorCode.NOT_FOUND_MP3;
+
 @RestController
 @RequestMapping(value = "/api/v1/music")
 @RequiredArgsConstructor
@@ -25,14 +27,12 @@ public class SongMP3Controller {
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
     public ResponseEntity<Long> saveSongMP3(@PathVariable("songDetailId") Long songDetailId,
                                             MultipartHttpServletRequest multipartHttpServletRequest,
-                                            UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException
+                                            UriComponentsBuilder uriComponentsBuilder) throws IOException
     {
-
-        final String NOT_FOUND_FILE_ERROR = "MP3 파일 null 오류";
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
                 .map(multipart -> multipart.getFile("mp3File"))
-                .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_MP3));
 
         Long id = songMP3Service.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 

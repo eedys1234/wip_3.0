@@ -1,9 +1,11 @@
 package com.wip.bool.music.sheet.service;
 
-import com.wip.bool.music.song.domain.SongDetail;
-import com.wip.bool.music.song.domain.SongDetailRepository;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.sheet.domain.SongSheet;
 import com.wip.bool.music.sheet.domain.SongSheetRepository;
+import com.wip.bool.music.song.domain.SongDetail;
+import com.wip.bool.music.song.domain.SongDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class SongSheetService {
     public Long save(Long songDetailId, String orgFileName, byte[] imageFiles) {
 
         SongDetail songDetail = songDetailRepository.findById(songDetailId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + songDetailId));
+                .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_SONG));
 
         SongSheet songSheet = SongSheet.createSongSheet(songDetail, imageFilePath, orgFileName, imageFiles, songDetail.getSongSheets().size() + 1);
 
@@ -40,7 +42,7 @@ public class SongSheetService {
     public Long delete(Long songSheetId) {
 
         SongSheet songSheet = songSheetRepository.findById(songSheetId)
-            .orElseThrow(()->new IllegalArgumentException("악보가 존재하지 않습니다. id = " + songSheetId));
+            .orElseThrow(() -> new EntityNotFoundException(songSheetId, ErrorCode.NOT_FOUND_SHEET));
 
         Long resValue = songSheetRepository.delete(songSheet);
         if(!songSheet.deleteSheetFile(imageFilePath)) {

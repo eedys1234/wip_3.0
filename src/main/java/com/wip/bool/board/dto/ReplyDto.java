@@ -1,5 +1,6 @@
 package com.wip.bool.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.domain.Reply;
 import com.wip.bool.cmmn.status.DeleteStatus;
@@ -21,10 +22,13 @@ public class ReplyDto {
         @NotBlank
         private String content;
 
+        @JsonProperty(value = "parent_id")
         private Long parentId;
 
+        @JsonProperty(value = "org_file_names")
         private String orgFileNames;
 
+        @JsonProperty(value = "temp_file_names")
         private String tempFileNames;
 
     }
@@ -33,10 +37,12 @@ public class ReplyDto {
     @NoArgsConstructor
     public static class ReplyResponse {
 
+        @JsonProperty(value = "reply_id")
         private Long replyId;
 
         private String content;
 
+        @JsonProperty(value = "parent_id")
         private Long parentId;
 
         private List<ImageFileDto.ImageFileResponse> images;

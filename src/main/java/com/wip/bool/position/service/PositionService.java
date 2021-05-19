@@ -1,6 +1,8 @@
 package com.wip.bool.position.service;
 
 import com.wip.bool.exception.excp.AuthorizationException;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
 import com.wip.bool.position.dto.PositionDto;
@@ -26,7 +28,7 @@ public class PositionService {
     public Long savePosition(Long userId, PositionDto.PositionSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
 
@@ -43,13 +45,13 @@ public class PositionService {
     public Long updatePosition(Long userId, Long positionId, PositionDto.PositionUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
 
         if(role == Role.ROLE_ADMIN) {
             Position position = positionRepository.findById(positionId)
-                    .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+                    .orElseThrow(() -> new EntityNotFoundException(positionId, ErrorCode.NOT_FOUND_POSITION));
 
             position.updatePositionName(requestDto.getPositionName());
             return position.getId();
@@ -71,17 +73,17 @@ public class PositionService {
     public PositionDto.PositionResponse findOne(Long positionId) {
 
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new IllegalArgumentException("직위가 존재하지 않습니다. id = " + positionId));
+                .orElseThrow(() -> new EntityNotFoundException(positionId, ErrorCode.NOT_FOUND_POSITION));
         return new PositionDto.PositionResponse(position);
     }
 
     public Long deletePosition(Long userId, Long positionId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException());
+        userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new EntityNotFoundException(positionId, ErrorCode.NOT_FOUND_POSITION));
 
         positionRepository.delete(position);
         return 1L;

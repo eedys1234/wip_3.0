@@ -1,6 +1,6 @@
 package com.wip.bool.board.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.file.FileManager;
 import com.wip.bool.cmmn.retry.Retry;
 import lombok.AccessLevel;

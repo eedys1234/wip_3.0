@@ -1,5 +1,6 @@
 package com.wip.bool.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class UserDto {
     @NoArgsConstructor
     public static class UserBase {
 
+        @JsonProperty(value = "user_password")
         @NotBlank
         protected String userPassword;
     }
@@ -31,10 +33,13 @@ public class UserDto {
     @NoArgsConstructor
     public static class UserUpdateRequest {
 
+        @JsonProperty(value = "user_password")
         private String userPassword;
 
+        @JsonProperty(value = "dept_id")
         private Long deptId;
 
+        @JsonProperty(value = "position_id")
         private Long positionId;
 
         private String role;
@@ -59,10 +64,13 @@ public class UserDto {
 
         private String role;
 
+        @JsonProperty(value = "dept_name")
         private String deptName;
 
+        @JsonProperty(value = "position_name")
         private String positionName;
 
+        @JsonProperty(value = "create_date")
         private LocalDateTime createDate;
 
         public UserResponse(User user) {

@@ -1,5 +1,6 @@
 package com.wip.bool.music.guitar.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.music.guitar.domain.GuitarCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,12 @@ public class GuitarCodeDto {
     @NoArgsConstructor
     public static class GuitarCodeResponse {
 
+        @JsonProperty(value = "guitar_code_id")
         private Long guitarCodeId;
+
         private String code;
+
+        @JsonProperty(value = "code_order")
         private int codeOrder;
 
         public GuitarCodeResponse(GuitarCode guitarCode) {

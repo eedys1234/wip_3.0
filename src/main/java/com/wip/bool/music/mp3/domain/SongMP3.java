@@ -1,12 +1,13 @@
 package com.wip.bool.music.mp3.domain;
 
-import com.wip.bool.cmmn.BaseEntity;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.file.FileManager;
 import com.wip.bool.cmmn.file.FileNIOManager;
 import com.wip.bool.cmmn.retry.Retry;
 import com.wip.bool.cmmn.type.FileExtType;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.song.domain.SongDetail;
-import com.wip.bool.exception.excp.NotFoundFileException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -187,7 +188,7 @@ public class SongMP3 extends BaseEntity {
             }
         } catch (IOException e) {
             log.error("mp3 파일을 가져오지 못했습니다.");
-            throw new NotFoundFileException("mp3 파일을 가져오지 못했습니다.");
+            throw new EntityNotFoundException("mp3 파일을 가져오지 못했습니다.", ErrorCode.NOT_FOUND_MP3);
         }
 
         return bytes;

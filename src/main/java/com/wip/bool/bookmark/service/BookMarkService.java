@@ -1,14 +1,16 @@
 package com.wip.bool.bookmark.service;
 
-import com.wip.bool.cmmn.type.OrderType;
-import com.wip.bool.cmmn.type.SortType;
 import com.wip.bool.bookmark.domain.BookMark;
 import com.wip.bool.bookmark.domain.BookMarkRepository;
+import com.wip.bool.bookmark.dto.BookMarkDto;
+import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.cmmn.type.SortType;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.song.domain.SongDetail;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.bookmark.dto.BookMarkDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +30,10 @@ public class BookMarkService {
     public Long save(Long userId, BookMarkDto.BookMarkSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. id = " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         SongDetail songDetail = songDetailRepository.findById(requestDto.getSongDetailId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 곡이 존재하지 않습니다. id = " + requestDto.getSongDetailId()));
+                .orElseThrow(() -> new EntityNotFoundException(requestDto.getSongDetailId(), ErrorCode.NOT_FOUND_SONG));
 
         BookMark bookMark = BookMark.createBookMark(user, songDetail);
 
@@ -41,7 +43,7 @@ public class BookMarkService {
     @Transactional
     public Long delete(Long bookMarkId) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId)
-                .orElseThrow(() -> new IllegalArgumentException("즐겨찾기가 존재하지 않습니다. id = " + bookMarkId));
+                .orElseThrow(() -> new EntityNotFoundException(bookMarkId, ErrorCode.NOT_FOUND_BOOKMARK));
         return bookMarkRepository.delete(bookMark);
     }
 

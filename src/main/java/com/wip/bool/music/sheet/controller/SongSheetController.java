@@ -1,6 +1,7 @@
 package com.wip.bool.music.sheet.controller;
 
-import com.wip.bool.exception.excp.NotFoundFileException;
+import com.wip.bool.exception.excp.BusinessException;
+import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.sheet.service.SongSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -24,13 +25,11 @@ public class SongSheetController {
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet")
     public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                               MultipartHttpServletRequest multipartHttpServletRequest,
-                                              UriComponentsBuilder uriComponentsBuilder) throws IOException, NotFoundFileException {
-
-        final String NOT_FOUND_FILE_ERROR = "이미지 파일 null 오류";
+                                              UriComponentsBuilder uriComponentsBuilder) throws IOException {
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
                 .map(multipart -> multipart.getFile("imagesFile"))
-                .orElseThrow(() -> new NotFoundFileException(NOT_FOUND_FILE_ERROR));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SHEET));
 
         Long id = songSheetService.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 

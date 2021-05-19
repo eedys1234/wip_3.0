@@ -3,6 +3,8 @@ package com.wip.bool.app.service;
 import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.domain.AppVersionRepository;
 import com.wip.bool.app.dto.AppVersionDto;
+import com.wip.bool.exception.excp.EntityNotFoundException;
+import com.wip.bool.exception.excp.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,7 @@ public class AppVersionService {
     @Transactional(readOnly = true)
     public AppVersionDto.AppVersionResponse get(String name) {
         return new AppVersionDto.AppVersionResponse(appVersionRepository.findOne(name)
-                .orElseThrow(() -> new IllegalArgumentException("앱 정보가 존재하지 않습니다. name = " + name)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("%s name = %s", ErrorCode.NOT_FOUND_APP.getMessage(), name), ErrorCode.NOT_FOUND_APP)));
     }
 
     @Transactional(readOnly = true)
@@ -37,13 +39,12 @@ public class AppVersionService {
                 .stream()
                 .map(AppVersionDto.AppVersionResponse::new)
                 .collect(Collectors.toList());
-
     }
 
     @Transactional
     public Long delete(Long appVersionId) {
         AppVersion appVersion = appVersionRepository.findById(appVersionId)
-                .orElseThrow(() -> new IllegalArgumentException("앱 정보가 존재하지 않습니다. id = " + appVersionId));
+                .orElseThrow(() -> new EntityNotFoundException(appVersionId, ErrorCode.NOT_FOUND_APP));
 
         return appVersionRepository.delete(appVersion);
     }
