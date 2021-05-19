@@ -139,7 +139,7 @@ public class SongDetailService {
             throw new IllegalArgumentException();
         }
 
-        return songDetailRepository.findAll(songMaster, sortType, orderType, offset, size);
+        return songDetailRepository.findAll(songMaster, sortType, orderType, size, offset);
     }
 
     @Transactional(readOnly = true)

@@ -18,7 +18,7 @@ public class SearchStoreProxy implements SearchStore {
 
     @PostConstruct
     private void init() {
-        songDetailRepository.findAll().stream().forEach(title -> searchStore.insert(title));
+        songDetailRepository.findAllTitle().stream().forEach(title -> searchStore.insert(title));
     }
 
     @Override

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SongDetailDto {
 
@@ -154,8 +155,11 @@ public class SongDetailDto {
             this.guitarCodeId = songDetail.getGuitarCode().getId();
             this.createDate = songDetail.getCreateDate();
             this.modifyDate = songDetail.getModifyDate();
-            this.bookmarkId = bookMark.getId();
             this.guitarCode = songDetail.getGuitarCode().getCode();
+
+            if(!Objects.isNull(bookMark)) {
+                this.bookmarkId = bookMark.getId();
+            }
         }
 
     }
