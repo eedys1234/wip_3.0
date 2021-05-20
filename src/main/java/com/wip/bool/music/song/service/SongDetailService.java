@@ -5,6 +5,7 @@ import com.wip.bool.bible.domain.WordsMasterRepository;
 import com.wip.bool.cmmn.dictionary.SearchStore;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
+import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.exception.excp.EntityNotFoundException;
 import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.guitar.domain.GuitarCode;
@@ -18,13 +19,16 @@ import com.wip.bool.music.song.domain.SongDetailRepository;
 import com.wip.bool.music.song.domain.SongMaster;
 import com.wip.bool.music.song.domain.SongMasterRepository;
 import com.wip.bool.music.song.dto.SongDetailDto;
+import com.wip.bool.user.domain.Role;
+import com.wip.bool.user.domain.User;
+import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,18 +45,34 @@ public class SongDetailService {
     @Value("${spring.mp3.path}")
     private String mp3FilePath;
 
-    @Resource(name = "searchStoreProxy")
-    private SearchStore searchStore;
+    @Qualifier(value = "searchStoreProxy")
+    private final SearchStore searchStore;
 
     private final SongDetailRepository songDetailRepository;
+
     private final SongMasterRepository songMasterRepository;
+
     private final GuitarCodeRepository guitarCodeRepository;
+
     private final WordsMasterRepository wordsMasterRepository;
+
     private final SongSheetRepository songSheetRepository;
+
     private final SongMP3Repository songMP3Repository;
 
+    private final UserRepository userRepository;
+
     @Transactional
-    public Long save(SongDetailDto.SongDetailSaveRequest requestDto) {
+    public Long saveSong(Long userId, SongDetailDto.SongDetailSaveRequest requestDto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_USER));
+
+        Role role = user.getRole();
+
+        if(role != Role.ROLE_ADMIN) {
+            throw new AuthorizationException();
+        }
 
         SongMaster songMaster = selectedSongMaster(requestDto.getCodeId());
 
@@ -71,7 +91,16 @@ public class SongDetailService {
     }
 
     @Transactional
-    public Long update(Long songDetailId, SongDetailDto.SongDetailUpdateRequest requestDto) {
+    public Long updateSong(Long userId, Long songDetailId, SongDetailDto.SongDetailUpdateRequest requestDto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
+
+        Role role = user.getRole();
+
+        if(role != Role.ROLE_ADMIN) {
+            throw new AuthorizationException();
+        }
 
         SongDetail songDetail = selectedSongDetail(songDetailId);
 
@@ -96,7 +125,16 @@ public class SongDetailService {
     }
 
     @Transactional
-    public Long delete(Long songDetailId) {
+    public Long deleteSong(Long userId, Long songDetailId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
+
+        Role role = user.getRole();
+
+        if(role != Role.ROLE_ADMIN) {
+            throw new AuthorizationException();
+        }
 
         boolean isDeleteSheet = true;
         boolean isDeleteMP3 = true;
@@ -171,7 +209,7 @@ public class SongDetailService {
     }
 
     private SongMaster selectedSongMaster(Long songMasterId) {
-        return  songMasterRepository.findById(songMasterId)
+        return songMasterRepository.findById(songMasterId)
                 .orElseThrow(() -> new EntityNotFoundException(songMasterId, ErrorCode.NOT_FOUND_SONG_MASTER));
     }
 }

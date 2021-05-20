@@ -55,6 +55,7 @@ public class SongDetailDto {
 
         private String lyrics;
 
+        @JsonProperty(value = "code_id")
         private Long codeId;
 
         @JsonProperty(value = "guitar_code_id")
@@ -65,7 +66,6 @@ public class SongDetailDto {
 
         @Builder
         public SongDetailUpdateRequest(String title, String lyrics, Long codeId, Long guitarCodeId, Long wordsMasterId) {
-
             this.title = title;
             this.lyrics = lyrics;
             this.codeId = codeId;

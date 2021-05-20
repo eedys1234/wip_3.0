@@ -1,4 +1,7 @@
-[INFO ] 2021-05-19 20:58:05.741 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
-[INFO ] 2021-05-19 20:58:05.760 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-[INFO ] 2021-05-19 20:58:05.764 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-05-19 20:58:05.768 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
+[INFO ] 2021-05-19 21:34:25.278 [main] ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-19 21:34:26.066 [main] H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+[INFO ] 2021-05-19 21:34:26.293 [main] SongDetailServiceTest - Started SongDetailServiceTest in 18.604 seconds (JVM running for 25.611)
+[INFO ] 2021-05-19 21:34:27.060 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2021-05-19 21:34:27.077 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2021-05-19 21:34:27.079 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2021-05-19 21:34:27.085 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.

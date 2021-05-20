@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static com.wip.bool.bible.domain.QWordsMaster.*;
+
 @Repository
 @RequiredArgsConstructor
 public class WordsMasterRepository {
@@ -21,12 +23,23 @@ public class WordsMasterRepository {
         return wordsMaster;
     }
 
+    public Integer findCount() {
+        return queryFactory.select(wordsMaster.wordsOrder.max())
+                .from(wordsMaster)
+                .fetchOne();
+    }
+
     public Optional<WordsMaster> findById(Long id) {
         return Optional.ofNullable(entityManager.find(WordsMaster.class, id));
     }
 
     public List<WordsMaster> findAll() {
-        return queryFactory.selectFrom(QWordsMaster.wordsMaster)
+        return queryFactory.selectFrom(wordsMaster)
                 .fetch();
+    }
+
+    public Long delete(WordsMaster wordsMaster) {
+        entityManager.remove(wordsMaster);
+        return 1L;
     }
 }
