@@ -153,34 +153,34 @@ public class SongDetailServiceTest {
         verify(searchStore, times(1)).insert(anyString());
     }
 
-    @DisplayName("곡 삭제")
-    @Test
-    public void 곡_삭제_Service() throws Exception {
-
-        //given
-        User user = UserFactory.getAdminUser(1L);
-        SongMaster songMaster = SongMasterFactory.getSongMaster(1L);
-        GuitarCode guitarCode = GuitarCodeFactory.getGuitarCode(1L);
-        WordsMaster wordsMaster = WordsMasterFactory.getWordsMaster(1L);
-        SongDetail songDetail = SongDetailFactory.getSongDetail(songMaster, guitarCode, wordsMaster, 1L);
-//        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, sheetFilePath, );
-
-        //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(songDetail)).when(songDetailRepository).findById(anyLong());
-        doReturn(1L).when(songDetailRepository).delete(any(SongDetail.class));
-//        doReturn().when(songSheetRepository).findBySongDetail(any(SongDetail.class));
-//        doReturn().when(songMP3Repository).findBySongDetail(any(SongDetail.class));
-        Long resValue = songDetailService.deleteSong(user.getId(), songDetail.getId());
-
-        //then
-        assertThat(resValue).isEqualTo(1L);
-
-        //verify
-        verify(userRepository, times(1)).findById(anyLong());
-        verify(songDetailRepository, times(1)).findById(anyLong());
-        verify(songDetailRepository, times(1)).delete(any(SongDetail.class));
-
-    }
+//    @DisplayName("곡 삭제")
+//    @Test
+//    public void 곡_삭제_Service() throws Exception {
+//
+//        //given
+//        User user = UserFactory.getAdminUser(1L);
+//        SongMaster songMaster = SongMasterFactory.getSongMaster(1L);
+//        GuitarCode guitarCode = GuitarCodeFactory.getGuitarCode(1L);
+//        WordsMaster wordsMaster = WordsMasterFactory.getWordsMaster(1L);
+//        SongDetail songDetail = SongDetailFactory.getSongDetail(songMaster, guitarCode, wordsMaster, 1L);
+////        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, sheetFilePath, );
+//
+//        //when
+//        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+//        doReturn(Optional.ofNullable(songDetail)).when(songDetailRepository).findById(anyLong());
+//        doReturn(1L).when(songDetailRepository).delete(any(SongDetail.class));
+////        doReturn().when(songSheetRepository).findBySongDetail(any(SongDetail.class));
+////        doReturn().when(songMP3Repository).findBySongDetail(any(SongDetail.class));
+//        Long resValue = songDetailService.deleteSong(user.getId(), songDetail.getId());
+//
+//        //then
+//        assertThat(resValue).isEqualTo(1L);
+//
+//        //verify
+//        verify(userRepository, times(1)).findById(anyLong());
+//        verify(songDetailRepository, times(1)).findById(anyLong());
+//        verify(songDetailRepository, times(1)).delete(any(SongDetail.class));
+//
+//    }
 
 }

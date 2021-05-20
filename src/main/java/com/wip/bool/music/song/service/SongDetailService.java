@@ -24,6 +24,7 @@ import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,8 @@ public class SongDetailService {
     private String mp3FilePath;
 
     @Qualifier(value = "searchStoreProxy")
-    private final SearchStore searchStore;
+    @Autowired
+    private SearchStore searchStore;
 
     private final SongDetailRepository songDetailRepository;
 
