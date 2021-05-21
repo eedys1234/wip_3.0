@@ -58,11 +58,11 @@ public class SongDetailController {
     }
 
     @GetMapping(value = "/song-details")
-    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> findAll(@RequestParam("codeId") Long songMasterId,
-                                                                        @RequestParam("order") String order,
-                                                                        @RequestParam("sort") String sort,
-                                                                        @RequestParam("size") int size,
-                                                                        @RequestParam("offset") int offset) {
+    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> findAll(@RequestParam Long songMasterId,
+                                                                        @RequestParam String order,
+                                                                        @RequestParam String sort,
+                                                                        @RequestParam int size,
+                                                                        @RequestParam int offset) {
 
         return ResponseEntity.ok(songDetailService.findAll(songMasterId, order, sort, size, offset));
     }
