@@ -2,7 +2,7 @@ package com.wip.bool.music.song.service;
 
 import com.wip.bool.bible.domain.WordsMaster;
 import com.wip.bool.bible.domain.WordsMasterRepository;
-import com.wip.bool.cmmn.dictionary.SearchStore;
+import com.wip.bool.cmmn.dictionary.SearchStoreProxy;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.type.SortType;
 import com.wip.bool.exception.excp.AuthorizationException;
@@ -25,7 +25,6 @@ import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @_(@Autowired))
 @Slf4j
 public class SongDetailService {
 
@@ -46,9 +45,7 @@ public class SongDetailService {
     @Value("${spring.mp3.path}")
     private String mp3FilePath;
 
-    @Qualifier(value = "searchStoreProxy")
-    @Autowired
-    private SearchStore searchStore;
+    private final SearchStoreProxy searchStore;
 
     private final SongDetailRepository songDetailRepository;
 
@@ -164,7 +161,7 @@ public class SongDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<SongDetailDto.SongDetailSimpleResponse> gets(Long songMasterId, String order, String sort,
+    public List<SongDetailDto.SongDetailSimpleResponse> findAll(Long songMasterId, String order, String sort,
                                                        int size, int offset) {
 
         SongMaster songMaster = null;
@@ -183,7 +180,7 @@ public class SongDetailService {
     }
 
     @Transactional(readOnly = true)
-    public SongDetailDto.SongDetailResponse get(Long songDetailId, Long userId) {
+    public SongDetailDto.SongDetailResponse findDetailOne(Long songDetailId, Long userId) {
         return songDetailRepository.findById(songDetailId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_SONG));
     }

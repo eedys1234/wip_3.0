@@ -58,21 +58,20 @@ public class SongDetailController {
     }
 
     @GetMapping(value = "/song-details")
-    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> gets(
-            @RequestParam("codeId") Long songMasterId,
-            @RequestParam("order") String order,
-            @RequestParam("sort") String sort,
-            @RequestParam("size") int size,
-            @RequestParam("offset") int offset) {
+    public ResponseEntity<List<SongDetailDto.SongDetailSimpleResponse>> findAll(@RequestParam("codeId") Long songMasterId,
+                                                                        @RequestParam("order") String order,
+                                                                        @RequestParam("sort") String sort,
+                                                                        @RequestParam("size") int size,
+                                                                        @RequestParam("offset") int offset) {
 
-        return new ResponseEntity<>(songDetailService.gets(songMasterId, order, sort, size, offset), HttpStatus.OK);
+        return ResponseEntity.ok(songDetailService.findAll(songMasterId, order, sort, size, offset));
     }
 
     @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}")
-    public ResponseEntity<SongDetailDto.SongDetailResponse> get(@PathVariable("songDetailId") Long songDetailId,
+    public ResponseEntity<SongDetailDto.SongDetailResponse> findDetailOne(@PathVariable("songDetailId") Long songDetailId,
                                                                 @RequestHeader("userId") Long userId) {
 
-        return new ResponseEntity<>(songDetailService.get(songDetailId, userId), HttpStatus.OK);
+        return ResponseEntity.ok(songDetailService.findDetailOne(songDetailId, userId));
     }
 
     @GetMapping(value = "/song-details/search")
