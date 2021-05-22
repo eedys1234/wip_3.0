@@ -1,1 +1,2 @@
-[ERROR] 2021-05-22 15:41:55.218 [main] SongMP3 - mp3 파일을 가져오지 못했습니다. path = src\test\resources\mp3\0\B\5\0B5B8DF97B594F69B8F50CE7136CF9E1\.MP3
+[INFO ] 2021-05-22 16:06:36.564 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-22 16:06:36.577 [main] TestDispatcherServlet - Completed initialization in 0 ms

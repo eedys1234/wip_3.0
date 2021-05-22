@@ -52,7 +52,7 @@ public class SongMP3ServiceTest {
     private UserRepository userRepository;
 
 
-    @DisplayName("mp3파일 추가")
+    @DisplayName("mp3 파일 추가")
     @Test
     public void mp3_파일_추가_Service() throws Exception {
 
@@ -82,7 +82,7 @@ public class SongMP3ServiceTest {
         verify(songMP3Repository, times(1)).save(any(SongMP3.class));
     }
 
-    @DisplayName("mp3파일 삭제")
+    @DisplayName("mp3 파일 삭제")
     @Test
     public void mp3_파일_삭제_Service() throws Exception {
 
@@ -110,7 +110,7 @@ public class SongMP3ServiceTest {
         verify(songMP3Repository, times(1)).delete(any(SongMP3.class));
     }
 
-    @DisplayName("mp3파일 가져오기")
+    @DisplayName("mp3 파일 가져오기")
     @Test
     public void mp3_파일_가져오기_Service() throws Exception {
 
