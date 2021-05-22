@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,32 +18,36 @@ public class RightService {
     private final RightsRepository rightRepository;
 
     @Transactional
-    public String saveRight(RightDto.RightSaveRequest requestDto) {
+    public Long saveRight(RightDto.RightSaveRequest requestDto) {
 
-        List<String> rightTypes = Arrays.stream(requestDto.getRightType().split(","))
-                                                                        .collect(Collectors.toList());
-
-
-        List<Long> ids = new ArrayList<>();
-        for(String rightType : rightTypes)
-        {
-            Rights rights = requestDto.toEntity();
-            rights.updateRightType(Rights.RightType.valueOf(rightType.toUpperCase()));
-            ids.add(rightRepository.save(rights).getId());
-        }
-
-        return ids.stream()
-                .map(id -> String.valueOf(id))
-                .collect(Collectors.joining(","));
+        return rightRepository.save(requestDto.toEntity()).getId();
     }
 
     @Transactional
-    public Long deleteRight(Long rightId) {
+    public Long deleteRight(Long rightId, String rightType) {
 
-        Rights right = rightRepository.findById(rightId).
-            orElseThrow(() -> new EntityNotFoundException(rightId, ErrorCode.NOT_FOUND_RIGHT));
+        Rights rights = rightRepository.findById(rightId)
+            .orElseThrow(() -> new EntityNotFoundException(rightId, ErrorCode.NOT_FOUND_RIGHT));
 
-        rightRepository.delete(right);
+        Long rightValues = Arrays.stream(rightType.split(","))
+                .mapToLong(right -> Rights.RightType.valueOf(right.toUpperCase()).getValue())
+                .sum();
+
+        Long deleteRightType = rights.getRightType() & rightValues;
+
+        if(deleteRightType == 0) {
+            throw new IllegalStateException();
+        }
+
+        //권한 레코드 삭제
+        if(rights.getRightType() - deleteRightType == 0) {
+            rightRepository.delete(rights);
+        }
+        //권한 삭제
+        else {
+            rights.updateRightType(rights.getRightType() - deleteRightType);
+        }
+
         return 1L;
     }
 }
