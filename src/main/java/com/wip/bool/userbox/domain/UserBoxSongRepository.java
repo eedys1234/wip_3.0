@@ -42,12 +42,19 @@ public class UserBoxSongRepository {
         return queryFactory.select(Projections.constructor(UserBoxSongDto.UserBoxSongResponse.class,
                 userBoxSong.id, songDetail.id, songDetail.title, userBoxSong.createDate))
                 .from(songDetail)
-                .innerJoin(songDetail, userBoxSong.songDetail)
-                .innerJoin(userBox, userBoxSong.userBox)
+                .innerJoin(userBoxSong)
+                .on(songDetail.id.eq(userBoxSong.songDetail.id))
+                .innerJoin(userBox)
+                .on(userBoxSong.userBox.id.eq(userBox.id))
                 .where(userBox.id.eq(userBoxId))
                 .orderBy(getOrder(sortType, orderType))
                 .offset(offset)
                 .limit(size)
+                .fetch();
+    }
+
+    public List<UserBoxSong> findAll() {
+        return queryFactory.selectFrom(userBoxSong)
                 .fetch();
     }
 

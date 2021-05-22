@@ -30,7 +30,7 @@ public class UserBox extends BaseEntity {
     private String userBoxName;
 
     @OneToMany(mappedBy = "userBox")
-    private List<UserBoxSong> userMusics = new ArrayList<>();
+    private List<UserBoxSong> userBoxSongs = new ArrayList<>();
 
     public static UserBox createUserBox(User user, String userBoxName) {
         UserBox userBox = new UserBox();
