@@ -34,6 +34,14 @@ public class Rights extends BaseEntity {
     @Column(name = "authority_id")
     private Long authorityId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "right_type")
+    private RightType rightType;
+
+    public enum RightType {
+        READ, WRITE
+    }
+
     private Rights(Target target, Long targetId, Authority authority, Long authorityId) {
         this.target = target;
         this.targetId = targetId;
@@ -45,4 +53,9 @@ public class Rights extends BaseEntity {
         Rights right = new Rights(target, targetId, authority, authorityId);
         return right;
     }
+
+    public void updateRightType(RightType rightType) {
+        this.rightType = rightType;
+    }
+
 }

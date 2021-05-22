@@ -44,13 +44,14 @@ public class RightServiceTest {
         ReflectionTestUtils.setField(requestDto, "target", "USERBOX");
         ReflectionTestUtils.setField(requestDto, "authority", "GROUP");
         ReflectionTestUtils.setField(requestDto, "authorityId", 1L);
+        ReflectionTestUtils.setField(requestDto, "rightType", "read");
 
         //when
         doReturn(right).when(rightRepository).save(any(Rights.class));
-        Long id = rightService.saveRight(requestDto);
+        String ids = rightService.saveRight(requestDto);
 
         //then
-        assertThat(id).isEqualTo(right.getId());
+        assertThat(ids).isEqualTo(String.valueOf(right.getId()));
 
         //verify
         verify(rightRepository, times(1)).save(any(Rights.class));
