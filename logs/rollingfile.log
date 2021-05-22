@@ -1,8 +1,0 @@
-[INFO ] 2021-05-22 23:36:54.633 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-22 23:36:54.654 [main] TestDispatcherServlet - Completed initialization in 9 ms
-[INFO ] 2021-05-22 23:36:55.426 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-22 23:36:55.426 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-22 23:36:55.426 [main] TestDispatcherServlet - Completed initialization in 0 ms
-[INFO ] 2021-05-22 23:36:55.860 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-22 23:36:55.861 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-22 23:36:55.863 [main] TestDispatcherServlet - Completed initialization in 0 ms
