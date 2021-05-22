@@ -20,7 +20,7 @@ public class RightController {
     private final RightService rightService;
 
     @PostMapping(value = "/right")
-    public ResponseEntity<Long> saveRight(@Valid @RequestBody RightDto.RightSaveRequest requestDto,
+    public ResponseEntity<String> saveRight(@Valid @RequestBody RightDto.RightSaveRequest requestDto,
                                           Errors errors,
                                           UriComponentsBuilder uriComponentsBuilder) {
 
@@ -28,11 +28,11 @@ public class RightController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = rightService.saveRight(requestDto);
+        String ids = rightService.saveRight(requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
+        httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(ids).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ids, httpHeaders, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/right/{rightId:[\\d]+}")
