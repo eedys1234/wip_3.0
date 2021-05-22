@@ -7,6 +7,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class RightsFactory {
 
+    public static final String rightType = "read";
+
     public static Rights getRights() {
         Rights right = Rights.of(Target.USERBOX, 1L, Authority.GROUP, 1L);
         return right;

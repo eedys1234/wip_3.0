@@ -84,7 +84,7 @@ public class RightControllerTest {
     public void 권한_삭제_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(rightService).deleteRight(any(Long.class));
+        doReturn(1L).when(rightService).deleteRight(any(Long.class), anyString());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/right/1")
@@ -96,6 +96,6 @@ public class RightControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(rightService, times(1)).deleteRight(any(Long.class));
+        verify(rightService, times(1)).deleteRight(any(Long.class), anyString());
     }
 }

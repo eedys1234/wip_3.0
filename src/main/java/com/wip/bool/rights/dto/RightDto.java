@@ -39,7 +39,7 @@ public class RightDto {
         public Rights toEntity() {
             Target target = Target.valueOf(this.target);
             Authority authority = Authority.valueOf(this.authority);
-            return Rights.of(target, targetId, authority, authorityId);
+            return Rights.of(target, targetId, authority, authorityId, this.rightType);
         }
     }
 }
