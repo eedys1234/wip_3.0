@@ -10,6 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SongSheetFactory {
 
+    public static final String orgFileName = "TEST.PNG";
+    public static final String byteString = "TEST";
+
     public static List<SongSheet> getSongSheets(SongDetail songDetail, String filePath, String orgFileName, byte[]... imagesFile) {
         List<SongSheet> songSheets = new ArrayList<>();
         AtomicInteger index = new AtomicInteger(1);

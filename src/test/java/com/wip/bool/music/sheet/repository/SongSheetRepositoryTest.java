@@ -101,12 +101,10 @@ public class SongSheetRepositoryTest {
     public void 악보_추가_Repository() throws Exception {
 
         //given
-        String orgFileName = "TEST.PNG";
-        String byteString = "TEST";
         SongDetail songDetail = SongDetailFactory.getSongDetail(findSongMaster(), findGuitarCode(), findWordsMaster());
         songDetailRepository.save(songDetail);
 
-        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, orgFileName, byteString.getBytes(), 1);
+        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, SongSheetFactory.orgFileName, SongSheetFactory.byteString.getBytes(), 1);
 
         //when
         SongSheet addSongSheet = songSheetRepository.save(songSheet);
@@ -144,12 +142,10 @@ public class SongSheetRepositoryTest {
     public void 악보_조회_byId_Repository() throws Exception {
 
         //given
-        String orgFileName = "TEST.PNG";
-        String byteString = "TEST";
         SongDetail songDetail = SongDetailFactory.getSongDetail(findSongMaster(), findGuitarCode(), findWordsMaster());
         songDetailRepository.save(songDetail);
 
-        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, orgFileName, byteString.getBytes(), 1);
+        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, SongSheetFactory.orgFileName, SongSheetFactory.byteString.getBytes(), 1);
         SongSheet addSongSheet = songSheetRepository.save(songSheet);
 
         //when
@@ -161,7 +157,7 @@ public class SongSheetRepositoryTest {
         assertThat(value.getSongDetail().getId()).isEqualTo(songDetail.getId());
         assertThat(value.getSheetFilePath()).isEqualTo(imagePath);
         assertThat(value.getSheetOrder()).isEqualTo(1);
-        assertThat(value.getSheetOrgFileName()).isEqualTo(orgFileName);
+        assertThat(value.getSheetOrgFileName()).isEqualTo(SongSheetFactory.orgFileName);
     }
 
     @DisplayName("악보 조회 by SongDetail")
@@ -169,12 +165,10 @@ public class SongSheetRepositoryTest {
     public void 악보_조회_bySongDetail_Repository() throws Exception {
 
         //given
-        String orgFileName = "TEST.PNG";
-        String byteString = "TEST";
         SongDetail songDetail = SongDetailFactory.getSongDetail(findSongMaster(), findGuitarCode(), findWordsMaster());
         songDetailRepository.save(songDetail);
 
-        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, orgFileName, byteString.getBytes(), 1);
+        SongSheet songSheet = SongSheetFactory.getSongSheet(songDetail, imagePath, SongSheetFactory.orgFileName, SongSheetFactory.byteString.getBytes(), 1);
         SongSheet addSongSheet = songSheetRepository.save(songSheet);
 
         //when
@@ -183,7 +177,7 @@ public class SongSheetRepositoryTest {
         //then
         assertThat(values.size()).isEqualTo(1);
         assertThat(values.get(0).getSongDetail().getId()).isEqualTo(songDetail.getId());
-        assertThat(values.get(0).getSheetOrgFileName()).isEqualTo(orgFileName);
+        assertThat(values.get(0).getSheetOrgFileName()).isEqualTo(SongSheetFactory.orgFileName);
         assertThat(values.get(0).getSheetOrder()).isEqualTo(1);
     }
 }

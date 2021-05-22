@@ -24,6 +24,7 @@ public class SongSheetController {
 
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet")
     public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
+                                              @RequestHeader("userId") Long userId,
                                               MultipartHttpServletRequest multipartHttpServletRequest,
                                               UriComponentsBuilder uriComponentsBuilder) throws IOException {
 
@@ -31,7 +32,7 @@ public class SongSheetController {
                 .map(multipart -> multipart.getFile("imagesFile"))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SHEET));
 
-        Long id = songSheetService.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
+        Long id = songSheetService.saveSongSheet(userId, songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -42,8 +43,9 @@ public class SongSheetController {
 
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet/{songSheetId:[\\d]+}")
     public ResponseEntity<Long> deleteSongSheet(@PathVariable("songDetailId") Long songDetailId,
-                                                @PathVariable("songSheetId") Long songSheetId)
-    {
-        return new ResponseEntity<>(songSheetService.delete(songSheetId), HttpStatus.OK);
+                                                @PathVariable("songSheetId") Long songSheetId,
+                                                @RequestHeader("userId") Long userId) {
+
+        return ResponseEntity.ok(songSheetService.deleteSongSheet(userId, songSheetId));
     }
 }
