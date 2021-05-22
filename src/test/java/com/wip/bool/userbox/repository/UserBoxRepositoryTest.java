@@ -11,6 +11,7 @@ import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import com.wip.bool.userbox.domain.UserBox;
 import com.wip.bool.userbox.domain.UserBoxRepository;
+import com.wip.bool.userbox.dto.UserBoxDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,11 +111,11 @@ public class UserBoxRepositoryTest {
         rightsRepository.save(rights);
 
         //when
-        List<UserBox> values = userBoxRepository.findAll(OrderType.ASC, size, offset, addUser.getId());
+        List<UserBoxDto.UserBoxResponse> values = userBoxRepository.findAll(OrderType.ASC, size, offset, addUser.getId());
 
         //then
         assertThat(values.size()).isEqualTo(1);
-        assertThat(values).extracting(UserBox::getUserBoxName).contains(userBoxNames.get(0));
+        assertThat(values).extracting(UserBoxDto.UserBoxResponse::getUserBoxName).contains(userBoxNames.get(0));
     }
 
 
