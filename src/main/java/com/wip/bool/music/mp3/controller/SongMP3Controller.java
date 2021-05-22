@@ -25,7 +25,8 @@ public class SongMP3Controller {
     private final SongMP3Service songMP3Service;
 
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
-    public ResponseEntity<Long> saveSongMP3(@PathVariable("songDetailId") Long songDetailId,
+    public ResponseEntity<Long> saveSongMP3(@PathVariable Long songDetailId,
+                                            @RequestHeader("userId") Long userId,
                                             MultipartHttpServletRequest multipartHttpServletRequest,
                                             UriComponentsBuilder uriComponentsBuilder) throws IOException
     {
@@ -34,7 +35,7 @@ public class SongMP3Controller {
                 .map(multipart -> multipart.getFile("mp3File"))
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_MP3));
 
-        Long id = songMP3Service.save(songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
+        Long id = songMP3Service.saveSongMP3(userId, songDetailId, multipartFile.getOriginalFilename(), multipartFile.getBytes());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -43,10 +44,11 @@ public class SongMP3Controller {
     }
 
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d+]}")
-    public ResponseEntity<Long> deleteSongMP3(@PathVariable("songDetailId") Long songDetailId,
-                                              @PathVariable("songMP3Id") Long songMP3Id) {
+    public ResponseEntity<Long> deleteSongMP3(@PathVariable Long songDetailId,
+                                              @PathVariable Long songMP3Id,
+                                              @RequestHeader("userId") Long userId) {
 
-        return new ResponseEntity<>(songMP3Service.delete(songMP3Id), HttpStatus.OK);
+        return ResponseEntity.ok(songMP3Service.deleteSongMP3(userId, songMP3Id));
     }
 
     @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d]+}")
@@ -54,6 +56,6 @@ public class SongMP3Controller {
                                              @PathVariable("songMP3Id") Long songMP3Id) {
 
         Base64.Encoder encoder = Base64.getEncoder();
-        return new ResponseEntity<>(encoder.encodeToString(songMP3Service.getFile(songMP3Id)), HttpStatus.OK);
+        return ResponseEntity.ok(encoder.encodeToString(songMP3Service.getFile(songMP3Id)));
     }
 }

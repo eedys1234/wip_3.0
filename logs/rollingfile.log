@@ -1,4 +1,1 @@
-[INFO ] 2021-05-22 13:56:54.158 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
-[INFO ] 2021-05-22 13:56:54.389 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-[INFO ] 2021-05-22 13:56:54.400 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-05-22 13:56:54.464 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
+[ERROR] 2021-05-22 15:41:55.218 [main] SongMP3 - mp3 파일을 가져오지 못했습니다. path = src\test\resources\mp3\0\B\5\0B5B8DF97B594F69B8F50CE7136CF9E1\.MP3

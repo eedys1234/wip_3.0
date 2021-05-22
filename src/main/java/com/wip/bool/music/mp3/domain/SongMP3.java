@@ -72,13 +72,13 @@ public class SongMP3 extends BaseEntity {
     @Transient
     private byte[] mp3File;
 
-    public static SongMP3 createSongMP3(SongDetail songDetail, String mp3FilePath, String mp3OrgFileName, byte[] mp3File) {
+    public static SongMP3 createSongMP3(SongDetail songDetail, String mp3FilePath, String orgFileName, byte[] mp3File) {
 
         SongMP3 songMP3 = new SongMP3();
-        songMP3.updateMP3Path();
+        songMP3.updateNewFileName();
         songMP3.updateSongDetail(songDetail);
-        songMP3.updateMP3FileExt(mp3OrgFileName);
-        songMP3.updateOrgFileName(mp3OrgFileName);
+        songMP3.updateMP3FileExt(orgFileName);
+        songMP3.updateOrgFileName(orgFileName);
         songMP3.updateMP3File(mp3File);
         songMP3.updateMP3FilePath(mp3FilePath);
         return songMP3;
@@ -125,7 +125,7 @@ public class SongMP3 extends BaseEntity {
         return String.join("/", String.valueOf(fileName.charAt(0)), String.valueOf(fileName.charAt(1)), String.valueOf(fileName.charAt(2)), fileName);
     }
 
-    public void updateMP3Path() {
+    public void updateNewFileName() {
         this.mp3NewFileName = UUID.randomUUID()
                 .toString()
                 .replace("-", "")
@@ -142,8 +142,8 @@ public class SongMP3 extends BaseEntity {
         this.mp3FileExt = extType.getValue();
     }
 
-    public void updateOrgFileName(String mp3OrgFileName) {
-        this.mp3OrgFileName = mp3OrgFileName;
+    public void updateOrgFileName(String orgFileName) {
+        this.mp3OrgFileName = orgFileName;
     }
 
     public void updateMP3File(byte[] mp3File) {
@@ -162,7 +162,6 @@ public class SongMP3 extends BaseEntity {
                 File file = path.toFile();
 
                 if(file.exists()) {
-
                     MP3File mp3 = (MP3File) AudioFileIO.read(file);
                     this.duration = mp3.getAudioHeader().getTrackLength();
                     this.miliDuration = duration * 1000;
@@ -177,17 +176,18 @@ public class SongMP3 extends BaseEntity {
         return false;
     }
 
-    public byte[] getFile(String filePath) {
+    public byte[] getFile() {
 
         byte [] bytes = null;
-
+        Path path = null;
         try {
-            Path path = FileSystems.getDefault().getPath(filePath, createDirectory(this.mp3NewFileName) + mp3FileExt);
+            path = FileSystems.getDefault().getPath(this.mp3FilePath, createDirectory(this.mp3NewFileName) + this.mp3FileExt);
+
             if(path.toFile().exists()) {
                 bytes = Files.readAllBytes(path);
             }
         } catch (IOException e) {
-            log.error("mp3 파일을 가져오지 못했습니다.");
+            log.error("mp3 파일을 가져오지 못했습니다. path = " + path.toString());
             throw new EntityNotFoundException("mp3 파일을 가져오지 못했습니다.", ErrorCode.NOT_FOUND_MP3);
         }
 

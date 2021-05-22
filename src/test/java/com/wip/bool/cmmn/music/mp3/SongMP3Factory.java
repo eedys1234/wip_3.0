@@ -6,7 +6,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class SongMP3Factory {
 
-    public static final String orgFileName = "TEST.MP4";
+    public static final String orgFileName = "test_01.mp3";
     public static final String byteString = "TEST";
 
     public static SongMP3 getSongMP3(SongDetail songDetail, String filePath, String orgFileName, byte[] mp3File) {
