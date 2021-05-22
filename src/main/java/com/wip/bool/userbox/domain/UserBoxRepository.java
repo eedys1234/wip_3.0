@@ -1,8 +1,10 @@
 package com.wip.bool.userbox.domain;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.userbox.dto.UserBoxDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -38,8 +40,9 @@ public class UserBoxRepository {
                 );
     }
 
-    public List<UserBox> findAll(OrderType orderType, int size, int offset, Long authorityId) {
-        return queryFactory.select(userBox)
+    public List<UserBoxDto.UserBoxResponse> findAll(OrderType orderType, int size, int offset, Long authorityId) {
+        return queryFactory.select(Projections.constructor(UserBoxDto.UserBoxResponse.class,
+                userBox, rights.rightType))
                 .from(userBox)
                 .innerJoin(rights)
                 .on(userBox.id.eq(rights.targetId), rights.authorityId.eq(authorityId))
@@ -49,8 +52,10 @@ public class UserBoxRepository {
                 .fetch();
     }
 
-    public List<UserBox> findAll(OrderType orderType, int size, int offset, List<Long> authorityId) {
-        return queryFactory.selectFrom(userBox)
+    public List<UserBoxDto.UserBoxResponse> findAll(OrderType orderType, int size, int offset, List<Long> authorityId) {
+        return queryFactory.select(Projections.constructor(UserBoxDto.UserBoxResponse.class,
+                userBox, rights.rightType))
+                .from(userBox)
                 .innerJoin(rights)
                 .on(userBox.id.eq(rights.targetId))
                 .where(rights.authorityId.in(authorityId))

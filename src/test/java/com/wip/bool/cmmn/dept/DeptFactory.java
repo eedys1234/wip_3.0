@@ -1,6 +1,7 @@
 package com.wip.bool.cmmn.dept;
 
 import com.wip.bool.dept.domain.Dept;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class DeptFactory {
 
@@ -12,6 +13,12 @@ public class DeptFactory {
         return dept;
     }
 
+    public static Dept getDept(long id) {
+        Dept dept = getDept();
+        ReflectionTestUtils.setField(dept, "id", id);
+        return dept;
+    }
+
     public static Dept getDept(String deptName) {
         Dept dept = Dept.builder()
                         .deptName(deptName)
@@ -19,4 +26,11 @@ public class DeptFactory {
 
         return dept;
     }
+
+    public static Dept getDept(String deptName, long id) {
+        Dept dept = getDept(deptName);
+        ReflectionTestUtils.setField(dept, "id", id);
+        return dept;
+    }
+
 }

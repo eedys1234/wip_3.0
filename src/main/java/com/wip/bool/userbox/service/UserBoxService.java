@@ -116,10 +116,7 @@ public class UserBoxService {
 
         OrderType orderType = OrderType.valueOf(order);
 
-        return userBoxRepository.findAll(orderType, size, offset, userId)
-                .stream()
-                .map(UserBoxDto.UserBoxResponse::new)
-                .collect(Collectors.toList());
+        return userBoxRepository.findAll(orderType, size, offset, userId);
     }
 
     @Transactional(readOnly = true)
@@ -137,10 +134,7 @@ public class UserBoxService {
 
         OrderType orderType = OrderType.valueOf(order);
 
-        return userBoxRepository.findAll(orderType, size, offset, deptId)
-                .stream()
-                .map(UserBoxDto.UserBoxResponse::new)
-                .collect(Collectors.toList());
+        return userBoxRepository.findAll(orderType, size, offset, deptId);
     }
 
     @Transactional(readOnly = true)
@@ -162,10 +156,7 @@ public class UserBoxService {
         
         OrderType orderType = OrderType.valueOf(order);
 
-        return userBoxRepository.findAll(orderType, size, offset, groupIds)
-                .stream()
-                .map(UserBoxDto.UserBoxResponse::new)
-                .collect(Collectors.toList());
+        return userBoxRepository.findAll(orderType, size, offset, groupIds);
     }
 
     @Transactional(readOnly = true)
@@ -184,9 +175,6 @@ public class UserBoxService {
 
         OrderType orderType = OrderType.valueOf(order);
 
-        return userBoxRepository.findAll(orderType, size, offset, authorityIds)
-                .stream()
-                .map(UserBoxDto.UserBoxResponse::new)
-                .collect(Collectors.toList());
+        return userBoxRepository.findAll(orderType, size, offset, authorityIds);
     }
 }

@@ -1,6 +1,7 @@
 package com.wip.bool.userbox.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wip.bool.cmmn.rights.RightsFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.userbox.UserBoxFactory;
 import com.wip.bool.user.domain.User;
@@ -144,7 +145,7 @@ public class UserBoxControllerTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         doReturn(userBoxes.stream()
-        .map(UserBoxDto.UserBoxResponse::new)
+        .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
         .collect(Collectors.toList())).when(userBoxService).findAllByUser(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -163,6 +164,7 @@ public class UserBoxControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 
@@ -184,7 +186,7 @@ public class UserBoxControllerTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         doReturn(userBoxes.stream()
-                .map(UserBoxDto.UserBoxResponse::new)
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
                 .collect(Collectors.toList())).when(userBoxService).findAllByDept(any(Long.class), any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -204,6 +206,7 @@ public class UserBoxControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$[0]['right_type']").value("READ,WRITE"))
                 .andReturn();
 
 
@@ -225,7 +228,7 @@ public class UserBoxControllerTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         doReturn(userBoxes.stream()
-                .map(UserBoxDto.UserBoxResponse::new)
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
                 .collect(Collectors.toList())).when(userBoxService).findAllByGroup(any(Long.class), any(String.class), any(String.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -245,6 +248,7 @@ public class UserBoxControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 
@@ -266,7 +270,7 @@ public class UserBoxControllerTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         doReturn(userBoxes.stream()
-                .map(UserBoxDto.UserBoxResponse::new)
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
                 .collect(Collectors.toList())).when(userBoxService).findAllByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -285,6 +289,7 @@ public class UserBoxControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 

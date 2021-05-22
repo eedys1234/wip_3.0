@@ -1,11 +1,14 @@
 package com.wip.bool.userbox.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wip.bool.rights.domain.Rights;
 import com.wip.bool.userbox.domain.UserBox;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class UserBoxDto {
 
@@ -40,10 +43,22 @@ public class UserBoxDto {
         @JsonProperty(value = "user_id")
         private Long userId;
 
+        @JsonProperty(value = "right_type")
+        private String rightType;
+
         public UserBoxResponse(UserBox userBox) {
             this.userBoxId = userBox.getId();
             this.userId = userBox.getUser().getId();
             this.userBoxName = userBox.getUserBoxName();
+        }
+
+        public UserBoxResponse(UserBox userBox, Long rightType) {
+            this.userBoxId = userBox.getId();
+            this.userId = userBox.getUser().getId();
+            this.userBoxName = userBox.getUserBoxName();
+            this.rightType = Arrays.stream(Rights.RightType.values())
+                    .filter(right -> (right.getValue() & rightType) == right.getValue())
+                    .map(right -> right.name()).collect(Collectors.joining(","));
         }
 
     }
