@@ -1,10 +1,8 @@
-<<<<<<< HEAD
-[INFO ] 2021-05-22 22:17:53.552 [SpringContextShutdownHook] ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
-[INFO ] 2021-05-22 22:17:53.569 [SpringContextShutdownHook] LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-[INFO ] 2021-05-22 22:17:53.571 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown initiated...
-[INFO ] 2021-05-22 22:17:53.575 [SpringContextShutdownHook] HikariDataSource - HikariPool-1 - Shutdown completed.
-=======
-[INFO ] 2021-05-22 20:54:15.199 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-22 20:54:15.205 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-22 20:54:15.206 [main] TestDispatcherServlet - Completed initialization in 0 ms
->>>>>>> feature-userbox
+[INFO ] 2021-05-22 23:36:54.633 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-22 23:36:54.654 [main] TestDispatcherServlet - Completed initialization in 9 ms
+[INFO ] 2021-05-22 23:36:55.426 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-22 23:36:55.426 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-22 23:36:55.426 [main] TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] 2021-05-22 23:36:55.860 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] 2021-05-22 23:36:55.861 [main] TestDispatcherServlet - Initializing Servlet ''
+[INFO ] 2021-05-22 23:36:55.863 [main] TestDispatcherServlet - Completed initialization in 0 ms
