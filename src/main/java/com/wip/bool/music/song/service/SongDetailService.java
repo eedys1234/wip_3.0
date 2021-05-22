@@ -142,7 +142,7 @@ public class SongDetailService {
 
         songDetailRepository.delete(songDetail);
 
-        List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail);
+        List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail.getId());
         SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetail);
 
         if(songSheets.size() > 0) {

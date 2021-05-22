@@ -3,6 +3,7 @@ package com.wip.bool.search;
 import com.wip.bool.cmmn.dictionary.SearchStore;
 import com.wip.bool.cmmn.dictionary.kmp.KMPStore;
 import com.wip.bool.cmmn.dictionary.standard.Initializer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,15 +12,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
+import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles(value = "local")
+@ActiveProfiles(value = TEST)
 @SpringBootTest
 public class SearchTest {
 
+    @DisplayName("검색 텟트ㅡ")
     @Test
-    public void Trie_테스트() throws Exception {
+    public void 검색_테스트() throws Exception {
 
         SearchStore store = new KMPStore(new Initializer());
         store.insert("희망이 다가왔어요");
@@ -30,7 +33,6 @@ public class SearchTest {
         store.insert("이 복음은 하나님의 능력이라 하나님");
 
         List<String> songs = store.findWords("ㅎㄴㄴ");
-        System.out.println(songs);
         assertThat(songs.size()).isEqualTo(5);
     }
 }
