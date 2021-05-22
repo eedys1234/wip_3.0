@@ -37,14 +37,14 @@ public class UserBoxSongRepository {
     // TODO : 드라이빙 테이블은 : SongDetail, 드리븐 테이블 : UserBox, UserBoxSong
     // TODO : 선정이유 : OrderBy 조건을 인덱스로 활용하기 위해서
     // TODO : SongDetail <-> UserBoxSong <-> UserBox
-    public List<UserBoxSongDto.UserBoxSongResponse> findAll(Long userId, SortType sortType, OrderType orderType,
+    public List<UserBoxSongDto.UserBoxSongResponse> findAll(Long userBoxId, SortType sortType, OrderType orderType,
                                                             int size, int offset) {
         return queryFactory.select(Projections.constructor(UserBoxSongDto.UserBoxSongResponse.class,
                 userBoxSong.id, songDetail.id, songDetail.title, userBoxSong.createDate))
                 .from(songDetail)
                 .innerJoin(songDetail, userBoxSong.songDetail)
                 .innerJoin(userBox, userBoxSong.userBox)
-                .where(userBox.user.id.eq(userId))
+                .where(userBox.id.eq(userBoxId))
                 .orderBy(getOrder(sortType, orderType))
                 .offset(offset)
                 .limit(size)

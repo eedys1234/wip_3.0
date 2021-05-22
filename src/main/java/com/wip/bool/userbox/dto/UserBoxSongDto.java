@@ -16,10 +16,6 @@ public class UserBoxSongDto {
         @JsonProperty(value = "song_detail_id")
         @Positive
         private Long songDetailId;
-
-        @JsonProperty(value = "userbox_id")
-        @Positive
-        private Long userBoxId;
     }
 
     @Getter

@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface RightsRepository extends JpaRepository<Rights, Long> {
 
     Optional<Rights> findByTargetIdAndTarget(Target target, Long targetId);
+
 }
