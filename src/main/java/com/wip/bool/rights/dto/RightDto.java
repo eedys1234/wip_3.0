@@ -32,11 +32,14 @@ public class RightDto {
         @Positive
         private Long authorityId;
 
+        @JsonProperty(value = "right_type")
+        @NotBlank
+        private String rightType;
+
         public Rights toEntity() {
             Target target = Target.valueOf(this.target);
             Authority authority = Authority.valueOf(this.authority);
-
-            return Rights.of(target, targetId, authority, authorityId);
+            return Rights.of(target, targetId, authority, authorityId, this.rightType);
         }
     }
 }

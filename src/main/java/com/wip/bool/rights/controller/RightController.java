@@ -36,7 +36,8 @@ public class RightController {
     }
 
     @DeleteMapping(value = "/right/{rightId:[\\d]+}")
-    public ResponseEntity<Long> deleteRight(@PathVariable Long rightId) {
-        return ResponseEntity.ok(rightService.deleteRight(rightId));
+    public ResponseEntity<Long> deleteRight(@PathVariable Long rightId,
+                                            @RequestParam("right_type") String rightType) {
+        return ResponseEntity.ok(rightService.deleteRight(rightId, rightType));
     }
 }

@@ -44,6 +44,7 @@ public class RightServiceTest {
         ReflectionTestUtils.setField(requestDto, "target", "USERBOX");
         ReflectionTestUtils.setField(requestDto, "authority", "GROUP");
         ReflectionTestUtils.setField(requestDto, "authorityId", 1L);
+        ReflectionTestUtils.setField(requestDto, "rightType", RightsFactory.rightType);
 
         //when
         doReturn(right).when(rightRepository).save(any(Rights.class));
@@ -66,7 +67,7 @@ public class RightServiceTest {
         //when
         doReturn(Optional.ofNullable(right)).when(rightRepository).findById(any(Long.class));
         doNothing().when(rightRepository).delete(any(Rights.class));
-        Long resValue = rightService.deleteRight(right.getId());
+        Long resValue = rightService.deleteRight(right.getId(), RightsFactory.rightType);
 
         //then
         assertThat(resValue).isEqualTo(1L);

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +35,24 @@ public class Rights extends BaseEntity {
     @Column(name = "authority_id")
     private Long authorityId;
 
+    @Column(name = "right_type")
+    private Long rightType;
+
+    public enum RightType {
+        READ(1L),
+        WRITE(2L);
+
+        private Long value;
+
+        RightType(Long value) {
+            this.value = value;
+        }
+
+        public Long getValue() {
+            return this.value;
+        }
+    }
+
     private Rights(Target target, Long targetId, Authority authority, Long authorityId) {
         this.target = target;
         this.targetId = targetId;
@@ -42,7 +61,26 @@ public class Rights extends BaseEntity {
     }
 
     public static Rights of(Target target, Long targetId, Authority authority, Long authorityId) {
-        Rights right = new Rights(target, targetId, authority, authorityId);
-        return right;
+        Rights rights = new Rights(target, targetId, authority, authorityId);
+        String rightType = "read";
+        rights.updateRightType(rightType);
+        return rights;
     }
+
+    public static Rights of(Target target, Long targetId, Authority authority, Long authorityId, String rightType) {
+        Rights rights = new Rights(target, targetId, authority, authorityId);
+        rights.updateRightType(rightType);
+        return rights;
+    }
+
+    public void updateRightType(String rightType) {
+        this.rightType = Arrays.stream(rightType.split(","))
+                                .mapToLong(right -> RightType.valueOf(right.toUpperCase()).getValue())
+                                .sum();
+    }
+
+    public void updateRightType(Long rightType) {
+        this.rightType = rightType;
+    }
+
 }
