@@ -143,7 +143,8 @@ public class SongDetailService {
         songDetailRepository.delete(songDetail);
 
         List<SongSheet> songSheets = songSheetRepository.findBySongDetail(songDetail.getId());
-        SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetail);
+        SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetailId)
+                .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_MP3));
 
         if(songSheets.size() > 0) {
             isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(imageFilePath));

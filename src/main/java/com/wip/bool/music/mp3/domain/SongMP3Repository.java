@@ -1,11 +1,11 @@
 package com.wip.bool.music.mp3.domain;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.music.song.domain.SongDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static com.wip.bool.music.mp3.domain.QSongMP3.songMP3;
@@ -15,6 +15,7 @@ import static com.wip.bool.music.mp3.domain.QSongMP3.songMP3;
 public class SongMP3Repository {
 
     private final JPAQueryFactory queryFactory;
+
     private final EntityManager entityManager;
 
     public SongMP3 save(SongMP3 songMP3) {
@@ -31,10 +32,16 @@ public class SongMP3Repository {
         return Optional.ofNullable(entityManager.find(SongMP3.class, songMP3Id));
     }
 
-    public SongMP3 findBySongDetail(SongDetail songDetail) {
-        return queryFactory.select(songMP3)
+    public Optional<SongMP3> findBySongDetail(Long songDetailId) {
+        return Optional.ofNullable(queryFactory.select(songMP3)
                 .from(songMP3)
-                .where(songMP3.songDetail.eq(songDetail))
-                .fetchOne();
+                .where(songMP3.songDetail.id.eq(songDetailId))
+                .fetchOne()
+        );
+    }
+
+    public List<SongMP3> findAll() {
+        return queryFactory.selectFrom(songMP3)
+                .fetch();
     }
 }

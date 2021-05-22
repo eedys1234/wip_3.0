@@ -91,11 +91,6 @@ public class SongSheetRepositoryTest {
         return wordsMasters.get(0);
     }
 
-    private SongDetail findSongDetail() {
-        List<SongDetail> songDetails = songDetailRepository.findAll();
-        return songDetails.get(0);
-    }
-
     @DisplayName("악보 추가")
     @Test
     public void 악보_추가_Repository() throws Exception {

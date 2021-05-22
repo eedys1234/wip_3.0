@@ -32,8 +32,7 @@ public class Retry {
         }
     }
 
-    //TODO : Exception 부분 좀더 생각해보자...
-    public <T> T perform(Supplier<T> supplier, loggable log, Exception... exceptions) {
+    public <T> T perform(Supplier<T> supplier, loggable log, RuntimeException exceptions) {
         int count = 1;
 
         while(count++ <= max) {
@@ -46,7 +45,7 @@ public class Retry {
             }
         }
 
-        throw new RuntimeException();
+        throw exceptions;
     }
 
     @FunctionalInterface

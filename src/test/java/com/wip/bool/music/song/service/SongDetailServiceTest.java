@@ -180,7 +180,7 @@ public class SongDetailServiceTest {
         doReturn(Optional.ofNullable(songDetail)).when(songDetailRepository).findById(anyLong());
         doReturn(1L).when(songDetailRepository).delete(any(SongDetail.class));
         doReturn(songSheets).when(songSheetRepository).findBySongDetail(anyLong());
-        doReturn(songMP3).when(songMP3Repository).findBySongDetail(any(SongDetail.class));
+        doReturn(songMP3).when(songMP3Repository).findBySongDetail(anyLong());
         Long resValue = songDetailService.deleteSong(user.getId(), songDetail.getId());
 
         //then
@@ -191,7 +191,7 @@ public class SongDetailServiceTest {
         verify(songDetailRepository, times(1)).findById(anyLong());
         verify(songDetailRepository, times(1)).delete(any(SongDetail.class));
         verify(songSheetRepository, times(1)).findBySongDetail(anyLong());
-        verify(songMP3Repository, times(1)).findBySongDetail(any(SongDetail.class));
+        verify(songMP3Repository, times(1)).findBySongDetail(anyLong());
     }
 
     @DisplayName("곡 리스트 간단 조회")
