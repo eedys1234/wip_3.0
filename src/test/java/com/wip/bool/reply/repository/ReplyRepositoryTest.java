@@ -56,7 +56,7 @@ public class ReplyRepositoryTest {
         return reply;
     }
 
-    @DisplayName("댓글 추가 by 게시물 Repository")
+    @DisplayName("댓글 추가 by 게시물")
     @Test
     public void 댓글_추가_by게시물_Repository() throws Exception {
 
@@ -75,7 +75,7 @@ public class ReplyRepositoryTest {
         assertThat(addReply.getChildReply()).isEmpty();
     }
 
-    @DisplayName("댓글 추가 by 댓글 Repository")
+    @DisplayName("댓글 추가 by 댓글")
     @Test
     public void 댓글_추가_by댓글_Repository() throws Exception {
 
@@ -95,7 +95,7 @@ public class ReplyRepositoryTest {
         assertThat(addChildReply.getParentReply().getId()).isEqualTo(parentReply.getId());
     }
 
-    @DisplayName("댓글 리스트 조회 by 게시물 Repository")
+    @DisplayName("댓글 리스트 조회 by 게시물")
     @Test
     public void 댓글_리스트_조회_by게시물_Repository() throws Exception {
 
@@ -124,7 +124,7 @@ public class ReplyRepositoryTest {
                         .collect(Collectors.toList()));
     }
 
-    @DisplayName("댓글 리스트 조회 by 댓글 Repository")
+    @DisplayName("댓글 리스트 조회 by 댓글")
     @Test
     public void 댓글_리스트_조회_by댓글_Repository() throws Exception {
 
@@ -155,7 +155,7 @@ public class ReplyRepositoryTest {
         assertThat(replies).extracting(ReplyDto.ReplyResponse::getReplyId).containsAll(childReplyIds);
     }
 
-    @DisplayName("댓글 삭제 Repository")
+    @DisplayName("댓글 삭제")
     @Test
     public void 댓글_삭제_Repository() throws Exception {
 

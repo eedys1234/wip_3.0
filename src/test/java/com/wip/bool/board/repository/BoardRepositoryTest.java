@@ -44,7 +44,7 @@ public class BoardRepositoryTest {
     @DisplayName("게시물 추가")
     @ParameterizedTest
     @EnumSource(BoardType.class)
-    public void 게시물_추가(BoardType boardType) throws Exception {
+    public void 게시물_추가_Repository(BoardType boardType) throws Exception {
 
         //given
         String title = "테스트 공지사항입니다.";
@@ -65,7 +65,7 @@ public class BoardRepositoryTest {
 
     @DisplayName("게시물 리스트 조회")
     @Test
-    public void 게시물_리스트_조회() throws Exception {
+    public void 게시물_리스트_조회_Repository() throws Exception {
 
         //given
         List<User> users = userRepository.findAll();
@@ -88,7 +88,7 @@ public class BoardRepositoryTest {
 
     @DisplayName("게시물 상세 조회")
     @Test
-    public void 게시물_상세_조회() throws Exception {
+    public void 게시물_상세_조회_Repository() throws Exception {
 
         //given
         String title = "테스트 공지사항입니다.";
@@ -109,7 +109,7 @@ public class BoardRepositoryTest {
     @DisplayName("게시물 삭제")
     @ParameterizedTest
     @EnumSource(BoardType.class)
-    public void 게시물_삭제(BoardType boardType) throws Exception {
+    public void 게시물_삭제_Repository(BoardType boardType) throws Exception {
 
         //given
         String title = "테스트 공지사항입니다.";

@@ -32,7 +32,7 @@ public class SongDetailRepository {
     }
 
     public List<SongDetailDto.SongDetailSimpleResponse> findAll(SongMaster songMaster, SortType sortType,
-                                                                OrderType order, int offset, int size) {
+                                                                OrderType order, int size, int offset) {
 
         return queryFactory.select(
                 Projections.constructor(SongDetailDto.SongDetailSimpleResponse.class,
@@ -46,9 +46,14 @@ public class SongDetailRepository {
                 .fetch();
     }
 
-    public List<String> findAll() {
+    public List<String> findAllTitle() {
         return queryFactory.select(songDetail.title)
                 .from(songDetail)
+                .fetch();
+    }
+
+    public List<SongDetail> findAll() {
+        return queryFactory.selectFrom(songDetail)
                 .fetch();
     }
 

@@ -28,7 +28,7 @@ public class SongSheet extends BaseEntity {
     @Column(name = "song_sheet_id")
     private Long id;
 
-    @Column(name = "sheet_file_path", length = 50, nullable = false)
+    @Column(name = "sheet_file_path", length = 50, nullable = false, unique = true)
     private String sheetFilePath;
 
     @Column(name = "sheet_org_file_name", length = 20, nullable = false)
@@ -37,16 +37,16 @@ public class SongSheet extends BaseEntity {
     @Column(name = "sheet_new_file_name", length = 32, nullable = false)
     private String sheetNewFileName;
 
-    @Column(name = "sheet_order", nullable = false)
-    private int sheetOrder;
+    @Column(name = "sheet_order", nullable = false, unique = true)
+    private Integer sheetOrder;
 
-    private long size;
+    private Integer size;
 
-    @Column(name = "sheet_file_ext", length = 5, nullable = false)
+    @Column(name = "sheet_file_ext", length = 6, nullable = false)
     private String sheetFileExt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "song_detail_id")
+    @JoinColumn(name = "song_detail_id", nullable = false)
     private SongDetail songDetail;
 
     @Transient
@@ -58,11 +58,11 @@ public class SongSheet extends BaseEntity {
     @Transient
     private byte[] imagesFile;
 
-    public static SongSheet createSongSheet(SongDetail songDetail,String filePath, String orgFileName, byte[] imagesFile, int sheetOrder) {
+    public static SongSheet createSongSheet(SongDetail songDetail, String filePath, String orgFileName, byte[] imagesFile, int sheetOrder) {
         SongSheet songSheet = new SongSheet();
         songSheet.updateSheetOrder(sheetOrder);
         songSheet.updateSongDetail(songDetail);
-        songSheet.updateSheetPath();
+        songSheet.updateNewFileName();
         songSheet.updateOrgFileName(orgFileName);
         songSheet.updateFileExt(orgFileName);
         songSheet.updateImagesFile(imagesFile);
@@ -122,7 +122,7 @@ public class SongSheet extends BaseEntity {
         songDetail.getSongSheets().add(this);
     }
 
-    public void updateSheetPath() {
+    public void updateNewFileName() {
         this.sheetNewFileName = UUID.randomUUID()
                 .toString()
                 .replace("-", "")

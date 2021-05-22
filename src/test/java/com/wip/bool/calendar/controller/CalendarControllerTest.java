@@ -2,8 +2,8 @@ package com.wip.bool.calendar.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
-import com.wip.bool.calendar.domain.Calendar;
-import com.wip.bool.calendar.domain.CalendarRepository;
+import com.wip.bool.calendar.repository.Calendar;
+import com.wip.bool.calendar.repository.CalendarRepository;
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.cmmn.calendar.CalendarFactory;
 import com.wip.bool.cmmn.type.ShareType;
@@ -11,6 +11,7 @@ import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -104,6 +105,7 @@ public class CalendarControllerTest {
         return calendars;
     }
 
+    @DisplayName("일정 추가")
     @Test
     public void 일정_추가_Controller() throws Exception {
 
@@ -136,6 +138,7 @@ public class CalendarControllerTest {
         assertThat(id).isGreaterThan(0L);
     }
 
+    @DisplayName("일정 리스트 가져오기 부서")
     @Test
     public void 일정_리스트_가져오기_부서_Controller() throws Exception {
 
@@ -162,6 +165,7 @@ public class CalendarControllerTest {
         assertThat(values.size()).isEqualTo(3);
     }
 
+    @DisplayName("일정 리스트 가져오기 개인")
     @Test
     public void 일정_리스트_가져오기_개인_Controller() throws Exception {
 
@@ -189,6 +193,7 @@ public class CalendarControllerTest {
 
     }
 
+    @DisplayName("일정 삭제")
     @Test
     public void 일정_삭제_Controller() throws Exception {
 

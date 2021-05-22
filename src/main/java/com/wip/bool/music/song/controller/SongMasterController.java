@@ -22,6 +22,7 @@ public class SongMasterController {
 
     @PostMapping(value = "/song-master")
     public ResponseEntity<Long> saveSongMaster(@Valid @RequestBody SongMasterDto.SongMasterSaveRequest requestDto,
+                                               @RequestHeader("userId") Long userId,
                                                Errors errors,
                                                UriComponentsBuilder uriComponentsBuilder) {
 
@@ -29,7 +30,7 @@ public class SongMasterController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = songMasterService.save(requestDto);
+        Long id = songMasterService.saveSongMaster(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -38,12 +39,13 @@ public class SongMasterController {
     }
 
     @DeleteMapping(value = "/song-master/{songMasterId:[\\d]+}")
-    public ResponseEntity<Long> deleteSongMaster(@PathVariable("songMasterId") Long songMasterId) {
-        return new ResponseEntity<>(songMasterService.delete(songMasterId), HttpStatus.OK);
+    public ResponseEntity<Long> deleteSongMaster(@PathVariable Long songMasterId,
+                                                 @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(songMasterService.deleteSongMaster(userId, songMasterId));
     }
 
     @GetMapping(value = "/song-masters")
     public ResponseEntity<List<SongMasterDto.SongMasterResponse>> getsSongMaster() {
-        return new ResponseEntity<>(songMasterService.gets(), HttpStatus.OK);
+        return ResponseEntity.ok(songMasterService.getsSongMaster());
     }
 }

@@ -23,7 +23,7 @@ public class SongMaster {
     @Column(name = "code_key", length = 32, nullable = false, unique = true)
     private String codeKey;
 
-    @Column(name = "code_name", length = 10, nullable = false)
+    @Column(name = "code_name", length = 20, nullable = false)
     private String codeName;
 
     @Column(name = "code_order", nullable = false)

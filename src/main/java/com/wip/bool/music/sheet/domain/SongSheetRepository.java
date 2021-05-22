@@ -1,13 +1,14 @@
 package com.wip.bool.music.sheet.domain;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wip.bool.music.song.domain.SongDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+
+import static com.wip.bool.music.sheet.domain.QSongSheet.songSheet;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,9 +23,10 @@ public class SongSheetRepository {
         return songSheet;
     }
 
-    public List<SongSheet> findBySongDetail(SongDetail songDetail) {
-        return queryFactory.selectFrom(QSongSheet.songSheet)
-                .where(QSongSheet.songSheet.songDetail.eq(songDetail))
+    public List<SongSheet> findBySongDetail(Long songDetailId) {
+        return queryFactory.selectFrom(songSheet)
+                .where(songSheet.songDetail.id.eq(songDetailId))
+                .orderBy(songSheet.sheetOrder.asc())
                 .fetch();
     }
 
