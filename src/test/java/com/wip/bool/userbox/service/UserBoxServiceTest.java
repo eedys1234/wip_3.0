@@ -381,7 +381,7 @@ public class UserBoxServiceTest {
         doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
         doReturn(groups).when(groupRepository).findAllByUser(any(Long.class));
         doReturn(userBoxes).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
-        List<UserBoxDto.UserBoxResponse> values = userBoxService.findALlByTotal(user.getId(), order, size, offset);
+        List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByTotal(user.getId(), order, size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(userBoxes.size());

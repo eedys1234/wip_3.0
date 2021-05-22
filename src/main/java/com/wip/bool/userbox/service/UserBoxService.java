@@ -169,7 +169,7 @@ public class UserBoxService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserBoxDto.UserBoxResponse> findALlByTotal(Long userId, String order, int size, int offset) {
+    public List<UserBoxDto.UserBoxResponse> findAllByTotal(Long userId, String order, int size, int offset) {
 
         User user = userRepository.deptByUser(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));

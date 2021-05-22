@@ -267,7 +267,7 @@ public class UserBoxControllerTest {
 
         doReturn(userBoxes.stream()
                 .map(UserBoxDto.UserBoxResponse::new)
-                .collect(Collectors.toList())).when(userBoxService).findALlByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+                .collect(Collectors.toList())).when(userBoxService).findAllByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("order", order);
@@ -289,7 +289,7 @@ public class UserBoxControllerTest {
 
 
         //verify
-        verify(userBoxService, times(1)).findALlByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(userBoxService, times(1)).findAllByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
     }
 
 }
