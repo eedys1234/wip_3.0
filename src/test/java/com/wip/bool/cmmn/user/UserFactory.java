@@ -1,5 +1,6 @@
 package com.wip.bool.cmmn.user;
 
+import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserType;
@@ -19,6 +20,13 @@ public class UserFactory {
 
     public static User getNormalUser(long id) {
         User user = getNormalUser();
+        ReflectionTestUtils.setField(user, "id", id);
+        return user;
+    }
+
+    public static User getNormalUser(Dept dept, long id) {
+        User user = getNormalUser();
+        user.updateDept(dept);
         ReflectionTestUtils.setField(user, "id", id);
         return user;
     }

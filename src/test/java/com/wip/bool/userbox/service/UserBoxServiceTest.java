@@ -63,59 +63,6 @@ public class UserBoxServiceTest {
     @Mock
     private RightsRepository rightRepository;
 
-    private User getNormalUser() {
-
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private User getNormalUser(Dept dept) {
-
-        User user = UserFactory.getNormalUser();
-        user.updateDept(dept);
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private User getAdminUser() {
-        User user = UserFactory.getAdminUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private UserBox getUserBox(User user) {
-
-        UserBox userBox = UserBoxFactory.getUserBox(user);
-        ReflectionTestUtils.setField(userBox, "id", 1L);
-        return userBox;
-    }
-
-    private UserBox getUserBox(User user, Long id) {
-
-        UserBox userBox = UserBoxFactory.getUserBox(user);
-        ReflectionTestUtils.setField(userBox, "id", 1L);
-        return userBox;
-    }
-
-    private Dept getDept() {
-        Dept dept = DeptFactory.getDept();
-        ReflectionTestUtils.setField(dept, "id", 1L);
-        return dept;
-    }
-
-    private Group getGroup(String groupName, User user, long id) {
-        Group group = GroupFactory.getGroup(groupName, user);
-        ReflectionTestUtils.setField(group, "id", id);
-        return group;
-    }
-
-    private GroupMember getGroupMember(Group group, User user) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        ReflectionTestUtils.setField(groupMember, "id", 1L);
-        return groupMember;
-    }
-
     private Rights getRight(Long targetId, Long authorityId) {
         Rights right = RightsFactory.getRights(Target.USERBOX, targetId, Authority.USER, authorityId);
         return right;
@@ -126,8 +73,8 @@ public class UserBoxServiceTest {
     public void 사용자박스_추가_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        UserBox userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser(1L);
+        UserBox userBox = UserBoxFactory.getUserBox(user, 1L);
         Rights right = getRight(userBox.getId(), user.getId());
         UserBoxDto.UserBoxSaveRequest requestDto = new UserBoxDto.UserBoxSaveRequest();
         ReflectionTestUtils.setField(requestDto, "userBoxName", "사용자박스_1");
@@ -151,9 +98,9 @@ public class UserBoxServiceTest {
     public void 사용자박스_수정_일반사용자_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        UserBox userBox = getUserBox(user);
-        UserBox update_userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser(1L);
+        UserBox userBox = UserBoxFactory.getUserBox(user, 1L);
+        UserBox update_userBox = UserBoxFactory.getUserBox(user, 1L);
         update_userBox.updateUserBoxName("사용자박스_2");
 
         UserBoxDto.UserBoxUpdateRequest requestDto = new UserBoxDto.UserBoxUpdateRequest();
@@ -179,9 +126,9 @@ public class UserBoxServiceTest {
     public void 사용자박스_수정_관리자_Service() throws Exception {
 
         //given
-        User user = getAdminUser();
-        UserBox userBox = getUserBox(user);
-        UserBox update_userBox = getUserBox(user);
+        User user = UserFactory.getAdminUser(1L);
+        UserBox userBox = UserBoxFactory.getUserBox(user, 1L);
+        UserBox update_userBox = UserBoxFactory.getUserBox(user, 1L);
         update_userBox.updateUserBoxName("사용자박스_2");
 
         UserBoxDto.UserBoxUpdateRequest requestDto = new UserBoxDto.UserBoxUpdateRequest();
@@ -207,8 +154,8 @@ public class UserBoxServiceTest {
     public void 사용자박스_삭제_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        UserBox userBox = getUserBox(user);
+        User user = UserFactory.getNormalUser(1L);
+        UserBox userBox = UserBoxFactory.getUserBox(user, 1L);
         Rights right = getRight(userBox.getId(), user.getId());
 
         //when
@@ -235,20 +182,17 @@ public class UserBoxServiceTest {
     public void 사용자박스_리스트_조회_byUser_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        List<UserBox> userBoxes = new ArrayList<>();
-
-        for(int i=1;i<=10;i++)
-        {
-            userBoxes.add(getUserBox(user, Long.valueOf(String.valueOf(i))));
-        }
-
         String order = "ASC";
         int size = 10;
         int offset = 0;
 
+        User user = UserFactory.getNormalUser(1L);
+        List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
+
         //when
-        doReturn(userBoxes).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
+        doReturn(userBoxes.stream()
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), anyInt(), anyInt(), anyLong());
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByUser(user.getId(), order, size, offset);
 
         //then
@@ -258,7 +202,7 @@ public class UserBoxServiceTest {
                 .collect(Collectors.toList()));
 
         //verify
-        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
+        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), anyInt(), anyInt(), anyLong());
     }
 
     @DisplayName("사용자박스 리스트 조회 by Dept")
@@ -266,29 +210,25 @@ public class UserBoxServiceTest {
     public void 사용자박스_리스트_조회_byDept_Service() throws Exception {
 
         //given
-        Dept dept = getDept();
-        User user = getNormalUser(dept);
-
         String order = "ASC";
         int size = 10;
         int offset = 0;
+        Dept dept = DeptFactory.getDept(1L);
+        User user = UserFactory.getNormalUser(dept, 1L);
 
-        List<UserBox> userBoxes = new ArrayList<>();
-
-        for(int i=1;i<=10;i++)
-        {
-            userBoxes.add(getUserBox(user, Long.valueOf(String.valueOf(i))));
-        }
+        List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
         doReturn(Optional.ofNullable(dept)).when(deptRepository).findById(any(Long.class));
-        doReturn(userBoxes).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
+        doReturn(userBoxes.stream()
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByDept(user.getId(), dept.getId(), order, size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(userBoxes.size());
-        assertThat(values).extracting(UserBoxDto.UserBoxResponse::getUserId).containsAll(
+        assertThat(values).extracting(UserBoxDto.UserBoxResponse::getUserBoxId).containsAll(
                 userBoxes.stream()
                         .map(UserBox::getId)
                         .collect(Collectors.toList()));
@@ -303,37 +243,29 @@ public class UserBoxServiceTest {
     public void 사용자박스_리스트_조회_byGroup_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
+        User user = UserFactory.getNormalUser(1L);
 
         String order = "ASC";
         int size = 10;
         int offset = 0;
 
-        String[] groupNames = {"그룹A", "그룹B", "그룹C", "그룹D"};
         String groupId = "1,2";
-        List<UserBox> userBoxes = new ArrayList<>();
-        List<Group> groups = new ArrayList<>();
+        List<UserBox> userBoxes = UserBoxFactory.getUserBoxes(user);
+        List<Group> groups = GroupFactory.getGroups(user);
         List<GroupMember> groupMembers = new ArrayList<>();
-
-        for(int i=1;i<=2;i++)
-        {
-            groups.add(getGroup(groupNames[i], user, i));
-        }
 
         for(int i=0;i<2;i++)
         {
-            groupMembers.add(getGroupMember(groups.get(i), user));
-        }
-
-        for(int i=1;i<=10;i++)
-        {
-            userBoxes.add(getUserBox(user, Long.valueOf(String.valueOf(i))));
+            groupMembers.add(GroupMemberFactory.getGroupMember(groups.get(i), user));
         }
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
         doReturn(groupMembers).when(groupMemberRepository).findAllByGroup(any(List.class));
-        doReturn(userBoxes).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+        doReturn(userBoxes.stream()
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByGroup(user.getId(), groupId, order, size, offset);
 
         //then
@@ -356,32 +288,22 @@ public class UserBoxServiceTest {
     public void 사용자박스_리스트_조회_byTotal_Service() throws Exception {
 
         //given
-        Dept dept = getDept();
-        User user = getNormalUser(dept);
-        String[] groupNames = {"그룹A", "그룹B", "그룹C", "그룹D"};
-
         String order = "ASC";
         int size = 10;
         int offset = 0;
+        Dept dept = DeptFactory.getDept(1L);
+        User user = UserFactory.getNormalUser(dept, 1L);
 
-        List<Group> groups = new ArrayList<>();
-        List<UserBox> userBoxes = new ArrayList<>();
-
-        for(int i=0;i<groupNames.length;i++)
-        {
-            groups.add(getGroup(groupNames[i], user, (i+1)));
-        }
-
-        for(int i=1;i<=10;i++)
-        {
-            userBoxes.add(getUserBox(user, Long.valueOf(String.valueOf(i))));
-        }
+        List<Group> groups = GroupFactory.getGroupsWithId(user);
+        List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
         doReturn(groups).when(groupRepository).findAllByUser(any(Long.class));
-        doReturn(userBoxes).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
-        List<UserBoxDto.UserBoxResponse> values = userBoxService.findALlByTotal(user.getId(), order, size, offset);
+        doReturn(userBoxes.stream()
+                .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+        List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByTotal(user.getId(), order, size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(userBoxes.size());

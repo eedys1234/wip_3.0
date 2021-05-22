@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -55,14 +56,16 @@ public class UserBoxSongService {
                                         .map(group -> group.getId())
                                         .collect(Collectors.toList());
 
+        if(Objects.isNull(authorityIds)) {
+            authorityIds = new ArrayList<>();
+        }
+
         authorityIds.add(userId);
         authorityIds.add(user.getDept().getId());
 
         List<Rights> rights = rightsRepository.findByUserBox(userBoxId, authorityIds);
 
-        if(rights.stream().anyMatch(right -> right.getRightType() < (right.getRightType() &
-                ( Rights.RightType.READ.getValue() | Rights.RightType.WRITE.getValue())))) {
-
+        if(rights.stream().allMatch(right -> right.getRightType() < (Rights.RightType.READ.getValue() | Rights.RightType.WRITE.getValue()))) {
             throw new AuthorizationException();
         }
 
@@ -89,12 +92,16 @@ public class UserBoxSongService {
                 .map(group -> group.getId())
                 .collect(Collectors.toList());
 
+        if(Objects.isNull(authorityIds)) {
+            authorityIds = new ArrayList<>();
+        }
+
         authorityIds.add(userId);
         authorityIds.add(user.getDept().getId());
 
         List<Rights> rights = rightsRepository.findByUserBox(userBoxId, authorityIds);
 
-        if(rights.stream().anyMatch(right -> right.getRightType() < (right.getRightType() & Rights.RightType.READ.getValue()))) {
+        if(rights.stream().anyMatch(right -> right.getRightType() < Rights.RightType.READ.getValue())) {
             throw new AuthorizationException();
         }
 
@@ -120,14 +127,16 @@ public class UserBoxSongService {
                 .map(group -> group.getId())
                 .collect(Collectors.toList());
 
+        if(Objects.isNull(authorityIds)) {
+            authorityIds = new ArrayList<>();
+        }
+
         authorityIds.add(userId);
         authorityIds.add(user.getDept().getId());
 
         List<Rights> rights = rightsRepository.findByUserBox(userBoxId, authorityIds);
 
-        if(rights.stream().anyMatch(right -> right.getRightType() < (right.getRightType() &
-                ( Rights.RightType.READ.getValue() | Rights.RightType.WRITE.getValue())))) {
-
+        if(rights.stream().allMatch(right -> right.getRightType() < (Rights.RightType.READ.getValue() | Rights.RightType.WRITE.getValue()))) {
             throw new AuthorizationException();
         }
 

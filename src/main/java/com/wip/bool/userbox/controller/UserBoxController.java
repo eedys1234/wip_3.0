@@ -91,6 +91,6 @@ public class UserBoxController {
                                                                            @RequestParam int size,
                                                                            @RequestParam int offset) {
 
-        return ResponseEntity.ok(userBoxService.findALlByTotal(userId, order, size, offset));
+        return ResponseEntity.ok(userBoxService.findAllByTotal(userId, order, size, offset));
     }
 }
