@@ -1,14 +1,14 @@
 package com.wip.bool.calendar.repository;
 
 import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.cmmn.dept.DeptFactory;
 import com.wip.bool.cmmn.type.ShareType;
+import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.configure.TestConfig;
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.dept.domain.DeptRepository;
-import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
-import com.wip.bool.user.domain.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,17 +45,11 @@ public class CalendarRepositoryTest {
     public void 사용자추가() throws Exception {
 
         //Dept 추가
-        String deptName = "밍공";
-        Dept dept = Dept.builder().deptName(deptName).build();
+        Dept dept = DeptFactory.getDept();
         deptRepository.save(dept);
 
-        String email = "test@gmail.com";
-        String name = "test";
-        String password = "1234!@#$";
-        String profile = "";
-
-        User userA = User.createUser(email, name, password, profile, UserType.WIP, Role.ROLE_NORMAL);
-        User userB = User.createUser(email+"B", name+"B", password, profile, UserType.WIP, Role.ROLE_NORMAL);
+        User userA = UserFactory.getNormalUser("test@gmail.com");
+        User userB = UserFactory.getNormalUser("test2@gmail.com");
 
         userA.updateDept(dept);
         userB.updateDept(dept);
@@ -75,8 +69,9 @@ public class CalendarRepositoryTest {
         LocalDateTime now = LocalDateTime.now();
 
         List<User> users = userRepository.findAll();
+        User user = users.get(0);
 
-        Calendar calendar = Calendar.createCalender(title, content, now, shareType, users.get(0));
+        Calendar calendar = Calendar.createCalender(title, content, now, shareType, user);
 
         //when
         Calendar addCalendar = calendarRepository.save(calendar);

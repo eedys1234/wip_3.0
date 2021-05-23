@@ -54,7 +54,7 @@ public class BoardRepository {
         );
     }
 
-    public BoardDto.BoardResponse findDetailById(Long boardId) {
+    public Optional<BoardDto.BoardResponse> findDetailById(Long boardId) {
         Board boardEntity = queryFactory
                             .select(board)
                             .from(board)
@@ -63,7 +63,7 @@ public class BoardRepository {
                             .where(board.id.eq(boardId))
                             .fetchOne();
 
-        return new BoardDto.BoardResponse(boardEntity);
+        return Optional.ofNullable(new BoardDto.BoardResponse(boardEntity));
     }
 
     public Long delete(Board board) {

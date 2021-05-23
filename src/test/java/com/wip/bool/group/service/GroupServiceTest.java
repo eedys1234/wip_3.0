@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,59 +42,19 @@ public class GroupServiceTest {
     private UserRepository userRepository;
 
 
-    private User getNormalUser() {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Group getGroup(User user) {
-        Group group = GroupFactory.getGroup(user);
-        ReflectionTestUtils.setField(group, "id", 1L);
-        return group;
-    }
-
-    private Group getGroup(User user, Long id) {
-        Group group = GroupFactory.getGroup(user);
-        ReflectionTestUtils.setField(group, "id", id);
-        return group;
-    }
-
-    private Group addGroup(String groupName, User user, Long id) {
-        Group group = GroupFactory.getGroup(groupName, user);
-        ReflectionTestUtils.setField(group, "id", id);
-        return group;
-    }
-
-    private GroupMember getGroupMember(Group group, User user) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        ReflectionTestUtils.setField(groupMember, "id", 1L);
-        return groupMember;
-    }
-
-    private GroupMember getGroupMember(Group group, User user, long id) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        ReflectionTestUtils.setField(groupMember, "id", id);
-        return groupMember;
-    }
-
-    private Group addGroup(User user, Long id) {
-        return getGroup(user, id);
-    }
-
     @DisplayName("그룹추가")
     @Test
     public void 그룹추가_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
-        GroupMember groupMember = getGroupMember(group, user);
+        User user = UserFactory.getNormalUser(1L);
+        Group group = GroupFactory.getGroup(user, 1L);
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user, 1L);
         GroupDto.GroupSaveRequest requestDto = new GroupDto.GroupSaveRequest();
-        ReflectionTestUtils.setField(requestDto, "groupName", "테스트그룹_1");
+        ReflectionTestUtils.setField(requestDto, "groupName", "그룹_A");
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(group).when(groupRepository).save(any(Group.class));
         doReturn(groupMember).when(groupMemberRepository).save(any(GroupMember.class));
         Long id = groupService.saveGroup(user.getId(), requestDto);
@@ -104,7 +63,7 @@ public class GroupServiceTest {
         assertThat(id).isEqualTo(group.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
         verify(groupRepository, times(1)).save(any(Group.class));
         verify(groupMemberRepository, times(1)).save(any(GroupMember.class));
     }
@@ -114,14 +73,14 @@ public class GroupServiceTest {
     public void 그룹수정_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
+        User user = UserFactory.getNormalUser(1L);
+        Group group = GroupFactory.getGroup(user, 1L);
         GroupDto.GroupUpdateRequest requestDto = new GroupDto.GroupUpdateRequest();
-        ReflectionTestUtils.setField(requestDto, "groupName", "테스트그룹_1");
+        ReflectionTestUtils.setField(requestDto, "groupName", "그룹_A");
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(any(Long.class), any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(anyLong(), anyLong());
         doReturn(group).when(groupRepository).save(any(Group.class));
         Long id = groupService.updateGroup(user.getId(), group.getId(), requestDto);
 
@@ -139,8 +98,8 @@ public class GroupServiceTest {
     public void 그룹삭제_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
+        User user = UserFactory.getNormalUser(1L);
+        Group group = GroupFactory.getGroup(user, 1L);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
@@ -152,10 +111,9 @@ public class GroupServiceTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(groupRepository, times(1)).findById(any(Long.class), any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(groupRepository, times(1)).findById(anyLong(), anyLong());
         verify(groupRepository, times(1)).delete(any(Group.class));
-
     }
 
     @DisplayName("그룹 리스트 조회 by Master")
@@ -163,20 +121,16 @@ public class GroupServiceTest {
     public void 그룹_리스트_조회_byMaster_Service() throws Exception {
 
         //given
-        User user = getNormalUser();
-        List<Group> groups = new ArrayList<>();
-        int cnt = 10;
-        for(int i=1;i<=cnt;i++) {
-            groups.add(addGroup(user, (long) i));
-        }
-
         int size = 10;
         int offset = 0;
         String order = "ASC";
 
+        User user = UserFactory.getNormalUser(1L);
+        List<Group> groups = GroupFactory.getGroupsWithId(user);
+
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(groups).when(groupRepository).findAllByMaster(any(Long.class), any(OrderType.class), any(Integer.class), any(Integer.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(groups).when(groupRepository).findAllByMaster(anyLong(), any(OrderType.class), anyInt(), anyInt());
 
         List<GroupDto.GroupResponse> values = groupService.findAllByMaster(user.getId(), order, size, offset);
 
@@ -184,9 +138,8 @@ public class GroupServiceTest {
         assertThat(values.size()).isEqualTo(groups.size());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(groupRepository, times(1)).findAllByMaster(any(Long.class), any(OrderType.class),
-                any(Integer.class), any(Integer.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(groupRepository, times(1)).findAllByMaster(anyLong(), any(OrderType.class), anyInt(), anyInt());
     }
     
     @DisplayName("그룹_리스트 조회 by User")
@@ -199,30 +152,20 @@ public class GroupServiceTest {
         int offset = 0;
         String order = "ASC";
 
-        User user = getNormalUser();
-        List<String> groupNames = new ArrayList<>();
-        List<Group> groups = new ArrayList<>();
-
-        for(int i=1;i<=cnt;i++)
-        {
-            String groupName = "테스트그룹_"+i;
-            Group group = addGroup(groupName, user, (long)i);
-            GroupMember groupMember = getGroupMember(group, user, (long)i);
-            groupNames.add(groupName);
-            groups.add(group);
-        }
+        User user = UserFactory.getNormalUser(1L);
+        List<Group> groups = GroupFactory.getGroupsWithId(user);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(groups).when(groupRepository).findAllByUser(any(Long.class), any(OrderType.class), any(Integer.class), any(Integer.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(groups).when(groupRepository).findAllByUser(anyLong(), any(OrderType.class), anyInt(), anyInt());
         List<GroupDto.GroupResponse> values = groupService.findAllByUser(user.getId(), order, size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(groups.size());
-        assertThat(values).extracting(GroupDto.GroupResponse::getGroupName).containsAll(groupNames);
+        assertThat(values).extracting(GroupDto.GroupResponse::getGroupName).containsAll(GroupFactory.getGroupNames());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(groupRepository, times(1)).findAllByUser(any(Long.class), any(OrderType.class), any(Integer.class), any(Integer.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(groupRepository, times(1)).findAllByUser(anyLong(), any(OrderType.class), anyInt(), anyInt());
     }
 }

@@ -6,15 +6,56 @@ import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserType;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 public class UserFactory {
 
-    public static User getNormalUser() {
-        String email = "test@gmail.com";
+    public static String[] emails = {
+        "test_1@gmail.com",
+        "test_2@gmail.com",
+        "test_3@gmail.com",
+        "test_4@gmail.com",
+        "test_5@gmail.com",
+        "test_6@gmail.com",
+        "test_7@gmail.com",
+        "test_8@gmail.com",
+        "test_9@gmail.com",
+        "test_10@gmail.com",
+    };
+
+    public static List<User> getNormalUsers() {
+        return Arrays.stream(emails)
+                .map(email -> getNormalUser(email))
+                .collect(Collectors.toList());
+    }
+
+    public static List<User> getNormalUsersWithId() {
+        AtomicInteger index = new AtomicInteger(1);
+        return Arrays.stream(emails)
+                .map(email -> getNormalUser(email, index.incrementAndGet()))
+                .collect(Collectors.toList());
+    }
+
+    public static User getNormalUser(String email) {
         String password = "test1234";
         String profiles = "";
         UserType userType = UserType.WIP;
         Role role = Role.ROLE_NORMAL;
         User user = User.createUser(email, password, profiles, userType, role);
+        return user;
+    }
+
+    public static User getNormalUser(String email, long id) {
+        User user = getNormalUser(email);
+        ReflectionTestUtils.setField(user, "id", id);
+        return user;
+    }
+    public static User getNormalUser() {
+        String email = "test@gmail.com";
+        User user = getNormalUser(email);
         return user;
     }
 

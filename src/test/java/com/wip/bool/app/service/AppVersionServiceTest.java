@@ -3,6 +3,7 @@ package com.wip.bool.app.service;
 import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.domain.AppVersionRepository;
 import com.wip.bool.app.dto.AppVersionDto;
+import com.wip.bool.cmmn.app.AppFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,8 +29,12 @@ public class AppVersionServiceTest {
     @Mock
     private AppVersionRepository appVersionRepository;
 
-    private AppVersionDto.AppVersionSaveRequest getAppVersionSaveRequest() {
+    @DisplayName("app 정보 추가")
+    @Test
+    public void app_정보_추가_Service() throws Exception {
 
+        //given
+        AppVersion appVersion = AppFactory.getAppVersion(1L);
         String name = "ILECTRON";
         String version = "1.0.0.0";
 
@@ -37,36 +42,9 @@ public class AppVersionServiceTest {
         ReflectionTestUtils.setField(requestDto, "name", name);
         ReflectionTestUtils.setField(requestDto, "version", version);
 
-        return requestDto;
-    }
-
-    private AppVersion getAppVersion() {
-
-        String name = "ILECTRON";
-        String version = "1.0.0.0";
-
-        AppVersion appVersion = AppVersion.createAppVersion(name, version);
-        ReflectionTestUtils.setField(appVersion, "id", 1L);
-
-        return appVersion;
-    }
-
-    private List<AppVersion> getAppVersions() {
-        return Arrays.asList(
-            getAppVersion()
-        );
-    }
-
-    @DisplayName("app 정보 추가")
-    @Test
-    public void app_정보_추가_Service() throws Exception {
-
-        //given
-        AppVersion appVersion = getAppVersion();
-
         //when
         doReturn(appVersion).when(appVersionRepository).save(any(AppVersion.class));
-        Long id = appVersionService.save(getAppVersionSaveRequest());
+        Long id = appVersionService.save(requestDto);
 
         //then
         assertThat(id).isEqualTo(appVersion.getId());
@@ -80,7 +58,7 @@ public class AppVersionServiceTest {
     public void app_정보_리스트_조회_Service() throws Exception {
 
         //given
-        List<AppVersion> appVersions = getAppVersions();
+        List<AppVersion> appVersions = Arrays.asList(AppFactory.getAppVersion(1L));
 
         //when
         doReturn(appVersions).when(appVersionRepository).findAll();
@@ -103,7 +81,7 @@ public class AppVersionServiceTest {
     public void app_정보_조회_Service() throws Exception {
 
         //given
-        AppVersion appVersion = getAppVersion();
+        AppVersion appVersion = AppFactory.getAppVersion(1L);
 
         //when
         doReturn(Optional.ofNullable(appVersion)).when(appVersionRepository).findOne(any(String.class));
@@ -122,7 +100,7 @@ public class AppVersionServiceTest {
     public void app_정보_삭제_Service() throws Exception {
 
         //given
-        AppVersion appVersion = getAppVersion();
+        AppVersion appVersion = AppFactory.getAppVersion(1L);
         //when
         doReturn(Optional.ofNullable(appVersion)).when(appVersionRepository).findById(any(Long.class));
         doReturn(1L).when(appVersionRepository).delete(any(AppVersion.class));

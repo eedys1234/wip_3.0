@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,18 +34,6 @@ public class PositionServiceTest {
     @Mock
     private PositionRepository positionRepository;
 
-    private User getAdminUser() {
-        User user = UserFactory.getAdminUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Position getPosition() {
-        Position position = PositionFactory.getPosition();
-        ReflectionTestUtils.setField(position, "id", 1L);
-        return position;
-    }
-
     private Position getPosition(String positionName, long id) {
         Position position = PositionFactory.getPosition(positionName);
         ReflectionTestUtils.setField(position, "id", id);
@@ -58,15 +45,15 @@ public class PositionServiceTest {
     public void 직위_추가_Service() throws Exception {
 
         //given
-        User user = getAdminUser();
-        Position position = getPosition();
+        User user = UserFactory.getAdminUser(1L);
+        Position position = PositionFactory.getPosition(1L);
         String positionName = "리더";
 
         PositionDto.PositionSaveRequest requestDto = new PositionDto.PositionSaveRequest();
         ReflectionTestUtils.setField(requestDto, "positionName", positionName);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(position).when(positionRepository).save(any(Position.class));
         Long id = positionService.savePosition(user.getId(), requestDto);
 
@@ -74,7 +61,7 @@ public class PositionServiceTest {
         assertThat(id).isEqualTo(position.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
         verify(positionRepository, times(1)).save(any(Position.class));
     }
 
@@ -83,24 +70,24 @@ public class PositionServiceTest {
     public void 직위_수정_Service() throws Exception {
 
         //given
-        User user = getAdminUser();
-        Position position = getPosition();
+        User user = UserFactory.getAdminUser(1L);
+        Position position = PositionFactory.getPosition(1L);
         String positionName = "리더";
 
         PositionDto.PositionUpdateRequest requestDto = new PositionDto.PositionUpdateRequest();
         ReflectionTestUtils.setField(requestDto, "positionName", positionName);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(position)).when(positionRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(position)).when(positionRepository).findById(anyLong());
         Long id = positionService.updatePosition(user.getId(), position.getId(), requestDto);
 
         //then
         assertThat(id).isEqualTo(position.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(positionRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(positionRepository, times(1)).findById(anyLong());
 
     }
 
@@ -109,12 +96,12 @@ public class PositionServiceTest {
     public void 직위_삭제_Service() throws Exception {
 
         //given
-        User user = getAdminUser();
-        Position position = getPosition();
+        User user = UserFactory.getAdminUser(1L);
+        Position position = PositionFactory.getPosition(1L);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(position)).when(positionRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(position)).when(positionRepository).findById(anyLong());
         doNothing().when(positionRepository).delete(any(Position.class));
         Long resValue = positionService.deletePosition(user.getId(), position.getId());
 
@@ -122,8 +109,8 @@ public class PositionServiceTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(positionRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(positionRepository, times(1)).findById(anyLong());
         verify(positionRepository, times(1)).delete(any(Position.class));
     }
 
@@ -132,22 +119,15 @@ public class PositionServiceTest {
     public void 직위_리스트_조회_Service() throws Exception {
 
         //given
-        String[] positionNames = {"리더", "부장", "차장", "대리", "사원"};
-        List<Position> positions = new ArrayList<>();
-
-        for(int i=0;i<positionNames.length;i++)
-        {
-            Position position = getPosition(positionNames[i], i+1);
-            positions.add(position);
-        }
+        List<Position> positions = PositionFactory.getPositionsWithId();
 
         //when
         doReturn(positions).when(positionRepository).findAll();
         List<PositionDto.PositionResponse> values = positionService.findAll();
 
         //then
-        assertThat(values.size()).isEqualTo(positionNames.length);
-        assertThat(values).extracting(PositionDto.PositionResponse::getPositionName).contains(positionNames);
+        assertThat(values.size()).isEqualTo(positions.size());
+        assertThat(values).extracting(PositionDto.PositionResponse::getPositionName).contains(PositionFactory.positionNames);
 
         //verify
         verify(positionRepository, times(1)).findAll();

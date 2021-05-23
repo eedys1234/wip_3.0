@@ -46,25 +46,8 @@ public class GroupMemberControllerTest {
     private GroupMemberService groupMemberService;
 
     private MockMvc mockMvc;
+
     private ObjectMapper objectMapper;
-
-    private User getNormalUser() {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Group getGroup(User user) {
-        Group group = GroupFactory.getGroup(user);
-        ReflectionTestUtils.setField(group, "id", 1L);
-        return group;
-    }
-
-    private GroupMember getGroupMember(Group group, User user) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        ReflectionTestUtils.setField(groupMember, "id", 1L);
-        return groupMember;
-    }
 
     @BeforeEach
     public void init() throws Exception {
@@ -77,23 +60,27 @@ public class GroupMemberControllerTest {
     public void 그룹멤버_추가_Controller() throws Exception {
 
         //given
+        User user = UserFactory.getNormalUser(1L);
+        Group group = GroupFactory.getGroup(user, 1L);
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user, 1L);
+
         GroupMemberDto.GroupMemberSaveRequest requestDto = new GroupMemberDto.GroupMemberSaveRequest();
         ReflectionTestUtils.setField(requestDto, "groupId", 1L);
-        doReturn(1L).when(groupMemberService).saveGroupMember(any(Long.class), any(GroupMemberDto.GroupMemberSaveRequest.class));
+        doReturn(groupMember.getId()).when(groupMemberService).saveGroupMember(anyLong(), any(GroupMemberDto.GroupMemberSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/group/member")
-        .header("userId", 1L)
-        .contentType(MediaType.APPLICATION_JSON)
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .content(objectMapper.writeValueAsString(requestDto)));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
         Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
-        assertThat(id).isEqualTo(1L);
+        assertThat(id).isEqualTo(groupMember.getId());
 
         //verify
-        verify(groupMemberService, times(1)).saveGroupMember(any(Long.class), any(GroupMemberDto.GroupMemberSaveRequest.class));
+        verify(groupMemberService, times(1)).saveGroupMember(anyLong(), any(GroupMemberDto.GroupMemberSaveRequest.class));
     }
 
     @DisplayName("그룹멤버 탈퇴")
@@ -101,12 +88,13 @@ public class GroupMemberControllerTest {
     public void 그룹멤버_탈퇴_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(groupMemberService).deleteGroupMember(any(Long.class), any(Long.class));
+        User user = UserFactory.getNormalUser(1L);
+        doReturn(1L).when(groupMemberService).deleteGroupMember(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/group/member/1")
-        .header("userId", 1L)
-        .contentType(MediaType.APPLICATION_JSON));
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
@@ -115,7 +103,7 @@ public class GroupMemberControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(groupMemberService, times(1)).deleteGroupMember(any(Long.class), any(Long.class));
+        verify(groupMemberService, times(1)).deleteGroupMember(anyLong(), anyLong());
     }
 
     @DisplayName("그룹멤버 조회")
@@ -123,17 +111,17 @@ public class GroupMemberControllerTest {
     public void 그룹멤버_조회_Controller() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
-        GroupMember groupMember = getGroupMember(group, user);
         String order = "ASC";
         int size = 10;
         int offset = 0;
+        User user = UserFactory.getNormalUser(1L);
+        Group group = GroupFactory.getGroup(user, 1L);
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user, 1L);
 
         List<GroupMemberDto.GroupMemberResponse> groupMembers = new ArrayList<>();
         groupMembers.add(new GroupMemberDto.GroupMemberResponse(groupMember));
 
-        doReturn(groupMembers).when(groupMemberService).findAllByGroup(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        doReturn(groupMembers).when(groupMemberService).findAllByGroup(anyLong(), anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("order", order);
@@ -142,17 +130,17 @@ public class GroupMemberControllerTest {
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/1/members")
-        .contentType(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['group_member_id']").value(1L))
+                .andExpect(jsonPath("$[0]['group_member_id']").value(groupMember.getId()))
                 .andReturn();
 
         //verify
-        verify(groupMemberService, times(1)).findAllByGroup(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(groupMemberService, times(1)).findAllByGroup(anyLong(), anyString(), anyInt(), anyInt());
     }
 }

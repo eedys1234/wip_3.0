@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,37 +39,26 @@ public class ReplyRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
 
-    private User getSaveUser() {
-        User user = UserFactory.getNormalUser();
-        return userRepository.save(user);
-    }
-
-    private Board getSaveBoard(User user) {
-        Board board = BoardFactory.getBoard(user);
-        boardRepository.save(board);
-        return board;
-    }
-
-    private Reply getSaveReply(Board board, User user) {
-        Reply reply = ReplyFactory.getReply(board, user);
-        return reply;
-    }
-
     @DisplayName("댓글 추가 by 게시물")
     @Test
     public void 댓글_추가_by게시물_Repository() throws Exception {
 
         //given
-        User user = getSaveUser();
-        Board board = getSaveBoard(user);
-        Reply reply = getSaveReply(board, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Board board = BoardFactory.getBoard(user);
+        boardRepository.save(board);
+
+        Reply reply = ReplyFactory.getReply(board, user);
 
         //when
         Reply addReply = replyRepository.save(reply);
 
         //then
+        assertThat(addReply.getId()).isGreaterThan(0L);
         assertThat(addReply.getId()).isEqualTo(reply.getId());
-        assertThat(addReply.getContent()).isEqualTo("테스트 댓글");
+        assertThat(addReply.getContent()).isEqualTo(reply.getContent());
         assertThat(addReply.getParentReply()).isNull();
         assertThat(addReply.getChildReply()).isEmpty();
     }
@@ -80,11 +68,16 @@ public class ReplyRepositoryTest {
     public void 댓글_추가_by댓글_Repository() throws Exception {
 
         //given
-        User user = getSaveUser();
-        Board board = getSaveBoard(user);
-        Reply parentReply = getSaveReply(board, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Board board = BoardFactory.getBoard(user);
+        boardRepository.save(board);
+
+        Reply parentReply = ReplyFactory.getReply(board, user);
         Reply addParentReply = replyRepository.save(parentReply);
-        Reply childReply = getSaveReply(board, user);
+
+        Reply childReply = ReplyFactory.getReply(board, user);
         childReply.updateParentReply(addParentReply);
 
         //when
@@ -100,28 +93,33 @@ public class ReplyRepositoryTest {
     public void 댓글_리스트_조회_by게시물_Repository() throws Exception {
 
         //given
-        User user = getSaveUser();
-        Board board = getSaveBoard(user);
-        List<Reply> replies = new ArrayList<>();
         int size = 10;
         int offset = 0;
-        int cnt = 10;
 
-        for(int i=0;i<cnt;i++) {
-            Reply reply = getSaveReply(board, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Board board = BoardFactory.getBoard(user);
+        boardRepository.save(board);
+
+        List<Reply> replies = ReplyFactory.getReplies(board, user);
+
+        for(Reply reply : replies) {
             replyRepository.save(reply);
-            replies.add(reply);
         }
 
         //when
         List<ReplyDto.ReplyResponse> values = replyRepository.findAllByBoard(board.getId(), size, offset);
 
         //then
-        assertThat(values.size()).isEqualTo(cnt);
-        assertThat(values).extracting(ReplyDto.ReplyResponse::getReplyId)
-                .containsAll(replies.stream()
-                        .map(Reply::getId)
-                        .collect(Collectors.toList()));
+        assertThat(values.size()).isEqualTo(replies.size());
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getReplyId).containsAll(replies.stream()
+                                                                                            .map(Reply::getId)
+                                                                                            .collect(Collectors.toList()));
+
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getContent).containsAll(replies.stream()
+                                                                                            .map(Reply::getContent)
+                                                                                            .collect(Collectors.toList()));
     }
 
     @DisplayName("댓글 리스트 조회 by 댓글")
@@ -131,28 +129,31 @@ public class ReplyRepositoryTest {
         //given
         int size = 10;
         int offset = 0;
-        int cnt = 10;
-        User user = getSaveUser();
-        Board board = getSaveBoard(user);
-        Reply parentReply = getSaveReply(board, user);
-        Reply addParentReply = replyRepository.save(parentReply);
-        List<Long> childReplyIds = new ArrayList<>();
 
-        for(int i=0;i<cnt;i++)
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Board board = BoardFactory.getBoard(user);
+        boardRepository.save(board);
+
+        Reply parentReply = ReplyFactory.getReply(board, user);
+        Reply addParentReply = replyRepository.save(parentReply);
+
+        List<Reply> replies = ReplyFactory.getReplies(board, user);
+
+        for(Reply reply : replies)
         {
-            Reply childReply = getSaveReply(board, user);
-            childReply.updateParentReply(addParentReply);
-            Reply addChildReply = replyRepository.save(childReply);
-            childReplyIds.add(addChildReply.getId());
+            reply.updateParentReply(addParentReply);
+            replyRepository.save(reply);
         }
 
         //when
-        List<ReplyDto.ReplyResponse> replies = replyRepository.findAllByReply(addParentReply.getId(), size, offset);
+        List<ReplyDto.ReplyResponse> values = replyRepository.findAllByReply(addParentReply.getId(), size, offset);
 
         //then
-        assertThat(replies.size()).isEqualTo(cnt);
-        assertThat(replies).extracting(ReplyDto.ReplyResponse::getParentId).contains(addParentReply.getId());
-        assertThat(replies).extracting(ReplyDto.ReplyResponse::getReplyId).containsAll(childReplyIds);
+        assertThat(values.size()).isEqualTo(replies.size());
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getParentId).contains(addParentReply.getId());
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getReplyId).containsAll(replies.stream().map(reply -> reply.getId()).collect(Collectors.toList()));
     }
 
     @DisplayName("댓글 삭제")
@@ -160,10 +161,13 @@ public class ReplyRepositoryTest {
     public void 댓글_삭제_Repository() throws Exception {
 
         //given
-        User user = getSaveUser();
-        Board board = getSaveBoard(user);
-        Reply reply = getSaveReply(board, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
 
+        Board board = BoardFactory.getBoard(user);
+        boardRepository.save(board);
+
+        Reply reply = ReplyFactory.getReply(board, user);
         Reply addReply = replyRepository.save(reply);
 
         //when
@@ -171,6 +175,5 @@ public class ReplyRepositoryTest {
 
         //then
         assertThat(resValue).isEqualTo(1L);
-
     }
 }
