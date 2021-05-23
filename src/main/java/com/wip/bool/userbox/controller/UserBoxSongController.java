@@ -14,21 +14,24 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api/v1/userbox")
 @RequiredArgsConstructor
 public class UserBoxSongController {
 
     private final UserBoxSongService userBoxSongService;
 
-    @PostMapping(value = "/userbox/song")
-    public ResponseEntity<Long> save(@Valid @RequestBody UserBoxSongDto.UserBoxSongSaveRequest requestDto,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    @PostMapping(value = "/{userBoxId:[\\d]+}/song")
+    public ResponseEntity<Long> saveUserBoxSong(@Valid @RequestBody UserBoxSongDto.UserBoxSongSaveRequest requestDto,
+                                     @PathVariable Long userBoxId,
+                                     @RequestHeader("userId") Long userId,
+                                     Errors errors,
+                                     UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = userBoxSongService.save(requestDto);
+        Long id = userBoxSongService.saveUserBoxSong(userId, userBoxId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -36,18 +39,21 @@ public class UserBoxSongController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/userbox/songs")
-    public ResponseEntity<List<UserBoxSongDto.UserBoxSongResponse>> gets(@RequestHeader("userId") Long userId,
+    @GetMapping(value = "/{userBoxId:[\\d]+}/songs")
+    public ResponseEntity<List<UserBoxSongDto.UserBoxSongResponse>> findAllUserBoxSong(@PathVariable Long userBoxId,
+                                                                         @RequestHeader("userId") Long userId,
                                                                          @RequestParam("sort") String sort,
                                                                          @RequestParam("order") String order,
                                                                          @RequestParam("size") int size,
                                                                          @RequestParam("offset") int offset) {
 
-        return new ResponseEntity<>(userBoxSongService.gets(userId, sort, order, size, offset), HttpStatus.OK);
+        return ResponseEntity.ok(userBoxSongService.findAllUserBoxSong(userId, userBoxId, sort, order, size, offset));
     }
 
-    @DeleteMapping(value = "userbox/song/{userBoxSongId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("userBoxSongId") Long userBoxSongId) {
-        return new ResponseEntity<>(userBoxSongService.delete(userBoxSongId), HttpStatus.OK);
+    @DeleteMapping(value = "/{userBoxId:[\\d]+}/song/{userBoxSongId:[\\d]+}")
+    public ResponseEntity<Long> deleteUserBoxSong(@PathVariable Long userBoxId,
+                                                  @PathVariable Long userBoxSongId,
+                                                  @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(userBoxSongService.deleteUserBoxSong(userId, userBoxId, userBoxSongId));
     }
 }

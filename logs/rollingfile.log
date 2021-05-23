@@ -1,3 +1,0 @@
-[INFO ] 2021-05-22 20:54:15.199 [main] MockServletContext - Initializing Spring TestDispatcherServlet ''
-[INFO ] 2021-05-22 20:54:15.205 [main] TestDispatcherServlet - Initializing Servlet ''
-[INFO ] 2021-05-22 20:54:15.206 [main] TestDispatcherServlet - Completed initialization in 0 ms

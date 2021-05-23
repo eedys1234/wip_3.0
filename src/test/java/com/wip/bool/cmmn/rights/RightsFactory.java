@@ -29,4 +29,10 @@ public class RightsFactory {
         ReflectionTestUtils.setField(rights, "id", id);
         return rights;
     }
+
+    public static Rights getUserBoxRightsWithUser(Long targetId, Long authorityId, String rightType, Long id) {
+        Rights rights = Rights.of(Target.USERBOX, targetId, Authority.USER, authorityId, rightType);
+        ReflectionTestUtils.setField(rights, "id", id);
+        return rights;
+    }
 }
