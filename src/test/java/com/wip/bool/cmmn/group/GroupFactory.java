@@ -42,8 +42,15 @@ public class GroupFactory {
     }
 
     public static Group getGroup(User user) {
-        String groupName = "테스트그룹_1";
-        Group group = Group.createGroup(groupName, user);
+        String groupName = "그룹_A";
+        Group group = getGroup(groupName, user);
+        return group;
+    }
+
+    public static Group getGroup(User user, long id) {
+        String groupName = "그룹_A";
+        Group group = getGroup(groupName, user);
+        ReflectionTestUtils.setField(group, "id", id);
         return group;
     }
 

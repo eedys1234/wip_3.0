@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,59 +40,21 @@ public class GroupRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-
-    private User getNormalUser() {
-        User user = UserFactory.getNormalUser();
-        return user;
-    }
-
-    private User getAdminUser() {
-        User user = UserFactory.getAdminUser();
-        return user;
-    }
-
-    private Group getGroup(User user) {
-        Group group = GroupFactory.getGroup(user);
-        return group;
-    }
-
-    private Group getGroup(String groupName, User user) {
-        Group group = GroupFactory.getGroup(groupName, user);
-        return group;
-    }
-
-    private void addGroup(String groupName, User user) {
-        Group group = getGroup(groupName, user);
-        groupRepository.save(group);
-    }
-
-    private Group addGroupReturnGroup(String groupName, User user) {
-        Group group = getGroup(groupName, user);
-        groupRepository.save(group);
-        return group;
-    }
-
-    private GroupMember getGroupMember(Group group, User user) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        groupMemberRepository.save(groupMember);
-        return groupMember;
-    }
-
     @DisplayName("그룹추가")
     @Test
     public void 그룹추가_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
+        User user = UserFactory.getNormalUser();
         User addUser = userRepository.save(user);
-        Group group = getGroup(addUser);
+        Group group = GroupFactory.getGroup(addUser);
 
         //when
         Group addGroup = groupRepository.save(group);
 
         //then
-        assertThat(addGroup.getGroupName()).isEqualTo(group.getGroupName());
         assertThat(addGroup.getId()).isGreaterThan(0L);
+        assertThat(addGroup.getGroupName()).isEqualTo(group.getGroupName());
     }
 
 
@@ -102,19 +63,19 @@ public class GroupRepositoryTest {
     public void 그룹수정_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
+        User user = UserFactory.getNormalUser();
         User addUser = userRepository.save(user);
-        Group group = getGroup(addUser);
+
+        Group group = GroupFactory.getGroup(addUser);
         Group addGroup = groupRepository.save(group);
+
         String updateGroupName = "테스트그룹_2";
-        group.updateGroupName(updateGroupName);
 
         //when
-        Group updateGroup = groupRepository.save(group);
+        addGroup.updateGroupName(updateGroupName);
 
         //then
-        assertThat(updateGroup.getGroupName()).isEqualTo(updateGroupName);
-        assertThat(updateGroup.getId()).isGreaterThan(0L);
+        assertThat(addGroup.getGroupName()).isEqualTo(updateGroupName);
     }
 
     @DisplayName("그룹삭제")
@@ -122,9 +83,10 @@ public class GroupRepositoryTest {
     public void 그룹삭제_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
+        User user = UserFactory.getNormalUser();
         User addUser = userRepository.save(user);
-        Group group = getGroup(addUser);
+
+        Group group = GroupFactory.getGroup(addUser);
         Group addGroup = groupRepository.save(group);
 
         //when
@@ -140,26 +102,25 @@ public class GroupRepositoryTest {
     public void 그룹_리스트_조회_byMaster_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
-        userRepository.save(user);
-        String groupName = "테스트그룹_";
-        List<String> groupNames = new ArrayList<>();
         int size = 10;
         int offset = 0;
-        int cnt = 10;
 
-        for(int i=1;i<=cnt;i++)
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        List<Group> groups = GroupFactory.getGroups(user);
+
+        for(Group group : groups)
         {
-            groupNames.add(groupName+i);
-            addGroup(groupName + i, user);
+            groupRepository.save(group);
         }
 
         //when
-        List<Group> groups = groupRepository.findAllByMaster(user.getId(), OrderType.ASC, size, offset);
+        List<Group> values = groupRepository.findAllByMaster(user.getId(), OrderType.ASC, size, offset);
 
         //then
-        assertThat(groups.size()).isEqualTo(cnt);
-        assertThat(groups).extracting(Group::getGroupName).containsAll(groupNames);
+        assertThat(values.size()).isEqualTo(groups.size());
+        assertThat(values).extracting(Group::getGroupName).containsAll(GroupFactory.getGroupNames());
     }
 
     @DisplayName("그룹 리스트 조회 by User")
@@ -167,30 +128,27 @@ public class GroupRepositoryTest {
     public void 그룹_리스트_조회_byUser_Repository() throws Exception {
 
         //given
-        int cnt = 10;
         int size = 10;
         int offset = 0;
 
-        User user = getNormalUser();
+        User user = UserFactory.getNormalUser();
         User addUser = userRepository.save(user);
-        List<String> groupNames = new ArrayList<>();
-        List<Group> groups = new ArrayList<>();
 
-        for (int i = 1; i <= cnt; i++)
-        {
-            String groupName = "테스트그룹_" + i;
-            Group group = addGroupReturnGroup(groupName, user);
-            GroupMember groupMember = getGroupMember(group, user);
-            groupNames.add(groupName);
-            groups.add(group);
+        List<Group> groups = GroupFactory.getGroups(addUser);
+
+        for(Group group : groups) {
+            groupRepository.save(group);
+
+            GroupMember groupMember = GroupMemberFactory.getGroupMember(group, addUser);
+            groupMemberRepository.save(groupMember);
         }
 
         //when
         List<Group> values = groupRepository.findAllByUser(user.getId(), OrderType.ASC, size, offset);
 
         //then
-        assertThat(values.size()).isEqualTo(cnt);
-        assertThat(values).extracting(Group::getGroupName).containsAll(groupNames);
+        assertThat(values.size()).isEqualTo(groups.size());
+        assertThat(values).extracting(Group::getGroupName).containsAll(GroupFactory.getGroupNames());
 
     }
 }

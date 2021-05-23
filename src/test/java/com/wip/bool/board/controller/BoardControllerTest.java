@@ -6,7 +6,6 @@ import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.board.service.BoardService;
 import com.wip.bool.cmmn.board.BoardFactory;
-import com.wip.bool.cmmn.status.DeleteStatus;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,9 +45,9 @@ public class BoardControllerTest {
     @Mock
     private BoardService boardService;
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void init() throws Exception {
@@ -55,38 +55,8 @@ public class BoardControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    private User getUser() {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Board getBoard(User user) {
-
-        Board board = BoardFactory.getBoard(user);
-        ReflectionTestUtils.setField(board, "id", 1L);
-        return board;
-    }
-
-    private List<BoardDto.BoardSimpleResponse> getSimpleBoards() {
-
-        List<BoardDto.BoardSimpleResponse> simpleBoards = new ArrayList<>();
-        BoardDto.BoardSimpleResponse board1 = new BoardDto.BoardSimpleResponse(1L, "테스트 게시물1", DeleteStatus.DELETE, BoardType.BOARD);
-        BoardDto.BoardSimpleResponse board2 = new BoardDto.BoardSimpleResponse(2L, "테스트 게시물2", DeleteStatus.NORMAL, BoardType.BOARD);
-        BoardDto.BoardSimpleResponse board3 = new BoardDto.BoardSimpleResponse(3L, "테스트 게시물3", DeleteStatus.NORMAL, BoardType.BOARD);
-        BoardDto.BoardSimpleResponse board4 = new BoardDto.BoardSimpleResponse(4L, "테스트 게시물4", DeleteStatus.NORMAL, BoardType.BOARD);
-
-        simpleBoards.add(board1);
-        simpleBoards.add(board2);
-        simpleBoards.add(board3);
-        simpleBoards.add(board4);
-
-        return simpleBoards;
-    }
-
     private List<BoardDto.BoardResponse> getDetailBoards(User user) {
         List<BoardDto.BoardResponse> detailBoards = new ArrayList<>();
-
         String title = "테스트 게시물";
         String content = "게시물내용";
         BoardType boardType = BoardType.BOARD;
@@ -99,31 +69,33 @@ public class BoardControllerTest {
 
     @DisplayName("게시물 저장")
     @Test
-    public void saveBoard_Controller() throws Exception {
+    public void 게시물_저장_Controller() throws Exception {
 
         //given
         String title = "테스트 게시물";
         String content = "게시물내용";
         String boardType = "BOARD";
-        User user = getUser();
-        Board board = getBoard(user);
+
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+
         BoardDto.BoardSaveRequest requestDto = new BoardDto.BoardSaveRequest();
         ReflectionTestUtils.setField(requestDto, "title", title);
         ReflectionTestUtils.setField(requestDto, "content", content);
         ReflectionTestUtils.setField(requestDto, "boardType", boardType);
 
-        doReturn(board.getId()).when(boardService).saveBoard(any(Long.class), any(BoardDto.BoardSaveRequest.class));
+        doReturn(board.getId()).when(boardService).saveBoard(anyLong(), any(BoardDto.BoardSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/board")
-                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                     .header("userId", user.getId())
                                                     .content(objectMapper.writeValueAsString(requestDto)));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
-        assertThat(resValue).isEqualTo(board.getId());
+        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        assertThat(id).isEqualTo(board.getId());
 
         //verify
         verify(boardService, times(1)).saveBoard(any(Long.class), any(BoardDto.BoardSaveRequest.class));
@@ -134,14 +106,20 @@ public class BoardControllerTest {
     public void 게시물_리스트_조회_Controller() throws Exception {
 
         //given
-        User user = getUser();
-        List<BoardDto.BoardSimpleResponse> boards = getSimpleBoards();
-        doReturn(boards).when(boardService).findBoards(any(String.class), any(Integer.class), any(Integer.class));
+        String boardType = "BOARD";
+        int size = 10;
+        int offset = 0;
+
+        User user = UserFactory.getNormalUser(1L);
+        List<Board> boards = BoardFactory.getBoardsWithId(user);
+
+        doReturn(boards.stream().map(board -> new BoardDto.BoardSimpleResponse(board.getId(), board.getTitle(), board.getIsDeleted(), board.getBoardType()))
+        .collect(Collectors.toList())).when(boardService).findBoards(anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("board", "BOARD");
-        params.add("size", "10");
-        params.add("offset", "0");
+        params.add("board", boardType);
+        params.add("size", String.valueOf(size));
+        params.add("offset", String.valueOf(offset));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/boards")
@@ -152,12 +130,12 @@ public class BoardControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0].board_id").value(1L))
+                                                .andExpect(jsonPath("$[0].board_id").value(boards.get(0).getId()))
                                                 .andExpect(jsonPath("$[0].title").value("숨김처리된 게시글입니다."))
                                                 .andReturn();
 
         //verify
-        verify(boardService, times(1)).findBoards(any(String.class), any(Integer.class), any(Integer.class));
+        verify(boardService, times(1)).findBoards(anyString(), anyInt(), anyInt());
     }
 
     @DisplayName("게시물 상세 조회")
@@ -165,9 +143,9 @@ public class BoardControllerTest {
     public void 게시물_상세_조회_Controller() throws Exception {
 
         //given
-        User user = getUser();
+        User user = UserFactory.getNormalUser(1L);
         List<BoardDto.BoardResponse> detailBoards = getDetailBoards(user);
-        doReturn(detailBoards.get(0)).when(boardService).findDetailBoard(any(Long.class));
+        doReturn(detailBoards.get(0)).when(boardService).findDetailBoard(anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/board/1"));
@@ -190,11 +168,12 @@ public class BoardControllerTest {
     public void 게시물_삭제_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(boardService).deleteBoard(any(Long.class), any(Long.class));
+        User user = UserFactory.getNormalUser(1L);
+        doReturn(1L).when(boardService).deleteBoard(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/board/1")
-        .header("userId", 1));
+        .header("userId", user.getId()));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
@@ -205,7 +184,7 @@ public class BoardControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(boardService, times(1)).deleteBoard(any(Long.class), any(Long.class));
+        verify(boardService, times(1)).deleteBoard(anyLong(), anyLong());
 
     }
 
@@ -214,22 +193,23 @@ public class BoardControllerTest {
     public void 게시물_숨김처리_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(boardService).hiddenBoard(any(Long.class), any(Long.class));
+        User user = UserFactory.getAdminUser(1L);
+        doReturn(1L).when(boardService).hiddenBoard(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/board/1/hidden")
-        .header("userId", 1L));
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
                                                 .andReturn();
 
-
         Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(boardService, times(1)).hiddenBoard(any(Long.class), any(Long.class));
+        verify(boardService, times(1)).hiddenBoard(anyLong(), anyLong());
     }
 }

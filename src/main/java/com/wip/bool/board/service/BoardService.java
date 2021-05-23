@@ -68,7 +68,8 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardDto.BoardResponse findDetailBoard(Long boardId) {
-        return boardRepository.findDetailById(boardId);
+        return boardRepository.findDetailById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
     }
 
     @Transactional
