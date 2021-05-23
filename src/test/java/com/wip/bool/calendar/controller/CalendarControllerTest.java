@@ -3,13 +3,11 @@ package com.wip.bool.calendar.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
-import com.wip.bool.calendar.repository.CalendarRepository;
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.cmmn.calendar.CalendarFactory;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
-import com.wip.bool.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,12 +27,12 @@ import org.springframework.util.MultiValueMap;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,12 +45,6 @@ public class CalendarControllerTest {
     @Mock
     private CalendarService calendarService;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private CalendarRepository calendarRepository;
-
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
@@ -61,48 +53,6 @@ public class CalendarControllerTest {
     public void init() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(calendarController).build();
         objectMapper = new ObjectMapper();
-    }
-
-    private User getUser() {
-
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Calendar getCalendar(User user) {
-
-        Calendar calendar = CalendarFactory.getPublicCalendar(user);
-        ReflectionTestUtils.setField(calendar, "id", 1L);
-        return calendar;
-    }
-
-    private List<CalendarDto.CalendarResponse> getDeptCalendars() {
-
-        List<CalendarDto.CalendarResponse> calendars = Arrays.asList(
-                new CalendarDto.CalendarResponse(1L, "OO부서 회의", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 01, 14, 00, 00),
-                        ShareType.DEPT, "test@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(2L, "OO부서 회의 - 1", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 02, 14, 00, 00),
-                        ShareType.PUBLIC, "test2@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
-                        ShareType.DEPT, "test2@gmail.com", 1L)
-        );
-
-        return calendars;
-    }
-
-    private List<CalendarDto.CalendarResponse> getIndividualCalendars() {
-
-        List<CalendarDto.CalendarResponse> calendars = Arrays.asList(
-                new CalendarDto.CalendarResponse(1L, "OO부서 회의", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 01, 14, 00, 00),
-                        ShareType.PRIVATE, "test@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(2L, "OO부서 회의 - 1", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 02, 14, 00, 00),
-                        ShareType.PRIVATE, "test2@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
-                        ShareType.PRIVATE, "test2@gmail.com", 1L)
-        );
-
-        return calendars;
     }
 
     @DisplayName("일정 추가")
@@ -121,21 +71,25 @@ public class CalendarControllerTest {
         ReflectionTestUtils.setField(requestDto, "shareType", shareType.name());
         ReflectionTestUtils.setField(requestDto, "calendarDate", Timestamp.valueOf(date).getTime());
 
-        User user = getUser();
-        Calendar calendar = getCalendar(user);
+        User user = UserFactory.getNormalUser(1L);
+        Calendar calendar = CalendarFactory.getPublicCalendar(user, 1L);
 
-        doReturn(calendar.getId()).when(calendarService).save(any(Long.class), any(CalendarDto.CalendarSaveRequest.class));
+        doReturn(calendar.getId()).when(calendarService).save(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/calendar")
-        .header("userId", 1L)
-        .contentType(MediaType.APPLICATION_JSON)
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .content(objectMapper.writeValueAsString(requestDto)));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
         final Long id = Long.valueOf(mvcResult.getResponse().getContentAsString());
         assertThat(id).isGreaterThan(0L);
+        assertThat(id).isEqualTo(calendar.getId());
+
+        //verify
+        verify(calendarService, times(1)).save(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
     }
 
     @DisplayName("일정 리스트 가져오기 부서")
@@ -143,9 +97,10 @@ public class CalendarControllerTest {
     public void 일정_리스트_가져오기_부서_Controller() throws Exception {
 
         //given
-        List<CalendarDto.CalendarResponse> deptCalendars = getDeptCalendars();
+        User user = UserFactory.getNormalUser(1L);
+        List<CalendarDto.CalendarResponse> deptCalendars = CalendarFactory.getDeptCalendars();
 
-        doReturn(deptCalendars).when(calendarService).getDeptCalendars(any(Long.class), any(Long.class), any(Long.class));
+        doReturn(deptCalendars).when(calendarService).getDeptCalendars(anyLong(), anyLong(), anyLong());
         Long from = Timestamp.valueOf(LocalDateTime.of(2021, 05, 01, 00, 00, 00)).getTime();
         Long to = Timestamp.valueOf(LocalDateTime.of(2021, 05, 31, 23, 59, 59)).getTime();
 
@@ -155,14 +110,18 @@ public class CalendarControllerTest {
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/calendar-dept")
-        .header("userId", 1L)
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
         List<CalendarDto.CalendarResponse> values = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
 
-        assertThat(values.size()).isEqualTo(3);
+        assertThat(values.size()).isEqualTo(deptCalendars.size());
+
+        //verify
+        verify(calendarService, times(1)).getDeptCalendars(anyLong(), anyLong(), anyLong());
     }
 
     @DisplayName("일정 리스트 가져오기 개인")
@@ -170,9 +129,10 @@ public class CalendarControllerTest {
     public void 일정_리스트_가져오기_개인_Controller() throws Exception {
 
         //given
-        List<CalendarDto.CalendarResponse> individualCalendars = getIndividualCalendars();
+        User user = UserFactory.getNormalUser(1L);
+        List<CalendarDto.CalendarResponse> individualCalendars = CalendarFactory.getIndividualCalendars();
 
-        doReturn(individualCalendars).when(calendarService).getIndividualCalenders(any(Long.class), any(Long.class), any(Long.class));
+        doReturn(individualCalendars).when(calendarService).getIndividualCalenders(anyLong(), anyLong(), anyLong());
         Long from = Timestamp.valueOf(LocalDateTime.of(2021, 05, 01, 00, 00, 00)).getTime();
         Long to = Timestamp.valueOf(LocalDateTime.of(2021, 05, 31, 23, 59, 59)).getTime();
 
@@ -182,15 +142,17 @@ public class CalendarControllerTest {
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/calendar-individual")
-                .header("userId", 1L)
+                .header("userId", user.getId())
                 .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
         List<CalendarDto.CalendarResponse> values = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
 
-        assertThat(values.size()).isEqualTo(3);
+        assertThat(values.size()).isEqualTo(individualCalendars.size());
 
+        //verify
+        verify(calendarService, times(1)).getIndividualCalenders(anyLong(), anyLong(), anyLong());
     }
 
     @DisplayName("일정 삭제")
@@ -198,20 +160,23 @@ public class CalendarControllerTest {
     public void 일정_삭제_Controller() throws Exception {
 
         //given
-        User user = getUser();
-        Calendar calendar = getCalendar(user);
+        User user = UserFactory.getNormalUser(1L);
+        Calendar calendar = CalendarFactory.getPublicCalendar(user, 1L);
 
-        doReturn(1L).when(calendarService).delete(any(Long.class), any(Long.class));
+        doReturn(1L).when(calendarService).delete(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/calendar/" + 1)
-        .header("userId", 1L)
-        .contentType(MediaType.APPLICATION_JSON));
+        .header("userId", user.getId())
+        .contentType(MediaType.APPLICATION_JSON_VALUE));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
         Long resValue = Long.valueOf(mvcResult.getResponse().getContentAsString());
 
         assertThat(resValue).isEqualTo(1L);
+
+        //verify
+        verify(calendarService, times(1)).delete(anyLong(), anyLong());
     }
 }
