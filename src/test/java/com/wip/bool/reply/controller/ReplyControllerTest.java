@@ -3,6 +3,7 @@ package com.wip.bool.reply.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.board.controller.ReplyController;
 import com.wip.bool.board.domain.Board;
+import com.wip.bool.board.domain.Reply;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.board.service.ReplyService;
 import com.wip.bool.cmmn.board.BoardFactory;
@@ -27,6 +28,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,22 +50,6 @@ public class ReplyControllerTest {
 
     private ObjectMapper objectMapper;
 
-    private User getUser() {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Board getBoard(User user) {
-        Board board = BoardFactory.getBoard(user);
-        ReflectionTestUtils.setField(board, "id", 1L);
-        return board;
-    }
-
-    private List<ReplyDto.ReplyResponse> getRepliesByBoards(Board board, User user) {
-        return ReplyFactory.getRepliesByBoard(board, user);
-    }
-
     private List<ReplyDto.ReplyResponse> getRepliesByReplies(Board board, User user) {
         return ReplyFactory.getRepliesByReplies(board, user);
     }
@@ -79,24 +65,28 @@ public class ReplyControllerTest {
     public void 댓글_추가_by게시물_Controller() throws Exception {
 
         //given
-        ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
-        ReflectionTestUtils.setField(requestDto, "content", "테스트 댓글");
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        Reply reply = ReplyFactory.getReply(board, user, 1L);
 
-        doReturn(1L).when(replyService).saveReply(any(Long.class), any(Long.class), any(ReplyDto.ReplySaveRequest.class));
+        ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
+        ReflectionTestUtils.setField(requestDto, "content", reply.getContent());
+
+        doReturn(1L).when(replyService).saveReply(anyLong(), anyLong(), any(ReplyDto.ReplySaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/board/1/reply")
-                                                                                    .contentType(MediaType.APPLICATION_JSON)
-                                                                                    .content(objectMapper.writeValueAsString(requestDto))
-                                                                                    .header("userId", 1L));
+                                                                                    .header("userId", user.getId())
+                                                                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                                                    .content(objectMapper.writeValueAsString(requestDto)));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
         Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
-        assertThat(id).isEqualTo(1L);
+        assertThat(id).isEqualTo(reply.getId());
 
         //verify
-        verify(replyService, times(1)).saveReply(any(Long.class), any(Long.class), any(ReplyDto.ReplySaveRequest.class));
+        verify(replyService, times(1)).saveReply(anyLong(), anyLong(), any(ReplyDto.ReplySaveRequest.class));
 
     }
 
@@ -105,25 +95,30 @@ public class ReplyControllerTest {
     public void 댓글_추가_by댓글_Controller() throws Exception {
 
         //given
-        ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
-        ReflectionTestUtils.setField(requestDto, "content", "테스트 댓글");
-        ReflectionTestUtils.setField(requestDto, "parentId", 2L);
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        Reply parentReply = ReplyFactory.getReply(board, user, 2L);
+        Reply childReply = ReplyFactory.getReply(board, user, 3L);
 
-        doReturn(1L).when(replyService).saveReply(any(Long.class), any(Long.class), any(ReplyDto.ReplySaveRequest.class));
+        ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
+        ReflectionTestUtils.setField(requestDto, "content", childReply.getContent());
+        ReflectionTestUtils.setField(requestDto, "parentId", parentReply.getId());
+
+        doReturn(childReply.getId()).when(replyService).saveReply(anyLong(), anyLong(), any(ReplyDto.ReplySaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/board/1/reply")
+                .header("userId", user.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDto))
-                .header("userId", 1L));
+                .content(objectMapper.writeValueAsString(requestDto)));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
         Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
-        assertThat(id).isEqualTo(1L);
+        assertThat(id).isEqualTo(childReply.getId());
 
         //verify
-        verify(replyService, times(1)).saveReply(any(Long.class), any(Long.class), any(ReplyDto.ReplySaveRequest.class));
+        verify(replyService, times(1)).saveReply(anyLong(), anyLong(), any(ReplyDto.ReplySaveRequest.class));
 
     }
 
@@ -132,28 +127,36 @@ public class ReplyControllerTest {
     public void 댓글_리스트_조회_by게시물_Controller() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        List<ReplyDto.ReplyResponse> repliesByBoards = getRepliesByBoards(board, user);
-        doReturn(repliesByBoards).when(replyService).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        int size = 10;
+        int offset = 0;
+
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        List<Reply> replies = ReplyFactory.getRepliesWithId(board, user);
+
+        doReturn(replies.stream()
+        .map(reply -> new ReplyDto.ReplyResponse(reply, null))
+        .collect(Collectors.toList())).when(replyService).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
-        params.add("size", "10");
-        params.add("offset", "0");
+        params.add("size", String.valueOf(size));
+        params.add("offset", String.valueOf(offset));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/board/1/reply")
+                                                                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                                                     .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
                                                 .andExpect(jsonPath("$").isArray())
+                                                .andExpect(jsonPath("$[0]['reply_id']").value(replies.get(0).getId()))
                                                 .andReturn();
 
         //verify
-        verify(replyService, times(1)).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        verify(replyService, times(1)).getsByBoard(anyLong(), anyInt(), anyInt());
     }
 
     @DisplayName("댓글 리스트 조회 by 댓글")
@@ -161,28 +164,33 @@ public class ReplyControllerTest {
     public void 댓글_리스트_조회_by댓글_Controller() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        List<ReplyDto.ReplyResponse> repliesByBoards = getRepliesByReplies(board, user);
-        doReturn(repliesByBoards).when(replyService).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        int size = 10;
+        int offset = 0;
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        List<ReplyDto.ReplyResponse> repliesByReply = ReplyFactory.getRepliesByReplies(board, user);
+
+        doReturn(repliesByReply).when(replyService).getsByBoard(anyLong(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
-        params.add("size", "10");
-        params.add("offset", "0");
+        params.add("size", String.valueOf(size));
+        params.add("offset", String.valueOf(offset));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/board/1/reply")
-                .params(params));
+                                                                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                                                    .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(10))
                 .andReturn();
 
         //verify
-        verify(replyService, times(1)).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        verify(replyService, times(1)).getsByBoard(anyLong(), anyInt(), anyInt());
     }
 
     @DisplayName("댓글 삭제")
@@ -190,11 +198,12 @@ public class ReplyControllerTest {
     public void 댓글_삭제_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(replyService).deleteReply(any(Long.class), any(Long.class));
+        User user = UserFactory.getNormalUser(1L);
+        doReturn(1L).when(replyService).deleteReply(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/board/1/reply/1")
-                                                                                    .header("userId", 1L));
+                                                                                    .header("userId", user.getId()));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
@@ -202,7 +211,7 @@ public class ReplyControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(replyService, times(1)).deleteReply(any(Long.class), any(Long.class));
+        verify(replyService, times(1)).deleteReply(anyLong(), anyLong());
 
     }
 

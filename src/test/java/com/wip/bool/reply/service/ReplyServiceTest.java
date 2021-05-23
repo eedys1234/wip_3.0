@@ -21,6 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,47 +42,21 @@ public class ReplyServiceTest {
     @Mock
     private BoardRepository boardRepository;
 
-    private User getUser() {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Board getBoard(User user) {
-        Board board = BoardFactory.getBoard(user);
-        ReflectionTestUtils.setField(board, "id", 1L);
-        return board;
-    }
-
-    private Reply getReply(Board board, User user) {
-        Reply reply = ReplyFactory.getReply(board, user);
-        ReflectionTestUtils.setField(reply, "id", 1L);
-        return reply;
-    }
-
-    private List<ReplyDto.ReplyResponse> getRepliesByBoard(Board board, User user) {
-        return ReplyFactory.getRepliesByBoard(board, user);
-    }
-
-    private List<ReplyDto.ReplyResponse> getRepliesByReplies(Board board, User user) {
-        return ReplyFactory.getRepliesByReplies(board, user);
-    }
-
     @DisplayName("댓글 추가 by 게시물")
     @Test
     public void 댓글_추가_by게시물_Service() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply reply = getReply(board, user);
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        Reply reply = ReplyFactory.getReply(board, user, 1L);
 
         ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
-        ReflectionTestUtils.setField(requestDto, "content", "테스트 댓글");
+        ReflectionTestUtils.setField(requestDto, "content", reply.getContent());
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong());
         doReturn(reply).when(replyRepository).save(any(Reply.class));
         Long id = replyService.saveReply(user.getId(), board.getId(), requestDto);
 
@@ -89,8 +64,8 @@ public class ReplyServiceTest {
         assertThat(id).isEqualTo(reply.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(boardRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(boardRepository, times(1)).findById(anyLong());
         verify(replyRepository, times(1)).save(any(Reply.class));
     }
 
@@ -99,20 +74,19 @@ public class ReplyServiceTest {
     public void 댓글_추가_by댓글_Service() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply parentReply = getReply(board, user);
-        Reply childReply = getReply(board, user);
-        ReflectionTestUtils.setField(childReply, "id", 2L);
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        Reply parentReply = ReplyFactory.getReply(board, user, 1L);
+        Reply childReply = ReplyFactory.getReply(board, user, 2L);
 
         ReplyDto.ReplySaveRequest requestDto = new ReplyDto.ReplySaveRequest();
-        ReflectionTestUtils.setField(requestDto, "content", "테스트 댓글");
+        ReflectionTestUtils.setField(requestDto, "content", parentReply.getContent());
         ReflectionTestUtils.setField(requestDto, "parentId", parentReply.getId());
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(anyLong());
         doReturn(childReply).when(replyRepository).save(any(Reply.class));
         Long id = replyService.saveReply(user.getId(), board.getId(), requestDto);
 
@@ -120,9 +94,9 @@ public class ReplyServiceTest {
         assertThat(id).isEqualTo(childReply.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(boardRepository, times(1)).findById(any(Long.class));
-        verify(replyRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(boardRepository, times(1)).findById(anyLong());
+        verify(replyRepository, times(1)).findById(anyLong());
         verify(replyRepository, times(1)).save(any(Reply.class));
     }
 
@@ -133,19 +107,25 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = getUser();
-        Board board = getBoard(user);
-        List<ReplyDto.ReplyResponse> repliesByBoard = getRepliesByBoard(board, user);
+
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+
+        List<Reply> replies = ReplyFactory.getRepliesWithId(board, user);
 
         //when
-        doReturn(repliesByBoard).when(replyRepository).findAllByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        doReturn(replies.stream()
+        .map(reply -> new ReplyDto.ReplyResponse(reply, null))
+        .collect(Collectors.toList())).when(replyRepository).findAllByBoard(anyLong(), anyInt(), anyInt());
+
         List<ReplyDto.ReplyResponse> values = replyService.getsByBoard(board.getId(), size, offset);
 
         //then
-        assertThat(values.size()).isEqualTo(repliesByBoard.size());
+        assertThat(values.size()).isEqualTo(replies.size());
+        assertThat(values).extracting(ReplyDto.ReplyResponse::getContent).containsAll(replies.stream().map(Reply::getContent).collect(Collectors.toList()));
 
         //verify
-        verify(replyRepository, times(1)).findAllByBoard(any(Long.class), any(Integer.class), any(Integer.class));
+        verify(replyRepository, times(1)).findAllByBoard(anyLong(), anyInt(), anyInt());
     }
 
     @DisplayName("댓글 리스트 조회 by 댓글")
@@ -155,12 +135,14 @@ public class ReplyServiceTest {
         //given
         int size = 10;
         int offset = 0;
-        User user = getUser();
-        Board board = getBoard(user);
-        List<ReplyDto.ReplyResponse> repliesByReply = getRepliesByReplies(board, user);
+
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+
+        List<ReplyDto.ReplyResponse> repliesByReply = ReplyFactory.getRepliesByReplies(board, user);
 
         //when
-        doReturn(repliesByReply).when(replyRepository).findAllByReply(any(Long.class), any(Integer.class), any(Integer.class));
+        doReturn(repliesByReply).when(replyRepository).findAllByReply(anyLong(), anyInt(), anyInt());
         List<ReplyDto.ReplyResponse> values = replyService.getsByReply(repliesByReply.get(0).getReplyId(), size, offset);
 
         //then
@@ -169,7 +151,7 @@ public class ReplyServiceTest {
         assertThat(values.get(0).getNodes().get(1).getNodes().size()).isEqualTo(2); // 2 depth
 
         //verify
-        verify(replyRepository, times(1)).findAllByReply(any(Long.class), any(Integer.class), any(Integer.class));
+        verify(replyRepository, times(1)).findAllByReply(anyLong(), anyInt(), anyInt());
     }
 
     @DisplayName("댓글 삭제")
@@ -177,16 +159,16 @@ public class ReplyServiceTest {
     public void 댓글_삭제_Service() throws Exception {
 
         //given
-        User user = getUser();
-        Board board = getBoard(user);
-        Reply parentReply = getReply(board, user);
-        Reply childReply = getReply(board, user);
-        ReflectionTestUtils.setField(childReply, "id", 2L);
+        User user = UserFactory.getNormalUser(1L);
+        Board board = BoardFactory.getBoard(user, 1L);
+        Reply parentReply = ReplyFactory.getReply(board, user, 1L);
+        Reply childReply = ReplyFactory.getReply(board, user, 2L);
+
         childReply.updateParentReply(parentReply);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(any(Long.class), any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(anyLong(), anyLong());
         doReturn(1L).when(replyRepository).delete(any(Reply.class));
         Long resValue = replyService.deleteReply(user.getId(), parentReply.getId());
 
@@ -194,8 +176,8 @@ public class ReplyServiceTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(replyRepository, times(1)).findById(any(Long.class), any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(replyRepository, times(1)).findById(anyLong(), anyLong());
         verify(replyRepository, times(1)).delete(any(Reply.class));
 
     }

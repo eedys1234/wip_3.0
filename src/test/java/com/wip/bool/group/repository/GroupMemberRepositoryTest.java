@@ -18,10 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,35 +39,18 @@ public class GroupMemberRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User getNormalUser() {
-        User user = UserFactory.getNormalUser();
-        return userRepository.save(user);
-    }
-
-    private User getNormalUser(String email) {
-        User user = UserFactory.getNormalUser();
-        ReflectionTestUtils.setField(user, "email", email);
-        return userRepository.save(user);
-    }
-
-    private Group getGroup(User user) {
-        Group group = GroupFactory.getGroup(user);
-        return groupRepository.save(group);
-    }
-
-    private GroupMember getGroupMember(Group group, User user) {
-        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
-        return groupMember;
-    }
-
     @DisplayName("그룹멤버 추가")
     @Test
     public void 그룹멤버_추가_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
-        GroupMember groupMember = getGroupMember(group, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Group group = GroupFactory.getGroup(user);
+        groupRepository.save(group);
+
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
 
         //when
         GroupMember addGroupMember = groupMemberRepository.save(groupMember);
@@ -83,12 +64,17 @@ public class GroupMemberRepositoryTest {
     public void 그룹멤버_탈퇴_Repository() throws Exception {
 
         //given
-        User user = getNormalUser();
-        Group group = getGroup(user);
-        GroupMember groupMember = getGroupMember(group, user);
+        User user = UserFactory.getNormalUser();
+        userRepository.save(user);
+
+        Group group = GroupFactory.getGroup(user);
+        groupRepository.save(group);
+
+        GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
+        GroupMember addGroupMember = groupMemberRepository.save(groupMember);
 
         //when
-        Long resValue = groupMemberRepository.delete(groupMember);
+        Long resValue = groupMemberRepository.delete(addGroupMember);
 
         //then
         assertThat(resValue).isEqualTo(1L);
@@ -103,15 +89,19 @@ public class GroupMemberRepositoryTest {
         int cnt = 10;
         int offset = 0;
         String order = "ASC";
-        User userA = getNormalUser();
-        Group group = getGroup(userA);
-        List<User> users = new ArrayList<>();
 
-        for(int i=1;i<=10;i++) {
-            String email = "test_" + i + "@gmail.com";
-            User user = getNormalUser(email);
-            users.add(user);
-            GroupMember groupMember = getGroupMember(group, user);
+        User userA = UserFactory.getNormalUser();
+        userRepository.save(userA);
+
+        Group group = GroupFactory.getGroup(userA);
+        groupRepository.save(group);
+
+        List<User> users = UserFactory.getNormalUsers();
+
+        for(User user : users)
+        {
+            userRepository.save(user);
+            GroupMember groupMember = GroupMemberFactory.getGroupMember(group, user);
             groupMemberRepository.save(groupMember);
         }
 
@@ -119,10 +109,8 @@ public class GroupMemberRepositoryTest {
         List<GroupMember> groupMembers = groupMemberRepository.findAllByGroup(group.getId(), OrderType.valueOf(order), size, offset);
 
         //then
-        List<Group> groups = new ArrayList<>();
-        groups.add(group);
         assertThat(groupMembers.size()).isEqualTo(cnt);
-        assertThat(groupMembers).extracting(GroupMember::getGroup).containsAll(groups);
+        assertThat(groupMembers).extracting(GroupMember::getGroup).contains(group);
         assertThat(groupMembers).extracting(GroupMember::getUser).containsAll(users);
     }
 }

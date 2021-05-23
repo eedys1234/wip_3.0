@@ -29,8 +29,12 @@ public class AppVersionServiceTest {
     @Mock
     private AppVersionRepository appVersionRepository;
 
-    private AppVersionDto.AppVersionSaveRequest getAppVersionSaveRequest() {
+    @DisplayName("app 정보 추가")
+    @Test
+    public void app_정보_추가_Service() throws Exception {
 
+        //given
+        AppVersion appVersion = AppFactory.getAppVersion(1L);
         String name = "ILECTRON";
         String version = "1.0.0.0";
 
@@ -38,25 +42,9 @@ public class AppVersionServiceTest {
         ReflectionTestUtils.setField(requestDto, "name", name);
         ReflectionTestUtils.setField(requestDto, "version", version);
 
-        return requestDto;
-    }
-//
-//    private List<AppVersion> getAppVersions() {
-//        return Arrays.asList(
-//            getAppVersion()
-//        );
-//    }
-
-    @DisplayName("app 정보 추가")
-    @Test
-    public void app_정보_추가_Service() throws Exception {
-
-        //given
-        AppVersion appVersion = AppFactory.getAppVersion(1L);
-
         //when
         doReturn(appVersion).when(appVersionRepository).save(any(AppVersion.class));
-        Long id = appVersionService.save(getAppVersionSaveRequest());
+        Long id = appVersionService.save(requestDto);
 
         //then
         assertThat(id).isEqualTo(appVersion.getId());

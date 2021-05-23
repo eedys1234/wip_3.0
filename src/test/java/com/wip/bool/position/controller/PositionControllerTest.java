@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,18 +51,6 @@ public class PositionControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    private User getAdminUser() {
-        User user = UserFactory.getAdminUser();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        return user;
-    }
-
-    private Position getPosition() {
-        Position position = PositionFactory.getPosition();
-        ReflectionTestUtils.setField(position, "id", 1L);
-        return position;
-    }
-
     private Position getPosition(String positionName, long id) {
         Position position = PositionFactory.getPosition(positionName);
         ReflectionTestUtils.setField(position, "id", id);
@@ -75,12 +62,12 @@ public class PositionControllerTest {
     public void 직위_추가_Controller() throws Exception {
 
         //given
-        User user = getAdminUser();
-        Position position = getPosition();
+        User user = UserFactory.getAdminUser(1L);
+        Position position = PositionFactory.getPosition(1L);
         PositionDto.PositionSaveRequest requestDto = new PositionDto.PositionSaveRequest();
         ReflectionTestUtils.setField(requestDto, "positionName", position.getPositionName());
 
-        doReturn(position.getId()).when(positionService).savePosition(any(Long.class), any(PositionDto.PositionSaveRequest.class));
+        doReturn(position.getId()).when(positionService).savePosition(anyLong(), any(PositionDto.PositionSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/position")
@@ -92,9 +79,10 @@ public class PositionControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
         Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
         assertThat(id).isGreaterThan(0L);
+        assertThat(id).isEqualTo(position.getId());
 
         //verify
-        verify(positionService, times(1)).savePosition(any(Long.class), any(PositionDto.PositionSaveRequest.class));
+        verify(positionService, times(1)).savePosition(anyLong(), any(PositionDto.PositionSaveRequest.class));
     }
 
     @DisplayName("직위 수정")
@@ -102,12 +90,12 @@ public class PositionControllerTest {
     public void 직위_수정_Controller() throws Exception {
 
         //given
-        User user = getAdminUser();
-        Position position = getPosition();
+        User user = UserFactory.getAdminUser(1L);
+        Position position = PositionFactory.getPosition(1L);
         PositionDto.PositionUpdateRequest requestDto = new PositionDto.PositionUpdateRequest();
         ReflectionTestUtils.setField(requestDto, "positionName", position.getPositionName());
 
-        doReturn(position.getId()).when(positionService).updatePosition(any(Long.class), any(Long.class), any(PositionDto.PositionUpdateRequest.class));
+        doReturn(position.getId()).when(positionService).updatePosition(anyLong(), anyLong(), any(PositionDto.PositionUpdateRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/position/1")
@@ -122,7 +110,7 @@ public class PositionControllerTest {
         assertThat(id).isEqualTo(position.getId());
 
         //verify
-        verify(positionService, times(1)).updatePosition(any(Long.class), any(Long.class), any(PositionDto.PositionUpdateRequest.class));
+        verify(positionService, times(1)).updatePosition(anyLong(), anyLong(), any(PositionDto.PositionUpdateRequest.class));
     }
 
     @DisplayName("직위 삭제")
@@ -130,8 +118,8 @@ public class PositionControllerTest {
     public void 직위_삭제_Controller() throws Exception {
 
         //given
-        User user = getAdminUser();
-        doReturn(1L).when(positionService).deletePosition(any(Long.class), any(Long.class));
+        User user = UserFactory.getAdminUser(1L);
+        doReturn(1L).when(positionService).deletePosition(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/position/1")
@@ -144,7 +132,7 @@ public class PositionControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(positionService, times(1)).deletePosition(any(Long.class), any(Long.class));
+        verify(positionService, times(1)).deletePosition(anyLong(), anyLong());
 
     }
 
@@ -153,13 +141,7 @@ public class PositionControllerTest {
     public void 직위_리스트_조회_Controller() throws Exception {
 
         //given
-        String[] positionNames = {"리더", "부장", "차장", "대리", "사원"};
-        List<Position> positions = new ArrayList<>();
-
-        for(int i=0;i<positionNames.length;i++) {
-            Position position = getPosition(positionNames[i], i+1);
-            positions.add(position);
-        }
+        List<Position> positions = PositionFactory.getPositionsWithId();
 
         doReturn(positions.stream()
                 .map(PositionDto.PositionResponse::new)

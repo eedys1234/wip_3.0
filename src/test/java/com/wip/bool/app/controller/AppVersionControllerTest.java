@@ -1,9 +1,9 @@
 package com.wip.bool.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wip.bool.app.domain.AppVersion;
 import com.wip.bool.app.dto.AppVersionDto;
 import com.wip.bool.app.service.AppVersionService;
+import com.wip.bool.cmmn.app.AppFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,41 +47,18 @@ public class AppVersionControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    private AppVersion getAppVersion() {
-
-        String name = "ILLECTORNC";
-        String version = "1.0.0.0";
-
-        AppVersion appVersion = AppVersion.createAppVersion(name, version);
-        ReflectionTestUtils.setField(appVersion, "id", 1L);
-
-        return appVersion;
-    }
-
-    private AppVersionDto.AppVersionSaveRequest getAppVersionSaveRequest() {
-
-        String name = "ILLECTORN";
-        String version = "1.0.0.0";
-
-        AppVersionDto.AppVersionSaveRequest reqeustDto = new AppVersionDto.AppVersionSaveRequest();
-        ReflectionTestUtils.setField(reqeustDto, "name", name);
-        ReflectionTestUtils.setField(reqeustDto, "version", version);
-        return reqeustDto;
-    }
-
-    private List<AppVersionDto.AppVersionResponse> getAppVersions() {
-
-        return Arrays.asList(
-               new AppVersionDto.AppVersionResponse(getAppVersion())
-        );
-    }
-
     @DisplayName("app 정보 추가")
     @Test
     public void app_정보_추가_Controller() throws Exception {
 
         //given
-        AppVersionDto.AppVersionSaveRequest requestDto = getAppVersionSaveRequest();
+        String name = "ILLECTORN";
+        String version = "1.0.0.0";
+
+        AppVersionDto.AppVersionSaveRequest requestDto = new AppVersionDto.AppVersionSaveRequest();
+        ReflectionTestUtils.setField(requestDto, "name", name);
+        ReflectionTestUtils.setField(requestDto, "version", version);
+
         doReturn(1L).when(appVersionService).save(any(AppVersionDto.AppVersionSaveRequest.class));
 
         //when
@@ -101,7 +78,7 @@ public class AppVersionControllerTest {
     public void app_정보_리스트_조회_Controller() throws Exception {
 
         //given
-        List<AppVersionDto.AppVersionResponse> appVersions = getAppVersions();
+        List<AppVersionDto.AppVersionResponse> appVersions = Arrays.asList(new AppVersionDto.AppVersionResponse(AppFactory.getAppVersion(1L)));
         doReturn(appVersions).when(appVersionService).gets();
 
         //when
@@ -120,7 +97,7 @@ public class AppVersionControllerTest {
 
         //given
         String name = "ILLECTORNC";
-        AppVersionDto.AppVersionResponse appVersion = new AppVersionDto.AppVersionResponse(getAppVersion());
+        AppVersionDto.AppVersionResponse appVersion = new AppVersionDto.AppVersionResponse(AppFactory.getAppVersion(1L));
         doReturn(appVersion).when(appVersionService).get(any(String.class));
 
         //when

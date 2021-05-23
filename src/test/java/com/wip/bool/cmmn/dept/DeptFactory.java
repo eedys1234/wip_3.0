@@ -3,7 +3,31 @@ package com.wip.bool.cmmn.dept;
 import com.wip.bool.dept.domain.Dept;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 public class DeptFactory {
+
+    public static String[] deptNames = {"밍공", "팡공", "볼공", "맹공"};
+
+    public static List<Dept> getDepts() {
+        return Arrays.stream(deptNames)
+                .map(deptName -> getDept(deptName))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Dept> getDeptsWithId() {
+        AtomicInteger index = new AtomicInteger(1);
+        return Arrays.stream(deptNames)
+                .map(deptName -> {
+                    Dept dept = getDept(deptName, index.intValue());
+                    index.incrementAndGet();
+                    return dept;
+                })
+                .collect(Collectors.toList());
+    }
 
     public static Dept getDept() {
         Dept dept = Dept.builder()
