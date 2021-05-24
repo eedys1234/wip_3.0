@@ -20,7 +20,8 @@ public class UserConfigService {
 
     private final UserConfigRepository userConfigRepository;
 
-    public Long update(Long userId, UserConfigDto.UserConfigUpdateRequest requestDto) {
+    @Transactional
+    public Long updateUserConfig(Long userId, UserConfigDto.UserConfigUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
@@ -28,13 +29,11 @@ public class UserConfigService {
         UserConfig userConfig = user.getUserConfig();
 
         userConfig.update(requestDto.getFontSize(), requestDto.getViewType(), requestDto.getRecvAlaram());
-        userConfigRepository.save(userConfig);
-
         return userConfig.getId();
     }
 
     @Transactional(readOnly = true)
-    public UserConfigDto.UserConfigResponse findOne(Long userId) {
+    public UserConfigDto.UserConfigResponse findUserConfig(Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
