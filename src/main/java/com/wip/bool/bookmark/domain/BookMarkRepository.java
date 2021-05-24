@@ -39,19 +39,26 @@ public class BookMarkRepository {
         return Optional.ofNullable(entityManager.find(BookMark.class, bookMarkId));
     }
 
+    public List<BookMark> findAll() {
+        return queryFactory.selectFrom(bookMark)
+                .fetch();
+    }
+
     // TODO : 드라이빙 테이블은 song-detail, 드리븐 테이블은 book-mark
     // TODO : userId에 index 추가, 드라이빙 테이블은 무엇이 좋을까?? Order By(TITLE, GuitarCoe)는 어떻게??
     // TODO : bookmark 테이블의 index는 songDetailId, userId, song-detail 테이블의 index는 title, guitarcode 설정
-    public List<BookMarkDto.BookMarkResponse> findAll(Long userId, SortType sortType, OrderType orderType, int offset, int size) {
+    public List<BookMarkDto.BookMarkResponse> findAll(Long userId, SortType sortType, OrderType orderType, int size, int offset) {
+
         return queryFactory.select(Projections.constructor(BookMarkDto.BookMarkResponse.class,
-                bookMark.id, songDetail.id, songDetail.title, bookMark.createDate))
+                bookMark.id, songDetail.id, songDetail.title, guitarCode.code, bookMark.createDate))
                 .from(songDetail)
-                .innerJoin(bookMark.songDetail)
+                .innerJoin(bookMark)
+                .on(songDetail.id.eq(bookMark.songDetail.id))
                 .innerJoin(songDetail.guitarCode, guitarCode)
                 .where(bookMark.user.id.eq(userId))
+                .orderBy(getOrder(sortType, orderType))
                 .offset(offset)
                 .limit(size)
-                .orderBy(getOrder(sortType, orderType))
                 .fetch();
 
     }
