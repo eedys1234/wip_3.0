@@ -3,6 +3,8 @@ package com.wip.bool.group.controller;
 
 import com.wip.bool.group.dto.GroupDto;
 import com.wip.bool.group.service.GroupService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,7 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/group")
     public ResponseEntity<Long> saveGroup(@RequestBody @Valid GroupDto.GroupSaveRequest requestDto,
                                           @RequestHeader("userId") Long userId,
@@ -40,6 +43,7 @@ public class GroupController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/group/{groupId:[\\d]+}")
     public ResponseEntity<Long> updateGroup(@PathVariable Long groupId,
                                             @RequestBody @Valid GroupDto.GroupUpdateRequest requestDto,
@@ -53,6 +57,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.updateGroup(userId, groupId, requestDto));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/group/{groupId:[\\d]+}")
     public ResponseEntity<Long> deleteGroup(@PathVariable Long groupId,
                                             @RequestHeader("userId") Long userId) {
@@ -60,6 +65,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.deleteGroup(userId, groupId));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/master/groups")
     public ResponseEntity<List<GroupDto.GroupResponse>> findAllByMaster(@RequestHeader("userId") Long userId,
                                                                         @RequestParam String order,
@@ -68,6 +74,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.findAllByMaster(userId, order, size, offset));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/user/groups")
     public ResponseEntity<List<GroupDto.GroupResponse>> findAllByUser(@RequestHeader("userId") Long userId,
                                                                       @RequestParam String order,

@@ -2,6 +2,8 @@ package com.wip.bool.music.mp3.controller;
 
 import com.wip.bool.exception.excp.BusinessException;
 import com.wip.bool.music.mp3.service.SongMP3Service;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class SongMP3Controller {
 
     private final SongMP3Service songMP3Service;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
     public ResponseEntity<Long> saveSongMP3(@PathVariable Long songDetailId,
                                             @RequestHeader("userId") Long userId,
@@ -43,6 +46,7 @@ public class SongMP3Controller {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d+]}")
     public ResponseEntity<Long> deleteSongMP3(@PathVariable Long songDetailId,
                                               @PathVariable Long songMP3Id,
@@ -51,6 +55,7 @@ public class SongMP3Controller {
         return ResponseEntity.ok(songMP3Service.deleteSongMP3(userId, songMP3Id));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d]+}")
     public ResponseEntity<Object> getMP3File(@PathVariable("songDetailId") Long songDetailId,
                                              @PathVariable("songMP3Id") Long songMP3Id) {

@@ -2,6 +2,8 @@ package com.wip.bool.dept.controller;
 
 import com.wip.bool.dept.service.DeptService;
 import com.wip.bool.dept.dto.DeptDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class DeptController {
 
     private final DeptService deptService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/dept")
     public ResponseEntity<Long> saveDept(@RequestBody @Valid DeptDto.DeptSaveRequest requestDto,
                                          @RequestHeader("userId") Long userId,
@@ -36,11 +39,13 @@ public class DeptController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/depts")
     public ResponseEntity<List<DeptDto.DeptResponse>> findAll() {
         return ResponseEntity.ok(deptService.findAll());
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/dept/{deptId:[\\d]+}")
     public ResponseEntity<Long> updateDept(@PathVariable Long deptId,
                                            @RequestHeader("userId") Long userId,
@@ -54,6 +59,7 @@ public class DeptController {
         return ResponseEntity.ok(deptService.updateDept(userId, deptId, requestDto));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/dept/{deptId:[\\d]+}")
     public ResponseEntity<Long> deleteDept(@PathVariable Long deptId,
                                            @RequestHeader("userId") Long userId) {

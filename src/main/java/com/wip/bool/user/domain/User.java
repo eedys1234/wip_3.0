@@ -117,10 +117,4 @@ public class User extends BaseEntity {
         return updateUserConfig(UserConfig.createUserConfig());
     }
 
-//    private void init(Dept dept, Position position, Role role, UserConfig userConfig) {
-//        this.dept = dept;
-//        this.position = position;
-//        this.role = role;
-//        this.userConfig = userConfig;
-//    }
 }

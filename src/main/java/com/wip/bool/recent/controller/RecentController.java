@@ -2,6 +2,8 @@ package com.wip.bool.recent.controller;
 
 import com.wip.bool.recent.service.RecentService;
 import com.wip.bool.recent.dto.RecentDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,9 @@ public class RecentController {
 
     private final RecentService recentService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/recent")
-    public ResponseEntity<Long> save(@Valid @RequestBody RecentDto.RecentSaveRequest requestDto,
+    public ResponseEntity<Long> saveRecent(@Valid @RequestBody RecentDto.RecentSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -37,6 +40,7 @@ public class RecentController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/recents")
     public ResponseEntity<List<RecentDto.RecentResponse>> gets(
             @RequestHeader("userId") Long userId,

@@ -60,6 +60,7 @@ public class BoardService {
         return id;
     }
 
+
     @Transactional(readOnly = true)
     public List<BoardDto.BoardSimpleResponse> findBoards(String board, int size, int offset) {
         BoardType boardType = BoardType.valueOf(board);

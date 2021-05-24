@@ -2,6 +2,8 @@ package com.wip.bool.bookmark.controller;
 
 import com.wip.bool.bookmark.service.BookMarkService;
 import com.wip.bool.bookmark.dto.BookMarkDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class BookMarkController {
 
     private final BookMarkService bookMarkService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/bookmark")
     public ResponseEntity<Long> save(@Valid @RequestBody BookMarkDto.BookMarkSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
@@ -36,11 +39,13 @@ public class BookMarkController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.OK);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/bookmark/{bookMarkId:[\\d]+}")
     public ResponseEntity<Long> delete(@PathVariable("bookMarkId") Long bookMarkId) {
         return new ResponseEntity<>(bookMarkService.delete(bookMarkId), HttpStatus.OK);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/bookmarks")
     public ResponseEntity<List<BookMarkDto.BookMarkResponse>> gets(
             @RequestHeader("userId") Long userId,
