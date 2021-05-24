@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import static com.wip.bool.user.domain.QUser.user;
 import static com.wip.bool.dept.domain.QDept.dept;
+import static com.wip.bool.user.domain.QUserConfig.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,10 +24,15 @@ public class UserRepository {
         return user;
     }
 
-    public Optional<User> findById(Long id) {
-        return Optional.ofNullable(queryFactory.selectFrom(user)
-                .where(user.id.eq(id))
-                .fetchOne());
+    public Optional<User> findById(Long userId) {
+        return Optional.ofNullable(
+                queryFactory.select(user)
+                .from(user)
+                .innerJoin(user.userConfig, userConfig)
+                .fetchJoin()
+                .where(user.id.eq(userId))
+                .fetchOne()
+        );
     }
 
     public List<User> findAllByRole(Role role) {
@@ -68,7 +74,8 @@ public class UserRepository {
                             .innerJoin(dept)
                             .fetchJoin()
                             .where(user.id.eq(userId))
-                            .fetchOne());
+                            .fetchOne()
+        );
     }
 
     public List<Long> usersByDept(Long deptId) {
