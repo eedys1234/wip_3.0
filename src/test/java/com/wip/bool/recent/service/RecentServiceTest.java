@@ -68,7 +68,7 @@ public class RecentServiceTest {
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(Optional.ofNullable(songDetail)).when(songDetailRepository).findById(anyLong());
         doReturn(recent).when(recentRepository).save(any(Recent.class));
-        Long id = recentService.save(user.getId(), requestDto);
+        Long id = recentService.saveRecent(user.getId(), requestDto);
 
         //then
         assertThat(id).isEqualTo(recent.getId());
@@ -99,7 +99,7 @@ public class RecentServiceTest {
                 .map(recent -> new RecentDto.RecentResponse(recent.getId(), recent.getSongDetail().getId(), recent.getSongDetail().getTitle(), recent.getCreateDate()))
                 .collect(Collectors.toList())).when(recentRepository).findAll(anyLong(), anyInt(), anyInt());
 
-        List<RecentDto.RecentResponse> values = recentService.gets(user.getId(), size, offset);
+        List<RecentDto.RecentResponse> values = recentService.findAll(user.getId(), size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(recents.size());
