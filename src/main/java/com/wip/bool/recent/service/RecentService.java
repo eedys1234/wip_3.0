@@ -24,7 +24,7 @@ public class RecentService {
     private final SongDetailRepository songDetailRepository;
 
     @Transactional
-    public Long save(Long userId, RecentDto.RecentSaveRequest requestDto) {
+    public Long saveRecent(Long userId, RecentDto.RecentSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
@@ -39,7 +39,7 @@ public class RecentService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecentDto.RecentResponse> gets(Long userId, int size, int offset) {
+    public List<RecentDto.RecentResponse> findAll(Long userId, int size, int offset) {
         return recentRepository.findAll(userId, size, offset);
     }
 }

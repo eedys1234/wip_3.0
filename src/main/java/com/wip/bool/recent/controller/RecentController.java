@@ -21,15 +21,16 @@ public class RecentController {
     private final RecentService recentService;
 
     @PostMapping(value = "/recent")
-    public ResponseEntity<Long> save(@Valid @RequestBody RecentDto.RecentSaveRequest requestDto,
-                                     @RequestHeader("userId") Long userId,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Long> saveRecent(@Valid @RequestBody RecentDto.RecentSaveRequest requestDto,
+                                           @RequestHeader("userId") Long userId,
+                                           Errors errors,
+                                           UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = recentService.save(userId, requestDto);
+        Long id = recentService.saveRecent(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -38,11 +39,11 @@ public class RecentController {
     }
 
     @GetMapping(value = "/recents")
-    public ResponseEntity<List<RecentDto.RecentResponse>> gets(
-            @RequestHeader("userId") Long userId,
-            @RequestParam("size") int size,
-            @RequestParam("offset") int offset) {
+    public ResponseEntity<List<RecentDto.RecentResponse>> findAll(
+            @RequestHeader Long userId,
+            @RequestParam int size,
+            @RequestParam int offset) {
 
-        return new ResponseEntity<>(recentService.gets(userId, size, offset), HttpStatus.OK);
+        return ResponseEntity.ok(recentService.findAll(userId, size, offset));
     }
 }

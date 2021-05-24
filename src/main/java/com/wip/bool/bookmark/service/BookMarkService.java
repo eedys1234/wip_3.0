@@ -27,7 +27,7 @@ public class BookMarkService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long save(Long userId, BookMarkDto.BookMarkSaveRequest requestDto) {
+    public Long saveBookMark(Long userId, BookMarkDto.BookMarkSaveRequest requestDto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
@@ -41,14 +41,14 @@ public class BookMarkService {
     }
 
     @Transactional
-    public Long delete(Long bookMarkId) {
-        BookMark bookMark = bookMarkRepository.findById(bookMarkId)
+    public Long deleteBookMark(Long userId, Long bookMarkId) {
+        BookMark bookMark = bookMarkRepository.findById(userId, bookMarkId)
                 .orElseThrow(() -> new EntityNotFoundException(bookMarkId, ErrorCode.NOT_FOUND_BOOKMARK));
         return bookMarkRepository.delete(bookMark);
     }
 
     @Transactional(readOnly = true)
-    public List<BookMarkDto.BookMarkResponse> gets(Long userId, String sort, String order, int size, int offset) {
+    public List<BookMarkDto.BookMarkResponse> findBookMarks(Long userId, String sort, String order, int size, int offset) {
 
         SortType sortType = SortType.valueOf(sort);
         OrderType orderType = OrderType.valueOf(order);
