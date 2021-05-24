@@ -35,8 +35,12 @@ public class BookMarkRepository {
         return 1L;
     }
 
-    public Optional<BookMark> findById(Long bookMarkId) {
-        return Optional.ofNullable(entityManager.find(BookMark.class, bookMarkId));
+    public Optional<BookMark> findById(Long userId, Long bookMarkId) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(bookMark)
+                .where(bookMark.user.id.eq(userId), bookMark.id.eq(bookMarkId))
+                .fetchOne()
+        );
     }
 
     public List<BookMark> findAll() {
