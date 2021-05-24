@@ -33,7 +33,7 @@ public class BookMarkController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/bookmark/{bookMarkId:[\\d]+}")
