@@ -63,21 +63,14 @@ public class UserBoxService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        UserBox userBox = null;
         Role role = user.getRole();
 
-        if(role == Role.ROLE_ADMIN) {
-            userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
-        }
-        else if(role == Role.ROLE_NORMAL) {
-
-            userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
-        }
-        else {
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
             throw new AuthorizationException();
         }
+
+        UserBox userBox = userBoxRepository.findById(userId, userBoxId, role)
+                .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
 
         userBox.updateUserBoxName(requestDto.getUserBoxName());
         return userBoxRepository.save(userBox).getId();
@@ -88,20 +81,14 @@ public class UserBoxService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        UserBox userBox = null;
         Role role = user.getRole();
 
-        if(role == Role.ROLE_ADMIN) {
-            userBox = userBoxRepository.findById(userBoxId)
-                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
-        }
-        else if(role == Role.ROLE_NORMAL) {
-            userBox = userBoxRepository.findById(userId, userBoxId)
-                    .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
-        }
-        else {
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
             throw new AuthorizationException();
         }
+
+        UserBox userBox = userBoxRepository.findById(userId, userBoxId, role)
+                .orElseThrow(() -> new EntityNotFoundException(userBoxId, ErrorCode.NOT_FOUND_USER_BOX));
 
         Rights right = rightRepository.findByTargetIdAndTarget(Target.USERBOX, userBox.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_RIGHT));

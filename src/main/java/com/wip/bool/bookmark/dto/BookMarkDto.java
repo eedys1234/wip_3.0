@@ -33,10 +33,14 @@ public class BookMarkDto {
         @JsonProperty(value = "create_date")
         private LocalDateTime createDate;
 
-        public BookMarkResponse(Long bookMarkId, Long songDetailId, String title, LocalDateTime createDate) {
+        @JsonProperty(value = "guitar_code")
+        private String guitarCode;
+
+        public BookMarkResponse(Long bookMarkId, Long songDetailId, String title, String guitarCode, LocalDateTime createDate) {
             this.bookmarkId = bookMarkId;
             this.songDetailId = songDetailId;
             this.title = title;
+            this.guitarCode = guitarCode;
             this.createDate = createDate;
         }
     }

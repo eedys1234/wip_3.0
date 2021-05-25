@@ -30,6 +30,7 @@ public class BookMark {
     private SongDetail songDetail;
 
     @CreatedDate
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
     public static BookMark createBookMark(User user, SongDetail songDetail) {

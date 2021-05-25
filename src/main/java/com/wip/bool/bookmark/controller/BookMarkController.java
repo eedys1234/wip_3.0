@@ -24,7 +24,7 @@ public class BookMarkController {
 
     @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/bookmark")
-    public ResponseEntity<Long> save(@Valid @RequestBody BookMarkDto.BookMarkSaveRequest requestDto,
+    public ResponseEntity<Long> saveBookMark(@Valid @RequestBody BookMarkDto.BookMarkSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -32,28 +32,29 @@ public class BookMarkController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = bookMarkService.save(userId, requestDto);
+        Long id = bookMarkService.saveBookMark(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/bookmark/{bookMarkId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("bookMarkId") Long bookMarkId) {
-        return new ResponseEntity<>(bookMarkService.delete(bookMarkId), HttpStatus.OK);
+    public ResponseEntity<Long> deleteBookMark(@PathVariable Long bookMarkId,
+                                               @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(bookMarkService.deleteBookMark(userId, bookMarkId));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/bookmarks")
     public ResponseEntity<List<BookMarkDto.BookMarkResponse>> gets(
             @RequestHeader("userId") Long userId,
-            @RequestParam("sort") String sort,
-            @RequestParam("order") String order,
-            @RequestParam("size") int size,
-            @RequestParam("offset") int offset) {
+            @RequestParam String sort,
+            @RequestParam String order,
+            @RequestParam int size,
+            @RequestParam int offset) {
 
-        return new ResponseEntity<>(bookMarkService.gets(userId, sort, order, size, offset), HttpStatus.OK);
+        return ResponseEntity.ok(bookMarkService.findBookMarks(userId, sort, order, size, offset));
     }
 }
