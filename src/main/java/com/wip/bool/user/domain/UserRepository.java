@@ -71,7 +71,7 @@ public class UserRepository {
         return Optional.ofNullable(
                 queryFactory.select(user)
                             .from(user)
-                            .innerJoin(dept)
+                            .innerJoin(user.dept, dept)
                             .fetchJoin()
                             .where(user.id.eq(userId))
                             .fetchOne()
