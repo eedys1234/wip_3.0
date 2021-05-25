@@ -52,16 +52,15 @@ public class UserController {
 //        return new ResponseEntity<>(resValue, HttpStatus.OK);
 //    }
 
-    @PutMapping(value = "/user/approval/{id}")
-    public ResponseEntity<Long> approve(@PathVariable Long id) {
+    @PutMapping(value = "/user/approval/{userId:[\\d]+}")
+    public ResponseEntity<Long> approve(@PathVariable Long userId) {
 
-        Long resValue = userService.approve(id);
-
-        return new ResponseEntity<>(resValue, HttpStatus.OK);
+        Long resValue = userService.approve(userId);
+        return ResponseEntity.ok(resValue);
     }
 
-    @PutMapping(value = "/user/{id}")
-    public ResponseEntity<Long> updateUser(@PathVariable Long id,
+    @PutMapping(value = "/user/{userId:[\\d]+}")
+    public ResponseEntity<Long> updateUser(@PathVariable Long userId,
                                            @RequestBody @Valid UserDto.UserUpdateRequest requestDto,
                                            Errors errors) {
 
@@ -69,16 +68,12 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long resValue = userService.update(id, requestDto);
-
-        return new ResponseEntity<>(resValue, HttpStatus.OK);
+        return ResponseEntity.ok(userService.update(userId, requestDto));
     }
 
-    @DeleteMapping(value = "/user/{id}")
-    public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
+    @DeleteMapping(value = "/user/{userId:[\\d]+}")
+    public ResponseEntity<Long> deleteUser(@PathVariable Long userId) {
 
-        Long resValue = userService.delete(id);
-
-        return new ResponseEntity<>(resValue, HttpStatus.OK);
+        return ResponseEntity.ok(userService.delete(userId));
     }
 }
