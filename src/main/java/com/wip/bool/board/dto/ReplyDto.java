@@ -35,6 +35,21 @@ public class ReplyDto {
 
     @Getter
     @NoArgsConstructor
+    public static class ReplyUpdateRequest {
+
+        @NotBlank
+        private String content;
+
+        @JsonProperty(value = "org_file_names")
+        private String orgFileNames;
+
+        @JsonProperty(value = "temp_file_names")
+        private String tempFileNames;
+
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class ReplyResponse {
 
         @JsonProperty(value = "reply_id")

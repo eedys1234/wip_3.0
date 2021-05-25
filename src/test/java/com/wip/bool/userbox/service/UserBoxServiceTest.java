@@ -17,6 +17,7 @@ import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.rights.domain.Rights;
 import com.wip.bool.rights.domain.RightsRepository;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import com.wip.bool.userbox.domain.UserBox;
@@ -80,7 +81,7 @@ public class UserBoxServiceTest {
         ReflectionTestUtils.setField(requestDto, "userBoxName", "사용자박스_1");
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(userBox).when(userBoxRepository).save(any(UserBox.class));
         doReturn(right).when(rightRepository).save(any(Rights.class));
         Long id = userBoxService.addUserBox(user.getId(), requestDto);
@@ -89,7 +90,7 @@ public class UserBoxServiceTest {
         assertThat(id).isEqualTo(1L);
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
         verify(userBoxRepository, times(1)).save(any(UserBox.class));
     }
 
@@ -107,8 +108,8 @@ public class UserBoxServiceTest {
         ReflectionTestUtils.setField(requestDto, "userBoxName", "사용자박스_2");
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(any(Long.class), any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(anyLong(), anyLong(), any(Role.class));
         doReturn(update_userBox).when(userBoxRepository).save(any(UserBox.class));
         Long id = userBoxService.updateUserBox(user.getId(), userBox.getId(), requestDto);
 
@@ -116,8 +117,8 @@ public class UserBoxServiceTest {
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(userBoxRepository, times(1)).findById(any(Long.class), any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(userBoxRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
         verify(userBoxRepository, times(1)).save(any(UserBox.class));
     }
 
@@ -135,8 +136,8 @@ public class UserBoxServiceTest {
         ReflectionTestUtils.setField(requestDto, "userBoxName", "사용자박스_2");
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(anyLong(), anyLong(), any(Role.class));
         doReturn(update_userBox).when(userBoxRepository).save(any(UserBox.class));
         Long id = userBoxService.updateUserBox(user.getId(), userBox.getId(), requestDto);
 
@@ -144,8 +145,8 @@ public class UserBoxServiceTest {
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(userBoxRepository, times(1)).findById(any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(userBoxRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
         verify(userBoxRepository, times(1)).save(any(UserBox.class));
     }
 
@@ -159,9 +160,9 @@ public class UserBoxServiceTest {
         Rights right = getRight(userBox.getId(), user.getId());
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(any(Long.class), any(Long.class));
-        doReturn(Optional.ofNullable(right)).when(rightRepository).findByTargetIdAndTarget(any(Target.class), any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(userBox)).when(userBoxRepository).findById(anyLong(), anyLong(), any(Role.class));
+        doReturn(Optional.ofNullable(right)).when(rightRepository).findByTargetIdAndTarget(any(Target.class), anyLong());
         doNothing().when(rightRepository).delete(any(Rights.class));
         doReturn(1L).when(userBoxRepository).delete(any(UserBox.class));
         Long resValue = userBoxService.deleteUserBox(user.getId(), userBox.getId());
@@ -170,9 +171,9 @@ public class UserBoxServiceTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(userRepository, times(1)).findById(any(Long.class));
-        verify(userBoxRepository, times(1)).findById(any(Long.class), any(Long.class));
-        verify(rightRepository, times(1)).findByTargetIdAndTarget(any(Target.class), any(Long.class));
+        verify(userRepository, times(1)).findById(anyLong());
+        verify(userBoxRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
+        verify(rightRepository, times(1)).findByTargetIdAndTarget(any(Target.class), anyLong());
         verify(rightRepository, times(1)).delete(any(Rights.class));
         verify(userBoxRepository, times(1)).delete(any(UserBox.class));
     }
@@ -219,11 +220,11 @@ public class UserBoxServiceTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
-        doReturn(Optional.ofNullable(dept)).when(deptRepository).findById(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(anyLong());
+        doReturn(Optional.ofNullable(dept)).when(deptRepository).findById(anyLong());
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
-                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), anyInt(), anyInt(), anyLong());
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByDept(user.getId(), dept.getId(), order, size, offset);
 
         //then
@@ -234,7 +235,7 @@ public class UserBoxServiceTest {
                         .collect(Collectors.toList()));
 
         //verify
-        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(Long.class));
+        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), anyInt(), anyInt(), anyLong());
 
     }
 
@@ -260,11 +261,11 @@ public class UserBoxServiceTest {
         }
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(anyLong());
         doReturn(groupMembers).when(groupMemberRepository).findAllByGroup(any(List.class));
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
-                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), anyInt(), anyInt(), any(List.class));
 
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByGroup(user.getId(), groupId, order, size, offset);
 
@@ -277,8 +278,8 @@ public class UserBoxServiceTest {
         );
 
         //verify
-        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
-        verify(userRepository, times(1)).deptByUser(any(Long.class));
+        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), anyInt(), anyInt(), any(List.class));
+        verify(userRepository, times(1)).deptByUser(anyLong());
         verify(groupMemberRepository, times(1)).findAllByGroup(any(List.class));
 
     }
@@ -298,11 +299,11 @@ public class UserBoxServiceTest {
         List<UserBox> userBoxes = UserBoxFactory.getUserBoxesWithId(user);
 
         //when
-        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(any(Long.class));
-        doReturn(groups).when(groupRepository).findAllByUser(any(Long.class));
+        doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(anyLong());
+        doReturn(groups).when(groupRepository).findAllByUser(anyLong());
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
-                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+                .collect(Collectors.toList())).when(userBoxRepository).findAll(any(OrderType.class), anyInt(), anyInt(), any(List.class));
         List<UserBoxDto.UserBoxResponse> values = userBoxService.findAllByTotal(user.getId(), order, size, offset);
 
         //then
@@ -314,9 +315,9 @@ public class UserBoxServiceTest {
         );
 
         //verify
-        verify(userRepository, times(1)).deptByUser(any(Long.class));
-        verify(groupRepository, times(1)).findAllByUser(any(Long.class));
-        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), any(Integer.class), any(Integer.class), any(List.class));
+        verify(userRepository, times(1)).deptByUser(anyLong());
+        verify(groupRepository, times(1)).findAllByUser(anyLong());
+        verify(userBoxRepository, times(1)).findAll(any(OrderType.class), anyInt(), anyInt(), any(List.class));
     }
 
 }

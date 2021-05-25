@@ -3,6 +3,7 @@ package com.wip.bool.board.service;
 import com.wip.bool.board.domain.*;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.exception.excp.EntityNotFoundException;
 import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.user.domain.Role;
@@ -58,7 +59,6 @@ public class ReplyService {
                     .collect(Collectors.toList());
 
             updateBoard(reply, imageFiles);
-
             moveImageFile(imageFiles, requestDto.getTempFileNames());
         }
 
@@ -76,23 +76,50 @@ public class ReplyService {
     }
 
     @Transactional
+    public Long updateReply(Long userId, Long replyId, ReplyDto.ReplyUpdateRequest requestDto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
+
+        Role role = user.getRole();
+
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
+            throw new AuthorizationException();
+        }
+
+        Reply reply = replyRepository.findById(userId, replyId, role)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
+
+        reply.updateContent(requestDto.getContent());
+
+        if(hasText(requestDto.getOrgFileNames())) {
+
+            List<ImageFile> imageFiles = Arrays.stream(requestDto.getOrgFileNames().split(","))
+                    .map(orgFileName -> ImageFile.createImageFile(imageFilePath, orgFileName))
+                    .collect(Collectors.toList());
+
+            deleteImageFile(imageFiles);
+            updateBoard(reply, imageFiles);
+            moveImageFile(imageFiles, requestDto.getTempFileNames());
+        }
+
+        return reply.getId();
+    }
+
+    @Transactional
     public Long deleteReply(Long userId, Long replyId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
-        Reply reply = null;
 
-        if(role == Role.ROLE_ADMIN) {
-            reply = replyRepository.findById(replyId)
-                    .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
+            throw new AuthorizationException();
         }
-        else if(role == Role.ROLE_NORMAL) {
-            reply = replyRepository.findById(userId, replyId)
-                    .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
 
-        }
+        Reply reply = replyRepository.findById(userId, replyId, role)
+                    .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
 
         if(reply.getChildReply().size() != 0) {
             reply.deleteStatus();
@@ -161,5 +188,15 @@ public class ReplyService {
         }
 
         return isSuccess;
+    }
+
+    private boolean deleteImageFile(List<ImageFile> imageFiles) {
+
+        for(ImageFile imageFile : imageFiles) {
+            if(!imageFile.deleteImageFile()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
