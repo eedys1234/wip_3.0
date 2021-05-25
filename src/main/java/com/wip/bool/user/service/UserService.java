@@ -67,17 +67,17 @@ public class UserService implements UserDetailsService {
             user.updatePosition(position);
         }
 
-        return userRepository.save(user).getId();
+        return user.getId();
     }
 
     @Transactional
     public Long approve(Long userId) {
 
         User user = userRepository.findById(userId)
-                .map(entity -> entity.approve())
                 .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        return userRepository.save(user).getId();
+        user.approve();
+        return user.getId();
     }
 
     @Transactional
@@ -105,8 +105,7 @@ public class UserService implements UserDetailsService {
 
     private void duplicationUser(String email) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("email이 존재하지 않습니다. email = " + email));
+        User user = userRepository.findByEmail(email).orElse(null);
 
         if(!Objects.isNull(user)) {
             throw new IllegalStateException("");

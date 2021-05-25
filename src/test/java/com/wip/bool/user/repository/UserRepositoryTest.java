@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -128,14 +129,18 @@ public class UserRepositoryTest {
     public void 사용자_리스트_조회_Repository() throws Exception {
 
         //given
-        User user = UserFactory.getNormalUser();
-        User addUser = userRepository.save(user);
+        List<User> users = UserFactory.getNormalUsers();
+
+        for(User user : users) {
+            userRepository.save(user);
+        }
 
         //when
-        List<User> users = userRepository.findAll();
+        List<User> values = userRepository.findAll();
 
         //then
-        assertThat(users.size()).isEqualTo(1);
-        assertThat(users.get(0).getId()).isEqualTo(addUser.getId());
+        assertThat(values.size()).isEqualTo(users.size());
+        assertThat(values).extracting(User::getEmail)
+                .containsAll(users.stream().map(User::getEmail).collect(Collectors.toList()));
     }
 }
