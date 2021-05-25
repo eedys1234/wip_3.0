@@ -2,6 +2,8 @@ package com.wip.bool.group.controller;
 
 import com.wip.bool.group.dto.GroupMemberDto;
 import com.wip.bool.group.service.GroupMemberService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class GroupMemberController {
 
     private final GroupMemberService groupMemberService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/group/member")
     public ResponseEntity<Long> saveGroupMember(@RequestBody @Valid GroupMemberDto.GroupMemberSaveRequest requestDto,
                                                 @RequestHeader("userId") Long userId,
@@ -35,6 +38,7 @@ public class GroupMemberController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/group/member/{groupMemberId:[\\d]+}")
     public ResponseEntity<Long> deleteGroupMember(@PathVariable Long groupMemberId,
                                                   @RequestHeader("userId") Long userId) {
@@ -42,6 +46,7 @@ public class GroupMemberController {
         return ResponseEntity.ok(groupMemberService.deleteGroupMember(userId, groupMemberId));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/group/{groupId:[\\d]+}/members")
     public ResponseEntity<List<GroupMemberDto.GroupMemberResponse>> findAllByGroup(@PathVariable Long groupId,
                                                                                    @RequestParam String order,

@@ -64,7 +64,7 @@ public class UserBoxControllerTest {
         UserBox userBox = UserBoxFactory.getUserBox(user, userBoxName, 1);
         UserBoxDto.UserBoxSaveRequest requestDto = new UserBoxDto.UserBoxSaveRequest();
         ReflectionTestUtils.setField(requestDto, "userBoxName", userBoxName);
-        doReturn(userBox.getId()).when(userBoxService).addUserBox(any(Long.class), any(UserBoxDto.UserBoxSaveRequest.class));
+        doReturn(userBox.getId()).when(userBoxService).addUserBox(anyLong(), any(UserBoxDto.UserBoxSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/userbox")
@@ -78,7 +78,7 @@ public class UserBoxControllerTest {
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
-        verify(userBoxService, times(1)).addUserBox(any(Long.class), any(UserBoxDto.UserBoxSaveRequest.class));
+        verify(userBoxService, times(1)).addUserBox(anyLong(), any(UserBoxDto.UserBoxSaveRequest.class));
 
     }
     
@@ -93,7 +93,7 @@ public class UserBoxControllerTest {
         UserBox userBox = UserBoxFactory.getUserBox(user, userBoxName, 1);
         UserBoxDto.UserBoxUpdateRequest requestDto = new UserBoxDto.UserBoxUpdateRequest();
         ReflectionTestUtils.setField(requestDto, "userBoxName", updateUserBoxName);
-        doReturn(userBox.getId()).when(userBoxService).updateUserBox(any(Long.class), any(Long.class), any(UserBoxDto.UserBoxUpdateRequest.class));
+        doReturn(userBox.getId()).when(userBoxService).updateUserBox(anyLong(), anyLong(), any(UserBoxDto.UserBoxUpdateRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/userbox/1")
@@ -107,7 +107,7 @@ public class UserBoxControllerTest {
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
-        verify(userBoxService, times(1)).updateUserBox(any(Long.class), any(Long.class), any(UserBoxDto.UserBoxUpdateRequest.class));
+        verify(userBoxService, times(1)).updateUserBox(anyLong(), anyLong(), any(UserBoxDto.UserBoxUpdateRequest.class));
     }
 
     @DisplayName("사용자박스 삭제")
@@ -116,7 +116,7 @@ public class UserBoxControllerTest {
 
         //given
         User user = UserFactory.getNormalUser(1);
-        doReturn(1L).when(userBoxService).deleteUserBox(any(Long.class), any(Long.class));
+        doReturn(1L).when(userBoxService).deleteUserBox(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/userbox/1")
@@ -129,7 +129,7 @@ public class UserBoxControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(userBoxService, times(1)).deleteUserBox(any(Long.class), any(Long.class));
+        verify(userBoxService, times(1)).deleteUserBox(anyLong(), anyLong());
     }
 
     @DisplayName("사용자박스 리스트 조회 by User")
@@ -146,7 +146,7 @@ public class UserBoxControllerTest {
 
         doReturn(userBoxes.stream()
         .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
-        .collect(Collectors.toList())).when(userBoxService).findAllByUser(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        .collect(Collectors.toList())).when(userBoxService).findAllByUser(anyLong(), anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("order", order);
@@ -169,7 +169,7 @@ public class UserBoxControllerTest {
 
 
         //verify
-        verify(userBoxService, times(1)).findAllByUser(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(userBoxService, times(1)).findAllByUser(anyLong(), anyString(), anyInt(), anyInt());
     }
 
     @DisplayName("사용자박스 리스트 조회 by Dept")
@@ -187,7 +187,7 @@ public class UserBoxControllerTest {
 
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 3L))
-                .collect(Collectors.toList())).when(userBoxService).findAllByDept(any(Long.class), any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+                .collect(Collectors.toList())).when(userBoxService).findAllByDept(anyLong(), anyLong(), anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("deptId", String.valueOf(deptId));
@@ -211,7 +211,7 @@ public class UserBoxControllerTest {
 
 
         //verify
-        verify(userBoxService, times(1)).findAllByDept(any(Long.class), any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(userBoxService, times(1)).findAllByDept(anyLong(), anyLong(), anyString(), anyInt(), anyInt());
     }
 
     @DisplayName("사용자박스 리스트 조회 by Group")
@@ -229,7 +229,7 @@ public class UserBoxControllerTest {
 
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
-                .collect(Collectors.toList())).when(userBoxService).findAllByGroup(any(Long.class), any(String.class), any(String.class), any(Integer.class), any(Integer.class));
+                .collect(Collectors.toList())).when(userBoxService).findAllByGroup(anyLong(), anyString(), anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("groupId", groupId);
@@ -253,7 +253,7 @@ public class UserBoxControllerTest {
 
 
         //verify
-        verify(userBoxService, times(1)).findAllByGroup(any(Long.class), any(String.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(userBoxService, times(1)).findAllByGroup(anyLong(), anyString(), anyString(), anyInt(), anyInt());
 
     }
 
@@ -271,7 +271,7 @@ public class UserBoxControllerTest {
 
         doReturn(userBoxes.stream()
                 .map(userBox -> new UserBoxDto.UserBoxResponse(userBox, 1L))
-                .collect(Collectors.toList())).when(userBoxService).findAllByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+                .collect(Collectors.toList())).when(userBoxService).findAllByTotal(anyLong(), anyString(), anyInt(), anyInt());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("order", order);
@@ -294,7 +294,7 @@ public class UserBoxControllerTest {
 
 
         //verify
-        verify(userBoxService, times(1)).findAllByTotal(any(Long.class), any(String.class), any(Integer.class), any(Integer.class));
+        verify(userBoxService, times(1)).findAllByTotal(anyLong(), anyString(), anyInt(), anyInt());
     }
 
 }

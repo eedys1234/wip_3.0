@@ -2,6 +2,8 @@ package com.wip.bool.calendar.controller;
 
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class CalendarController {
 
     private final CalendarService calendarService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/calendar")
     public ResponseEntity<Long> save(@Valid @RequestBody CalendarDto.CalendarSaveRequest requestDto,
                                     @RequestHeader("userId") Long userId,
@@ -40,6 +43,7 @@ public class CalendarController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-dept")
     public ResponseEntity<List<CalendarDto.CalendarResponse>> getDeptCalendars(
             @RequestHeader("userId") @Positive Long userId,
@@ -49,6 +53,7 @@ public class CalendarController {
         return ResponseEntity.ok(calendarService.getDeptCalendars(userId, from, to));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-individual")
     public ResponseEntity<List<CalendarDto.CalendarResponse>> getIndividualCalendar(
             @RequestHeader("userId") @Positive Long userId,
@@ -59,6 +64,7 @@ public class CalendarController {
         return ResponseEntity.ok(calendarService.getIndividualCalenders(userId, from, to));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/calendar/{calendarId:[\\d]+}")
     public ResponseEntity<Long> delete(@PathVariable("calendarId") Long calendarId,
                                        @RequestHeader("userId") Long userId) {

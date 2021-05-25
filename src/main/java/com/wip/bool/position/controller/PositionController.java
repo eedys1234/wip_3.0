@@ -2,6 +2,8 @@ package com.wip.bool.position.controller;
 
 import com.wip.bool.position.service.PositionService;
 import com.wip.bool.position.dto.PositionDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class PositionController {
 
     private final PositionService positionService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/position")
     public ResponseEntity<Long> add(@RequestBody @Valid PositionDto.PositionSaveRequest requestDto,
                                     @RequestHeader("userId") Long userId,
@@ -36,6 +39,7 @@ public class PositionController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/position/{id}")
     public ResponseEntity<Long> update(@RequestBody @Valid PositionDto.PositionUpdateRequest requestDto,
                                        @RequestHeader("userId") Long userId,
@@ -49,11 +53,13 @@ public class PositionController {
         return ResponseEntity.ok(positionService.updatePosition(userId, positionId, requestDto));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/positions")
     public ResponseEntity<List<PositionDto.PositionResponse>> findAll() {
         return ResponseEntity.ok(positionService.findAll());
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/position/{positionId:[\\d]+}")
     public ResponseEntity<Long> deletePosition(@PathVariable Long positionId,
                                                @RequestHeader("userId") Long userId) {

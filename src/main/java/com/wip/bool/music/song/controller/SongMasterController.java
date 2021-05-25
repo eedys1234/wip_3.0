@@ -2,6 +2,8 @@ package com.wip.bool.music.song.controller;
 
 import com.wip.bool.music.song.service.SongMasterService;
 import com.wip.bool.music.song.dto.SongMasterDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class SongMasterController {
 
     private final SongMasterService songMasterService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-master")
     public ResponseEntity<Long> saveSongMaster(@Valid @RequestBody SongMasterDto.SongMasterSaveRequest requestDto,
                                                @RequestHeader("userId") Long userId,
@@ -38,12 +41,14 @@ public class SongMasterController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-master/{songMasterId:[\\d]+}")
     public ResponseEntity<Long> deleteSongMaster(@PathVariable Long songMasterId,
                                                  @RequestHeader("userId") Long userId) {
         return ResponseEntity.ok(songMasterService.deleteSongMaster(userId, songMasterId));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/song-masters")
     public ResponseEntity<List<SongMasterDto.SongMasterResponse>> getsSongMaster() {
         return ResponseEntity.ok(songMasterService.getsSongMaster());

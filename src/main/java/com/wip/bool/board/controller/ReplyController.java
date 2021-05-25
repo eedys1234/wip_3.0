@@ -2,6 +2,8 @@ package com.wip.bool.board.controller;
 
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.board.service.ReplyService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,9 +24,10 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/board/{boardId:[\\d]+}/reply")
     public ResponseEntity<Long> saveReply(@Valid @RequestBody ReplyDto.ReplySaveRequest requestDto,
-                                     @PathVariable("boardId") Long boardId,
+                                     @PathVariable Long boardId,
                                      @RequestHeader("userId") Long userId,
                                      Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -39,26 +42,36 @@ public class ReplyController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/board/{boardId:[\\d]+}/reply")
     public ResponseEntity<List<ReplyDto.ReplyResponse>> getsByBoard(
-                                    @PathVariable("boardId") Long boardId,
-                                    @RequestParam("size") int size,
-                                    @RequestParam("offset") int offset) {
+                                    @PathVariable Long boardId,
+                                    @RequestParam int size,
+                                    @RequestParam int offset) {
 
         return ResponseEntity.ok(replyService.getsByBoard(boardId, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/board/{boardId:[\\d]+}/reply/{replyId:[\\d]+}")
-    public ResponseEntity<List<ReplyDto.ReplyResponse>> getsByReply(
-                                    @PathVariable("boardId") Long boardId,
-                                    @PathVariable("replyId") Long replyId,
-                                    @RequestParam("size") int size,
-                                    @RequestParam("offset") int offset
-                                    ) {
+    public ResponseEntity<List<ReplyDto.ReplyResponse>> getsByReply(@PathVariable Long boardId,
+                                                                    @PathVariable Long replyId,
+                                                                    @RequestParam int size,
+                                                                    @RequestParam int offset) {
 
         return ResponseEntity.ok(replyService.getsByReply(replyId, size, offset));
     }
 
+    @PutMapping(value = "/board/{boardId:[\\d]+}/reply/{replyId:[\\d]+}")
+    public ResponseEntity<Long> updateReply(@PathVariable Long replyId,
+                                            @PathVariable Long boardId,
+                                            @RequestHeader("userId") Long userId,
+                                            @Valid @RequestBody ReplyDto.ReplyUpdateRequest requestDto) {
+
+        return ResponseEntity.ok(replyService.updateReply(userId, replyId, requestDto));
+    }
+
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/board/{boardId:[\\d]+}/reply/{replyId:[\\d]+}")
     public ResponseEntity<Long> deleteReply(@PathVariable("replyId") Long replyId,
                                        @PathVariable("boardId") Long boardId,

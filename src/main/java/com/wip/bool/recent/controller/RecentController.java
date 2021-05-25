@@ -2,6 +2,8 @@ package com.wip.bool.recent.controller;
 
 import com.wip.bool.recent.service.RecentService;
 import com.wip.bool.recent.dto.RecentDto;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,11 @@ public class RecentController {
 
     private final RecentService recentService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/recent")
     public ResponseEntity<Long> saveRecent(@Valid @RequestBody RecentDto.RecentSaveRequest requestDto,
-                                           @RequestHeader("userId") Long userId,
-                                           Errors errors,
-                                           UriComponentsBuilder uriComponentsBuilder) {
+                                     @RequestHeader("userId") Long userId,
+                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -38,11 +40,12 @@ public class RecentController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/recents")
     public ResponseEntity<List<RecentDto.RecentResponse>> findAll(
-            @RequestHeader Long userId,
-            @RequestParam int size,
-            @RequestParam int offset) {
+            @RequestHeader("userId") Long userId,
+            @RequestParam("size") int size,
+            @RequestParam("offset") int offset) {
 
         return ResponseEntity.ok(recentService.findAll(userId, size, offset));
     }

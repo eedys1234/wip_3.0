@@ -1,8 +1,10 @@
 package com.wip.bool.board.domain;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.board.dto.BoardDto;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 import static com.wip.bool.board.domain.QBoard.board;
 import static com.wip.bool.board.domain.QImageFile.imageFile;
+import static com.wip.bool.cmmn.util.RoleUtils.isRoleAdmin;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,17 +43,18 @@ public class BoardRepository {
     public Optional<Board> findById(Long boardId) {
         return Optional.ofNullable(
                 queryFactory.select(board)
-                .from(board)
-                .where(board.id.eq(boardId))
-                .fetchOne()
+                        .from(board)
+                        .where(board.id.eq(boardId))
+                        .fetchOne()
         );
     }
-    public Optional<Board> findById(Long userId, Long boardId) {
+
+    public Optional<Board> findById(Long userId, Long boardId, Role role) {
         return Optional.ofNullable(
                 queryFactory.select(board)
-                .from(board)
-                .where(board.user.id.eq(userId), board.id.eq(boardId))
-                .fetchOne()
+                        .from(board)
+                        .where(eqAdmin(userId, role), board.id.eq(boardId))
+                        .fetchOne()
         );
     }
 
@@ -71,5 +75,7 @@ public class BoardRepository {
         return 1L;
     }
 
-
+    private BooleanExpression eqAdmin(Long userId, Role role) {
+        return !isRoleAdmin(role) ? board.user.id.eq(userId) : null;
+    }
 }

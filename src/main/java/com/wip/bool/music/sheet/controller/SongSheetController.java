@@ -3,6 +3,8 @@ package com.wip.bool.music.sheet.controller;
 import com.wip.bool.exception.excp.BusinessException;
 import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.sheet.service.SongSheetService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ public class SongSheetController {
 
     private final SongSheetService songSheetService;
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet")
     public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                               @RequestHeader("userId") Long userId,
@@ -41,6 +44,7 @@ public class SongSheetController {
     }
 
 
+    @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet/{songSheetId:[\\d]+}")
     public ResponseEntity<Long> deleteSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                                 @PathVariable("songSheetId") Long songSheetId,

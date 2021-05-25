@@ -139,6 +139,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
 
         User user = saveOrUpdate(attributes);
+        attributes.getAttributes().put("id", user.getId());
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),

@@ -60,6 +60,7 @@ public class BoardService {
         return id;
     }
 
+
     @Transactional(readOnly = true)
     public List<BoardDto.BoardSimpleResponse> findBoards(String board, int size, int offset) {
         BoardType boardType = BoardType.valueOf(board);
@@ -79,18 +80,13 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
-        Board board = null;
-        if(role == Role.ROLE_ADMIN) {
-            board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
-        }
-        else if(role == Role.ROLE_NORMAL){
-            board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
-        }
-        else {
+
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
             throw new AuthorizationException();
         }
+
+        Board board = boardRepository.findById(userId, boardId, role)
+                .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
 
         boardRepository.delete(board);
         return 1L;
@@ -103,18 +99,13 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Role role = user.getRole();
-        Board board = null;
-        if(role == Role.ROLE_ADMIN) {
-            board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
-        }
-        else if(role == Role.ROLE_NORMAL){
-            board = boardRepository.findById(userId, boardId)
-                    .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
-        }
-        else {
+
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
             throw new AuthorizationException();
         }
+
+        Board board = boardRepository.findById(userId, boardId, role)
+                .orElseThrow(() -> new EntityNotFoundException(boardId, ErrorCode.NOT_FOUND_BOARD));
 
         board.hiddenStatus();
         return 1L;

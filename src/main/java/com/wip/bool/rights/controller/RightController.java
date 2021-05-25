@@ -2,6 +2,8 @@ package com.wip.bool.rights.controller;
 
 import com.wip.bool.rights.dto.RightDto;
 import com.wip.bool.rights.service.RightService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ public class RightController {
 
     private final RightService rightService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/right")
     public ResponseEntity<Long> saveRight(@Valid @RequestBody RightDto.RightSaveRequest requestDto,
                                           Errors errors,
@@ -35,6 +38,7 @@ public class RightController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/right/{rightId:[\\d]+}")
     public ResponseEntity<Long> deleteRight(@PathVariable Long rightId,
                                             @RequestParam("right_type") String rightType) {
