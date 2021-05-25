@@ -32,7 +32,7 @@ public class RecentController {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = recentService.save(userId, requestDto);
+        Long id = recentService.saveRecent(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
@@ -42,11 +42,11 @@ public class RecentController {
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/recents")
-    public ResponseEntity<List<RecentDto.RecentResponse>> gets(
+    public ResponseEntity<List<RecentDto.RecentResponse>> findAll(
             @RequestHeader("userId") Long userId,
             @RequestParam("size") int size,
             @RequestParam("offset") int offset) {
 
-        return new ResponseEntity<>(recentService.gets(userId, size, offset), HttpStatus.OK);
+        return ResponseEntity.ok(recentService.findAll(userId, size, offset));
     }
 }
