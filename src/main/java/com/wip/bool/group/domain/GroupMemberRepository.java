@@ -1,8 +1,10 @@
 package com.wip.bool.group.domain;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static com.wip.bool.cmmn.util.RoleUtils.isRoleAdmin;
 import static com.wip.bool.group.domain.QGroupMember.groupMember;
 import static com.wip.bool.user.domain.QUser.user;
 
@@ -36,10 +39,10 @@ public class GroupMemberRepository {
         );
     }
 
-    public Optional<GroupMember> findById(Long userId, Long groupMemberId) {
+    public Optional<GroupMember> findById(Long userId, Long groupMemberId, Role role) {
         return Optional.ofNullable(
                queryFactory.selectFrom(groupMember)
-               .where(groupMember.user.id.eq(userId), groupMember.id.eq(groupMemberId))
+               .where(eqAdmin(userId, role), groupMember.id.eq(groupMemberId))
                 .fetchOne()
         );
     }
@@ -65,4 +68,7 @@ public class GroupMemberRepository {
         return orderType == OrderType.ASC ? groupMember.createDate.asc() : groupMember.createDate.desc();
    }
 
+   private BooleanExpression eqAdmin(Long userId, Role role) {
+       return !isRoleAdmin(role) ? groupMember.user.id.eq(userId) : null;
+   }
 }

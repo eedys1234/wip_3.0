@@ -9,6 +9,7 @@ import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.group.dto.GroupDto;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +81,7 @@ public class GroupServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(anyLong(), anyLong());
+        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(anyLong(), anyLong(), any(Role.class));
         doReturn(group).when(groupRepository).save(any(Group.class));
         Long id = groupService.updateGroup(user.getId(), group.getId(), requestDto);
 
@@ -89,7 +90,7 @@ public class GroupServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(any(Long.class));
-        verify(groupRepository, times(1)).findById(any(Long.class), any(Long.class));
+        verify(groupRepository, times(1)).findById(any(Long.class), any(Long.class), any(Role.class));
         verify(groupRepository, times(1)).save(any(Group.class));
     }
 
@@ -103,7 +104,7 @@ public class GroupServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(any(Long.class));
-        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(any(Long.class), any(Long.class));
+        doReturn(Optional.ofNullable(group)).when(groupRepository).findById(any(Long.class), any(Long.class), any(Role.class));
         doReturn(1L).when(groupRepository).delete(any(Group.class));
         Long resValue = groupService.deleteGroup(user.getId(), group.getId());
 
@@ -112,7 +113,7 @@ public class GroupServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(groupRepository, times(1)).findById(anyLong(), anyLong());
+        verify(groupRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
         verify(groupRepository, times(1)).delete(any(Group.class));
     }
 

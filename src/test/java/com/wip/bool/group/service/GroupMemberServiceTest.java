@@ -9,6 +9,7 @@ import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.group.dto.GroupMemberDto;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -81,7 +82,7 @@ public class GroupMemberServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(groupMember)).when(groupMemberRepository).findById(anyLong(), anyLong());
+        doReturn(Optional.ofNullable(groupMember)).when(groupMemberRepository).findById(anyLong(), anyLong(), any(Role.class));
         doReturn(1L).when(groupMemberRepository).delete(any(GroupMember.class));
         resValue = groupMemberService.deleteGroupMember(user.getId(), groupMember.getId());
 
@@ -90,7 +91,7 @@ public class GroupMemberServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(groupMemberRepository, times(1)).findById(anyLong(), anyLong());
+        verify(groupMemberRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
         verify(groupMemberRepository, times(1)).delete(any(GroupMember.class));
 
     }
