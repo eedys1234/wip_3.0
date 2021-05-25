@@ -7,7 +7,6 @@ import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.position.domain.Position;
 import com.wip.bool.position.domain.PositionRepository;
 import com.wip.bool.user.domain.*;
-import com.wip.bool.user.dto.OAuthAttributes;
 import com.wip.bool.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,12 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +23,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService, OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -42,6 +34,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional
     public Long join(UserDto.UserSaveRequest requestDto) {
 
         duplicationUser(requestDto.getEmail());
@@ -54,6 +47,7 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
         return userRepository.save(user).getId();
     }
 
+    @Transactional
     public Long update(Long userId, UserDto.UserUpdateRequest requestDto) {
 
         User user = userRepository.findById(userId)
@@ -73,18 +67,20 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
             user.updatePosition(position);
         }
 
-        return userRepository.save(user).getId();
+        return user.getId();
     }
 
+    @Transactional
     public Long approve(Long userId) {
 
         User user = userRepository.findById(userId)
-                .map(entity -> entity.approve())
                 .orElseThrow(()-> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        return userRepository.save(user).getId();
+        user.approve();
+        return user.getId();
     }
 
+    @Transactional
     public Long delete(Long userId) {
 
         User user = userRepository.findById(userId)
@@ -107,52 +103,13 @@ public class UserService implements UserDetailsService, OAuth2UserService<OAuth2
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public Long login(UserDto.UserLoginRequest requestDto) {
-        return userRepository.login(requestDto.getEmail(), passwordEncoder.encode(requestDto.getUserPassword()));
-    }
-
     private void duplicationUser(String email) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("email이 존재하지 않습니다. email = " + email));
+        User user = userRepository.findByEmail(email).orElse(null);
 
         if(!Objects.isNull(user)) {
             throw new IllegalStateException("");
         }
-    }
-
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
-
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = userRequest.getClientRegistration()
-                                                    .getProviderDetails()
-                                                    .getUserInfoEndpoint()
-                                                    .getUserNameAttributeName();
-
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName,
-                oAuth2User.getAttributes());
-
-
-        User user = saveOrUpdate(attributes);
-        attributes.getAttributes().put("id", user.getId());
-
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
-    }
-
-    private User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.updateInfo(attributes.getName(), attributes.getProfiles()))
-                .orElse(attributes.toEntity());
-
-        return userRepository.save(user);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.wip.bool.security.CustomAuthenticationFilter;
 import com.wip.bool.security.CustomAuthenticationProvider;
 import com.wip.bool.security.CustomLoginSuccessHandler;
 import com.wip.bool.security.CustomOauth2SuccessHandler;
+import com.wip.bool.user.service.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +14,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private final UserService userService;
+    private final Oauth2UserService oauth2UserService;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -28,18 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.httpBasic().disable()
-        .csrf().disable()
-//        .headers().frameOptions().disable()
-//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        .and()
-//        .authorizeRequests()
-//        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-//        .antMatchers("/user/login", "/user/wip-login").permitAll()
-//        .anyRequest().authenticated()
-//        .and()
-//        .oauth2Login().userInfoEndpoint().userService(userService).and().successHandler(customOauth2SuccessHandler())
-//        .and()
-//        .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+        .csrf().disable().authorizeRequests()
+        .anyRequest().permitAll()
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .formLogin().disable()
+        .oauth2Login().userInfoEndpoint().userService(oauth2UserService).and().successHandler(customOauth2SuccessHandler())
+        .and()
+        .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         ;
     }
 

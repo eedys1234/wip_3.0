@@ -4,7 +4,9 @@ import com.wip.bool.cmmn.rights.RightsFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.userbox.UserBoxFactory;
+import com.wip.bool.configure.SecurityConfig;
 import com.wip.bool.configure.TestConfig;
+import com.wip.bool.configure.WebMvcConfig;
 import com.wip.bool.rights.domain.Rights;
 import com.wip.bool.rights.domain.RightsRepository;
 import com.wip.bool.user.domain.User;
@@ -22,11 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Import(TestConfig.class)
-@ActiveProfiles("test")
+@Import(value = {TestConfig.class, SecurityConfig.class, WebMvcConfig.class})
+@ActiveProfiles(TEST)
 @Transactional
 public class UserBoxRepositoryTest {
 
