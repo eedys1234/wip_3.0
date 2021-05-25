@@ -8,9 +8,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wip.bool.user.domain.QUser.user;
 import static com.wip.bool.dept.domain.QDept.dept;
-import static com.wip.bool.user.domain.QUserConfig.*;
+import static com.wip.bool.position.domain.QPosition.position;
+import static com.wip.bool.user.domain.QUser.user;
+import static com.wip.bool.user.domain.QUserConfig.userConfig;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,6 +44,10 @@ public class UserRepository {
 
     public List<User> findAll() {
         return queryFactory.selectFrom(user)
+                .leftJoin(user.dept, dept)
+                .fetchJoin()
+                .leftJoin(user.position, position)
+                .fetchJoin()
                 .fetch();
     }
 
@@ -71,7 +76,7 @@ public class UserRepository {
         return Optional.ofNullable(
                 queryFactory.select(user)
                             .from(user)
-                            .innerJoin(dept)
+                            .innerJoin(user.dept, dept)
                             .fetchJoin()
                             .where(user.id.eq(userId))
                             .fetchOne()

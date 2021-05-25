@@ -39,6 +39,22 @@ public class UserFactory {
                 .collect(Collectors.toList());
     }
 
+    public static User getRequestUser() {
+        String email = "test@gmail.com";
+        String password = "test1234";
+        String profiles = "";
+        UserType userType = UserType.WIP;
+        Role role = Role.ROLE_REQUEST;
+        User user = User.createUser(email, password, profiles, userType, role);
+        return user;
+    }
+
+    public static User getRequestUser(long id) {
+        User user = getRequestUser();
+        ReflectionTestUtils.setField(user, "id", id);
+        return user;
+    }
+
     public static User getNormalUser(String email) {
         String password = "test1234";
         String profiles = "";
@@ -53,6 +69,7 @@ public class UserFactory {
         ReflectionTestUtils.setField(user, "id", id);
         return user;
     }
+
     public static User getNormalUser() {
         String email = "test@gmail.com";
         User user = getNormalUser(email);
@@ -65,9 +82,14 @@ public class UserFactory {
         return user;
     }
 
-    public static User getNormalUser(Dept dept, long id) {
+    public static User getNormalUser(Dept dept) {
         User user = getNormalUser();
         user.updateDept(dept);
+        return user;
+    }
+
+    public static User getNormalUser(Dept dept, long id) {
+        User user = getNormalUser(dept);
         ReflectionTestUtils.setField(user, "id", id);
         return user;
     }
