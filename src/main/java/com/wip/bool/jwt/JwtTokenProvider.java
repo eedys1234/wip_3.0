@@ -76,21 +76,29 @@ public class JwtTokenProvider {
                 .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 token입니다. "));
     }
 
+    public Long getIdFromToken(String token) {
+        Map<String, Object> body = getBodyFromToken(token);
+        return Long.parseLong(String.valueOf(body.get("id")));
+    }
+
     //JWT 토큰 생성
     public <T> String createToken(T userDetails) {
 
         String email = "";
+        Long id = 0L;
         Role role = null;
 
         if(userDetails instanceof CustomUser) {
             User user = ((CustomUser) userDetails).getUser();
             email = user.getEmail();
             role = user.getRole();
+            id = user.getId();
         }
 
         if(userDetails instanceof DefaultOAuth2User) {
             DefaultOAuth2User user = ((DefaultOAuth2User) userDetails);
             email = String.valueOf(user.getAttributes().get("email"));
+            id = Long.parseLong(String.valueOf(user.getAttributes().get("id")));
             role = user.getAuthorities().stream().findFirst()
                     .map(auth -> Role.valueOf(auth.getAuthority()))
                     .orElseThrow(()-> new IllegalArgumentException());
@@ -98,6 +106,7 @@ public class JwtTokenProvider {
         }
 
         Claims claims = Jwts.claims().setSubject(email);
+        claims.put("id", id);
         claims.put("role", role);
         Date now = new Date();
 

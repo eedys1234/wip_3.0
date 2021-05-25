@@ -1,6 +1,6 @@
 package com.wip.bool.configure;
 
-import com.wip.bool.jwt.JwtInterceptor;
+import com.wip.bool.jwt.JwtTokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,7 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public JwtInterceptor jwtInterceptor() {
-        return new JwtInterceptor();
+    public JwtTokenInterceptor jwtInterceptor() {
+        return new JwtTokenInterceptor();
     }
 }

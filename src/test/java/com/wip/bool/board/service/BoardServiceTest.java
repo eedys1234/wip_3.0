@@ -79,7 +79,7 @@ public class BoardServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong(), any(Role.class));
         Long resValue = boardService.deleteBoard(1L, 1L);
 
         //then
@@ -87,7 +87,7 @@ public class BoardServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(boardRepository, times(1)).findById(anyLong(), anyLong());
+        verify(boardRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
 
     }
     @DisplayName("게시물_삭제_관리자")
@@ -101,7 +101,7 @@ public class BoardServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong(), any(Role.class));
         Long resValue = boardService.deleteBoard(1L, 1L);
 
         //then
@@ -109,7 +109,7 @@ public class BoardServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(boardRepository, times(1)).findById(anyLong());
+        verify(boardRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
 
     }
 
@@ -172,7 +172,7 @@ public class BoardServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong(), any(Role.class));
         Long resValue = boardService.hiddenBoard(user.getId(), board.getId());
 
         //then
@@ -181,7 +181,7 @@ public class BoardServiceTest {
 
         //verify
         verify(userRepository, timeout(1)).findById(anyLong());
-        verify(boardRepository, times(1)).findById(anyLong(), anyLong());
+        verify(boardRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
     }
 
 
@@ -196,7 +196,7 @@ public class BoardServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong());
+        doReturn(Optional.ofNullable(board)).when(boardRepository).findById(anyLong(), anyLong(), any(Role.class));
         Long resValue = boardService.hiddenBoard(user.getId(), board.getId());
 
         //then
@@ -205,7 +205,7 @@ public class BoardServiceTest {
 
         //verify
         verify(userRepository, timeout(1)).findById(anyLong());
-        verify(boardRepository, times(1)).findById(anyLong());
+        verify(boardRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
     }
     
 }

@@ -1,7 +1,7 @@
 package com.wip.bool.group.service;
 
-import com.wip.bool.cmmn.auth.AuthExecutor;
 import com.wip.bool.cmmn.type.OrderType;
+import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.exception.excp.EntityNotFoundException;
 import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.group.domain.Group;
@@ -9,6 +9,7 @@ import com.wip.bool.group.domain.GroupMember;
 import com.wip.bool.group.domain.GroupMemberRepository;
 import com.wip.bool.group.domain.GroupRepository;
 import com.wip.bool.group.dto.GroupDto;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +47,14 @@ public class GroupService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        AuthExecutor<Long, Group> authExecutor = new AuthExecutor<>();
+        Role role = user.getRole();
 
-        Group group = authExecutor.execute(user, groupId,
-                gid -> groupRepository.findById(gid)
-                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)),
-                (uid, gid) -> groupRepository.findById(uid, gid)
-                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)));
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
+            throw new AuthorizationException();
+        }
+
+        Group group = groupRepository.findById(userId, groupId, role)
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP));
 
         group.updateGroupName(requestDto.getGroupName());
         return groupRepository.save(group).getId();
@@ -64,13 +66,14 @@ public class GroupService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
-        AuthExecutor<Long, Group> authExecutor = new AuthExecutor<>();
+        Role role = user.getRole();
 
-        Group group = authExecutor.execute(user, groupId,
-                gid -> groupRepository.findById(gid)
-                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)),
-                (uid, gid) -> groupRepository.findById(uid, gid)
-                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP)));
+        if(role != Role.ROLE_ADMIN && role != Role.ROLE_NORMAL) {
+            throw new AuthorizationException();
+        }
+
+        Group group = groupRepository.findById(userId, groupId, role)
+                .orElseThrow(() -> new EntityNotFoundException(groupId, ErrorCode.NOT_FOUND_GROUP));
 
         return groupRepository.delete(group);
     }

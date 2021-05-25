@@ -2,6 +2,8 @@ package com.wip.bool.board.controller;
 
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.board.service.BoardService;
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/board")
     public ResponseEntity<Long> saveBoard(@Valid @RequestBody BoardDto.BoardSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
@@ -38,6 +41,7 @@ public class BoardController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/boards")
     public ResponseEntity<List<BoardDto.BoardSimpleResponse>> findBoards(
                                             @RequestParam("board") String board,
@@ -47,11 +51,13 @@ public class BoardController {
         return ResponseEntity.ok(boardService.findBoards(board, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/board/{boardId:[\\d]+}")
     public ResponseEntity<BoardDto.BoardResponse> findDetailBoard(@PathVariable("boardId") Long boardId) {
         return ResponseEntity.ok(boardService.findDetailBoard(boardId));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/board/{boardId:[\\d]+}")
     public ResponseEntity<Long> deleteBoard(@PathVariable Long boardId,
                                        @RequestHeader("userId") Long userId) {
@@ -59,6 +65,7 @@ public class BoardController {
         return ResponseEntity.ok(boardService.deleteBoard(userId, boardId));
     }
 
+    @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/board/{boardId:[\\d]+}/hidden")
     public ResponseEntity<Long> hiddenBoard(@PathVariable Long boardId,
                                             @RequestHeader("userId") Long userId) {

@@ -9,6 +9,7 @@ import com.wip.bool.board.service.ReplyService;
 import com.wip.bool.cmmn.board.BoardFactory;
 import com.wip.bool.cmmn.reply.ReplyFactory;
 import com.wip.bool.cmmn.user.UserFactory;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -168,7 +169,7 @@ public class ReplyServiceTest {
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(anyLong(), anyLong());
+        doReturn(Optional.ofNullable(parentReply)).when(replyRepository).findById(anyLong(), anyLong(), any(Role.class));
         doReturn(1L).when(replyRepository).delete(any(Reply.class));
         Long resValue = replyService.deleteReply(user.getId(), parentReply.getId());
 
@@ -177,7 +178,7 @@ public class ReplyServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(replyRepository, times(1)).findById(anyLong(), anyLong());
+        verify(replyRepository, times(1)).findById(anyLong(), anyLong(), any(Role.class));
         verify(replyRepository, times(1)).delete(any(Reply.class));
 
     }

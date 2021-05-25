@@ -1,5 +1,7 @@
 package com.wip.bool.userbox.controller;
 
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.userbox.service.UserBoxSongService;
 import com.wip.bool.userbox.dto.UserBoxSongDto;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class UserBoxSongController {
 
     private final UserBoxSongService userBoxSongService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/{userBoxId:[\\d]+}/song")
     public ResponseEntity<Long> saveUserBoxSong(@Valid @RequestBody UserBoxSongDto.UserBoxSongSaveRequest requestDto,
                                      @PathVariable Long userBoxId,
@@ -39,6 +42,7 @@ public class UserBoxSongController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/{userBoxId:[\\d]+}/songs")
     public ResponseEntity<List<UserBoxSongDto.UserBoxSongResponse>> findAllUserBoxSong(@PathVariable Long userBoxId,
                                                                          @RequestHeader("userId") Long userId,
@@ -50,6 +54,7 @@ public class UserBoxSongController {
         return ResponseEntity.ok(userBoxSongService.findAllUserBoxSong(userId, userBoxId, sort, order, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/{userBoxId:[\\d]+}/song/{userBoxSongId:[\\d]+}")
     public ResponseEntity<Long> deleteUserBoxSong(@PathVariable Long userBoxId,
                                                   @PathVariable Long userBoxSongId,

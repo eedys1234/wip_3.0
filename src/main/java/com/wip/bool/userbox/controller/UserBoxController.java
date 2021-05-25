@@ -1,5 +1,7 @@
 package com.wip.bool.userbox.controller;
 
+import com.wip.bool.security.Permission;
+import com.wip.bool.user.domain.Role;
 import com.wip.bool.userbox.service.UserBoxService;
 import com.wip.bool.userbox.dto.UserBoxDto;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class UserBoxController {
 
     private final UserBoxService userBoxService;
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/userbox")
     public ResponseEntity<Long> addUserBox(@Valid @RequestBody UserBoxDto.UserBoxSaveRequest requestDto,
                                      @RequestHeader("userId") Long userId,
@@ -37,6 +40,7 @@ public class UserBoxController {
         return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @PutMapping(value = "/userbox/{userBoxId:[\\d]+}")
     public ResponseEntity<Long> updateUserBox(@PathVariable Long userBoxId,
                                        @RequestHeader("userId") Long userId,
@@ -50,12 +54,14 @@ public class UserBoxController {
         return ResponseEntity.ok(userBoxService.updateUserBox(userId, userBoxId, requestDto));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/userbox/{userBoxId:[\\d]+}")
     public ResponseEntity<Long> deleteUserBox(@PathVariable Long userBoxId,
                                        @RequestHeader("userId") Long userId) {
         return ResponseEntity.ok(userBoxService.deleteUserBox(userId, userBoxId));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/user-userboxes")
     public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByUser(@RequestHeader("userId") Long userId,
                                                                  @RequestParam String order,
@@ -65,6 +71,7 @@ public class UserBoxController {
         return ResponseEntity.ok(userBoxService.findAllByUser(userId, order, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/dept-userboxes")
     public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByDept(@RequestHeader("userId") Long userId,
                                                                           @RequestParam Long deptId,
@@ -75,6 +82,7 @@ public class UserBoxController {
         return ResponseEntity.ok(userBoxService.findAllByDept(userId, deptId, order, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/group-userboxes")
     public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByGroup(@RequestHeader("userId") Long userId,
                                                                            @RequestParam String groupId,
@@ -85,6 +93,7 @@ public class UserBoxController {
         return ResponseEntity.ok(userBoxService.findAllByGroup(userId, groupId, order, size, offset));
     }
 
+    @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "total-userboxes")
     public ResponseEntity<List<UserBoxDto.UserBoxResponse>> findAllByTotal(@RequestHeader("userId") Long userId,
                                                                            @RequestParam String order,
