@@ -1,7 +1,8 @@
 package com.wip.bool.app.controller;
 
-import com.wip.bool.app.service.AppVersionService;
 import com.wip.bool.app.dto.AppVersionDto;
+import com.wip.bool.app.service.AppVersionService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.security.Permission;
 import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -24,36 +26,37 @@ public class AppVersionController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/version")
-    public ResponseEntity<Long> save(@Valid @RequestBody AppVersionDto.AppVersionSaveRequest requestDto,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveApp(@Valid @RequestBody AppVersionDto.AppVersionSaveRequest requestDto,
+                                                    Errors errors,
+                                                    UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = appVersionService.save(requestDto);
+        Long id = appVersionService.saveApp(requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/version")
-    public ResponseEntity<AppVersionDto.AppVersionResponse> get(@RequestParam("name") String name) {
-        return ResponseEntity.ok(appVersionService.get(name));
+    public ResponseEntity<ApiResponse<AppVersionDto.AppVersionResponse>> get(@RequestParam @NotNull String name) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), appVersionService.get(name)));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/versions")
-    public ResponseEntity<List<AppVersionDto.AppVersionResponse>> gets() {
-        return ResponseEntity.ok(appVersionService.gets());
+    public ResponseEntity<ApiResponse<List<AppVersionDto.AppVersionResponse>>> gets() {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), appVersionService.gets()));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/version/{appVersionId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("appVersionId") Long appVersionId) {
-        return ResponseEntity.ok(appVersionService.delete(appVersionId));
+    public ResponseEntity<ApiResponse<Long>> deleteApp(@PathVariable("appVersionId") Long appVersionId) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), appVersionService.deleteApp(appVersionId)));
     }
 }

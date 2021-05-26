@@ -19,7 +19,7 @@ public class AppVersionService {
     private final AppVersionRepository appVersionRepository;
 
     @Transactional
-    public Long save(AppVersionDto.AppVersionSaveRequest requestDto) {
+    public Long saveApp(AppVersionDto.AppVersionSaveRequest requestDto) {
 
         AppVersion appVersion = AppVersion.createAppVersion(requestDto.getName(), requestDto.getVersion());
 
@@ -42,7 +42,7 @@ public class AppVersionService {
     }
 
     @Transactional
-    public Long delete(Long appVersionId) {
+    public Long deleteApp(Long appVersionId) {
         AppVersion appVersion = appVersionRepository.findById(appVersionId)
                 .orElseThrow(() -> new EntityNotFoundException(appVersionId, ErrorCode.NOT_FOUND_APP));
 
