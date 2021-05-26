@@ -1,5 +1,6 @@
 package com.wip.bool.calendar.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.type.ShareType;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class CalendarDto {
         private String content;
 
         @JsonProperty(value = "calendar_date")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd kk:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime calendarDate;
 
         @JsonProperty(value = "share_type")

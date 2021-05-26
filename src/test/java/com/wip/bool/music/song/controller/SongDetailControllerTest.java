@@ -1,7 +1,9 @@
 package com.wip.bool.music.song.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.bible.domain.WordsMaster;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.bible.WordsMasterFactory;
 import com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory;
 import com.wip.bool.cmmn.music.song.SongDetailFactory;
@@ -87,7 +89,8 @@ public class SongDetailControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(songDetail.getId());
 
         //verify
@@ -122,7 +125,8 @@ public class SongDetailControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(songDetail.getId());
 
         //verify
@@ -144,7 +148,8 @@ public class SongDetailControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
@@ -186,9 +191,9 @@ public class SongDetailControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['title']").value(songDetails.get(0).getTitle()))
-                .andExpect(jsonPath("$[0]['id']").value(songDetails.get(0).getId()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['title']").value(songDetails.get(0).getTitle()))
+                .andExpect(jsonPath("$.result[0]['id']").value(songDetails.get(0).getId()))
                 .andReturn();
 
 
@@ -217,11 +222,11 @@ public class SongDetailControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isMap())
-                .andExpect(jsonPath("$.id").value(songDetail.getId()))
-                .andExpect(jsonPath("$.title").value(songDetail.getTitle()))
-                .andExpect(jsonPath("$.song_master_id").value(songDetail.getSongMaster().getId()))
-                .andExpect(jsonPath("$.guitar_code_id").value(songDetail.getGuitarCode().getId()))
+                .andExpect(jsonPath("$.result").isMap())
+                .andExpect(jsonPath("$.result.id").value(songDetail.getId()))
+                .andExpect(jsonPath("$.result.title").value(songDetail.getTitle()))
+                .andExpect(jsonPath("$.result.song_master_id").value(songDetail.getSongMaster().getId()))
+                .andExpect(jsonPath("$.result.guitar_code_id").value(songDetail.getGuitarCode().getId()))
                 .andReturn();
 
         //verify
@@ -248,8 +253,8 @@ public class SongDetailControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['title']").value(songTitles.get(0)))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['title']").value(songTitles.get(0)))
                 .andReturn();
         
         //verify

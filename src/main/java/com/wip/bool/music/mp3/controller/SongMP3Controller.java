@@ -1,5 +1,6 @@
 package com.wip.bool.music.mp3.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.exception.excp.BusinessException;
 import com.wip.bool.music.mp3.service.SongMP3Service;
 import com.wip.bool.security.Permission;
@@ -28,11 +29,10 @@ public class SongMP3Controller {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3")
-    public ResponseEntity<Long> saveSongMP3(@PathVariable Long songDetailId,
-                                            @RequestHeader("userId") Long userId,
-                                            MultipartHttpServletRequest multipartHttpServletRequest,
-                                            UriComponentsBuilder uriComponentsBuilder) throws IOException
-    {
+    public ResponseEntity<ApiResponse<Long>> saveSongMP3(@PathVariable Long songDetailId,
+                                                         @RequestHeader("userId") Long userId,
+                                                         MultipartHttpServletRequest multipartHttpServletRequest,
+                                                         UriComponentsBuilder uriComponentsBuilder) throws IOException {
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
                 .map(multipart -> multipart.getFile("mp3File"))
@@ -43,24 +43,24 @@ public class SongMP3Controller {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d+]}")
-    public ResponseEntity<Long> deleteSongMP3(@PathVariable Long songDetailId,
-                                              @PathVariable Long songMP3Id,
-                                              @RequestHeader("userId") Long userId) {
+    public ResponseEntity<ApiResponse<Long>> deleteSongMP3(@PathVariable Long songDetailId,
+                                                           @PathVariable Long songMP3Id,
+                                                           @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(songMP3Service.deleteSongMP3(userId, songMP3Id));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), songMP3Service.deleteSongMP3(userId, songMP3Id)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/song-detail/{songDetailId:[\\d]+}/mp3/{songMP3Id:[\\d]+}")
-    public ResponseEntity<Object> getMP3File(@PathVariable("songDetailId") Long songDetailId,
-                                             @PathVariable("songMP3Id") Long songMP3Id) {
+    public ResponseEntity<ApiResponse<Object>> getMP3File(@PathVariable("songDetailId") Long songDetailId,
+                                                          @PathVariable("songMP3Id") Long songMP3Id) {
 
         Base64.Encoder encoder = Base64.getEncoder();
-        return ResponseEntity.ok(encoder.encodeToString(songMP3Service.getFile(songMP3Id)));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), encoder.encodeToString(songMP3Service.getFile(songMP3Id))));
     }
 }

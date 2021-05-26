@@ -1,5 +1,6 @@
 package com.wip.bool.rights.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.rights.dto.RightDto;
 import com.wip.bool.rights.service.RightService;
 import com.wip.bool.security.Permission;
@@ -23,9 +24,9 @@ public class RightController {
 
     @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/right")
-    public ResponseEntity<Long> saveRight(@Valid @RequestBody RightDto.RightSaveRequest requestDto,
-                                          Errors errors,
-                                          UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveRight(@Valid @RequestBody RightDto.RightSaveRequest requestDto,
+                                                      Errors errors,
+                                                      UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -35,13 +36,13 @@ public class RightController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/right/{rightId:[\\d]+}")
-    public ResponseEntity<Long> deleteRight(@PathVariable Long rightId,
-                                            @RequestParam("right_type") String rightType) {
-        return ResponseEntity.ok(rightService.deleteRight(rightId, rightType));
+    public ResponseEntity<ApiResponse<Long>> deleteRight(@PathVariable Long rightId,
+                                                         @RequestParam("right_type") String rightType) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), rightService.deleteRight(rightId, rightType)));
     }
 }

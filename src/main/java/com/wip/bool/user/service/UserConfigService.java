@@ -23,7 +23,7 @@ public class UserConfigService {
     @Transactional
     public Long updateUserConfig(Long userId, UserConfigDto.UserConfigUpdateRequest requestDto) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findJoinUserConfig(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         UserConfig userConfig = user.getUserConfig();
@@ -35,7 +35,7 @@ public class UserConfigService {
     @Transactional(readOnly = true)
     public UserConfigDto.UserConfigResponse findUserConfig(Long userId) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findJoinUserConfig(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         return new UserConfigDto.UserConfigResponse(user.getUserConfig());

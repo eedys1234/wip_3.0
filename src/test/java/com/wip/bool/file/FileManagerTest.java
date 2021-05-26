@@ -12,10 +12,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
+import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles(value = "local")
+@ActiveProfiles(TEST)
 @SpringBootTest
 public class FileManagerTest {
 
