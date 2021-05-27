@@ -115,8 +115,8 @@ public class CalendarServiceTest {
         assertThat(values).extracting(CalendarDto.CalendarResponse::getShareType)
                 .noneMatch(share -> share.equals(ShareType.PRIVATE));
 
-        assertThat(values).extracting(v -> Timestamp.valueOf(v.getCalendarDate()).getTime())
-                .containsAll(deptCalendars.stream().map(c -> Timestamp.valueOf(c.getCalendarDate()).getTime()).collect(Collectors.toList()));
+        assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarDate)
+                .containsAll(deptCalendars.stream().map(CalendarDto.CalendarResponse::getCalendarDate).collect(Collectors.toList()));
 
         //verify
         verify(userRepository, times(1)).deptByUser(anyLong());

@@ -116,9 +116,6 @@ public class CalendarRepositoryTest {
         assertThat(deptCalendars).extracting(CalendarDto.CalendarResponse::getShareType)
                 .noneMatch(a -> a.equals(ShareType.PRIVATE));
 
-        assertThat(deptCalendars).extracting(CalendarDto.CalendarResponse::getCalendarDate)
-                .allMatch(a -> a.isBefore(LocalDateTime.now()));
-
         assertThat(deptCalendars).extracting(CalendarDto.CalendarResponse::getUserId).isNotNull();
         assertThat(deptCalendars).extracting(CalendarDto.CalendarResponse::getTitle).isNotNull();
         assertThat(deptCalendars).extracting(CalendarDto.CalendarResponse::getContent).isNotNull();
@@ -150,7 +147,6 @@ public class CalendarRepositoryTest {
         assertThat(calendars.get(0).getTitle()).isEqualTo(title);
         assertThat(calendars.get(0).getContent()).isEqualTo(content);
         assertThat(calendars.size()).isEqualTo(1);
-        assertThat(calendars.get(0).getCalendarDate()).isBefore(LocalDateTime.now());
         assertThat(calendars.get(0).getCalendarId()).isGreaterThan(0L);
     }
 
