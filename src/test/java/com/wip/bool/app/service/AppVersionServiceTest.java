@@ -44,7 +44,7 @@ public class AppVersionServiceTest {
 
         //when
         doReturn(appVersion).when(appVersionRepository).save(any(AppVersion.class));
-        Long id = appVersionService.save(requestDto);
+        Long id = appVersionService.saveApp(requestDto);
 
         //then
         assertThat(id).isEqualTo(appVersion.getId());
@@ -104,7 +104,7 @@ public class AppVersionServiceTest {
         //when
         doReturn(Optional.ofNullable(appVersion)).when(appVersionRepository).findById(any(Long.class));
         doReturn(1L).when(appVersionRepository).delete(any(AppVersion.class));
-        Long resValue = appVersionService.delete(1L);
+        Long resValue = appVersionService.deleteApp(1L);
 
         //then
         assertThat(resValue).isEqualTo(1L);
