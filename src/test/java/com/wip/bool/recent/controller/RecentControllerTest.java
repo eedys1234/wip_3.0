@@ -1,7 +1,9 @@
 package com.wip.bool.recent.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.bible.domain.WordsMaster;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.bible.WordsMasterFactory;
 import com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory;
 import com.wip.bool.cmmn.music.song.SongDetailFactory;
@@ -88,7 +90,8 @@ public class RecentControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id =  objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response =  objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(recent.getId());
 
         //verify
@@ -128,9 +131,9 @@ public class RecentControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['song_detail_id']").value(recents.get(0).getSongDetail().getId()))
-                .andExpect(jsonPath("$[0]['title']").value(recents.get(0).getSongDetail().getTitle()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['song_detail_id']").value(recents.get(0).getSongDetail().getId()))
+                .andExpect(jsonPath("$.result[0]['title']").value(recents.get(0).getSongDetail().getTitle()))
                 .andReturn();
 
         //verify

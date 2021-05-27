@@ -36,16 +36,28 @@ public class UserConfig {
     public void update(String fontSize, String viewType, String recvAlaram) {
 
         if(!Objects.isNull(fontSize)) {
-            this.fontSize = fontSize;
+            updateFontSize(fontSize);
         }
 
         if(!Objects.isNull(viewType)) {
-            this.viewType = viewType;
+            updateViewType(viewType);
         }
 
         if(!Objects.isNull(recvAlaram)) {
-            this.recvAlaram = recvAlaram;
+            updateRecvAlaram(recvAlaram);
         }
+    }
+
+    public void updateFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public void updateViewType(String viewType) {
+        this.viewType = viewType;
+    }
+
+    public void updateRecvAlaram(String recvAlaram) {
+        this.recvAlaram = recvAlaram;
     }
 
     private void init() {

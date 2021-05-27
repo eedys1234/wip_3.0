@@ -1,5 +1,6 @@
 package com.wip.bool.music.sheet.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.exception.excp.BusinessException;
 import com.wip.bool.exception.excp.ErrorCode;
 import com.wip.bool.music.sheet.service.SongSheetService;
@@ -26,10 +27,10 @@ public class SongSheetController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet")
-    public ResponseEntity<Long> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
-                                              @RequestHeader("userId") Long userId,
-                                              MultipartHttpServletRequest multipartHttpServletRequest,
-                                              UriComponentsBuilder uriComponentsBuilder) throws IOException {
+    public ResponseEntity<ApiResponse<Long>> saveSongSheet(@PathVariable("songDetailId") Long songDetailId,
+                                                           @RequestHeader("userId") Long userId,
+                                                           MultipartHttpServletRequest multipartHttpServletRequest,
+                                                           UriComponentsBuilder uriComponentsBuilder) throws IOException {
 
         MultipartFile multipartFile = Optional.ofNullable(multipartHttpServletRequest)
                 .map(multipart -> multipart.getFile("imagesFile"))
@@ -40,16 +41,16 @@ public class SongSheetController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-detail/{songDetailId:[\\d]+}/sheet/{songSheetId:[\\d]+}")
-    public ResponseEntity<Long> deleteSongSheet(@PathVariable("songDetailId") Long songDetailId,
+    public ResponseEntity<ApiResponse<Long>> deleteSongSheet(@PathVariable("songDetailId") Long songDetailId,
                                                 @PathVariable("songSheetId") Long songSheetId,
                                                 @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(songSheetService.deleteSongSheet(userId, songSheetId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), songSheetService.deleteSongSheet(userId, songSheetId)));
     }
 }

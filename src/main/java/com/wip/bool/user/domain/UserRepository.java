@@ -28,6 +28,15 @@ public class UserRepository {
     public Optional<User> findById(Long userId) {
         return Optional.ofNullable(
                 queryFactory.select(user)
+                        .from(user)
+                        .where(user.id.eq(userId))
+                        .fetchOne()
+        );
+    }
+
+    public Optional<User> findJoinUserConfig(Long userId) {
+        return Optional.ofNullable(
+                queryFactory.select(user)
                 .from(user)
                 .innerJoin(user.userConfig, userConfig)
                 .fetchJoin()

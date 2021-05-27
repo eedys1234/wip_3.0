@@ -1,6 +1,6 @@
 package com.wip.bool.jwt;
 
-import com.wip.bool.cmmn.util.AnnotationUtil;
+import com.wip.bool.cmmn.util.AnnotationUtils;
 import com.wip.bool.exception.excp.AuthorizationException;
 import com.wip.bool.security.AuthConstants;
 import com.wip.bool.security.Permission;
@@ -50,7 +50,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
         Permission classAnnotation = handlerMethod.getBean().getClass().getAnnotation(Permission.class);
         Permission methodAnnotation = handlerMethod.getBean().getClass().getAnnotation(Permission.class);
-        Permission priority = AnnotationUtil.getPermissionPriority(classAnnotation, methodAnnotation);
+        Permission priority = AnnotationUtils.getPermissionPriority(classAnnotation, methodAnnotation);
         return priority.target();
     }
 }

@@ -2,6 +2,7 @@ package com.wip.bool.user.controller;
 
 //import com.wip.bool.user.service.UserService;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.user.service.UserService;
 import com.wip.bool.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(value = "/user")
-    public ResponseEntity<Long> join(@RequestBody @Valid UserDto.UserSaveRequest requestDto,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> join(@RequestBody @Valid UserDto.UserSaveRequest requestDto,
+                                                 Errors errors, UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -36,7 +37,7 @@ public class UserController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
 //    @PostMapping(value = "/user/wip-login")
@@ -53,27 +54,24 @@ public class UserController {
 //    }
 
     @PutMapping(value = "/user/approval/{userId:[\\d]+}")
-    public ResponseEntity<Long> approve(@PathVariable Long userId) {
-
-        Long resValue = userService.approve(userId);
-        return ResponseEntity.ok(resValue);
+    public ResponseEntity<ApiResponse<Long>> approve(@PathVariable Long userId) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), userService.approve(userId)));
     }
 
     @PutMapping(value = "/user/{userId:[\\d]+}")
-    public ResponseEntity<Long> updateUser(@PathVariable Long userId,
-                                           @RequestBody @Valid UserDto.UserUpdateRequest requestDto,
-                                           Errors errors) {
+    public ResponseEntity<ApiResponse<Long>> updateUser(@PathVariable Long userId,
+                                                        @RequestBody @Valid UserDto.UserUpdateRequest requestDto,
+                                                        Errors errors) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(userService.update(userId, requestDto));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), userService.update(userId, requestDto)));
     }
 
     @DeleteMapping(value = "/user/{userId:[\\d]+}")
-    public ResponseEntity<Long> deleteUser(@PathVariable Long userId) {
-
-        return ResponseEntity.ok(userService.delete(userId));
+    public ResponseEntity<ApiResponse<Long>> deleteUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), userService.delete(userId)));
     }
 }

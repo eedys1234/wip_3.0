@@ -1,9 +1,11 @@
 package com.wip.bool.calendar.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.service.CalendarService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.calendar.CalendarFactory;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.cmmn.user.UserFactory;
@@ -74,7 +76,7 @@ public class CalendarControllerTest {
         User user = UserFactory.getNormalUser(1L);
         Calendar calendar = CalendarFactory.getPublicCalendar(user, 1L);
 
-        doReturn(calendar.getId()).when(calendarService).save(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
+        doReturn(calendar.getId()).when(calendarService).saveCalendar(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/calendar")
@@ -84,12 +86,14 @@ public class CalendarControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        final Long id = Long.valueOf(mvcResult.getResponse().getContentAsString());
+        final ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        final Long id = response.getResult();
+
         assertThat(id).isGreaterThan(0L);
         assertThat(id).isEqualTo(calendar.getId());
 
         //verify
-        verify(calendarService, times(1)).save(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
+        verify(calendarService, times(1)).saveCalendar(anyLong(), any(CalendarDto.CalendarSaveRequest.class));
     }
 
     @DisplayName("일정 리스트 가져오기 부서")
@@ -116,8 +120,8 @@ public class CalendarControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        List<CalendarDto.CalendarResponse> values = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
-
+        ApiResponse<List<CalendarDto.CalendarResponse>> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<List<CalendarDto.CalendarResponse>>>() {});
+        List<CalendarDto.CalendarResponse> values = response.getResult();
         assertThat(values.size()).isEqualTo(deptCalendars.size());
 
         //verify
@@ -147,8 +151,8 @@ public class CalendarControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        List<CalendarDto.CalendarResponse> values = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
-
+        ApiResponse<List<CalendarDto.CalendarResponse>> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<List<CalendarDto.CalendarResponse>>>() {});
+        List<CalendarDto.CalendarResponse> values = response.getResult();
         assertThat(values.size()).isEqualTo(individualCalendars.size());
 
         //verify
@@ -163,7 +167,7 @@ public class CalendarControllerTest {
         User user = UserFactory.getNormalUser(1L);
         Calendar calendar = CalendarFactory.getPublicCalendar(user, 1L);
 
-        doReturn(1L).when(calendarService).delete(anyLong(), anyLong());
+        doReturn(1L).when(calendarService).deleteCalendar(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/calendar/" + 1)
@@ -172,11 +176,11 @@ public class CalendarControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = Long.valueOf(mvcResult.getResponse().getContentAsString());
-
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(calendarService, times(1)).delete(anyLong(), anyLong());
+        verify(calendarService, times(1)).deleteCalendar(anyLong(), anyLong());
     }
 }

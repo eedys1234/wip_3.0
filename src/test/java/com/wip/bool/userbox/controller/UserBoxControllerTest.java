@@ -1,6 +1,8 @@
 package com.wip.bool.userbox.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.rights.RightsFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.cmmn.userbox.UserBoxFactory;
@@ -74,7 +76,8 @@ public class UserBoxControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
@@ -103,7 +106,8 @@ public class UserBoxControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(userBox.getId());
 
         //verify
@@ -125,7 +129,8 @@ public class UserBoxControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
@@ -162,9 +167,9 @@ public class UserBoxControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
-                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$.result[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 
@@ -204,9 +209,9 @@ public class UserBoxControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
-                .andExpect(jsonPath("$[0]['right_type']").value("READ,WRITE"))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$.result[0]['right_type']").value("READ,WRITE"))
                 .andReturn();
 
 
@@ -246,9 +251,9 @@ public class UserBoxControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
-                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$.result[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 
@@ -287,9 +292,9 @@ public class UserBoxControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
-                .andExpect(jsonPath("$[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['user_box_name']").value(userBoxes.get(0).getUserBoxName()))
+                .andExpect(jsonPath("$.result[0]['right_type']").value(RightsFactory.rightType.toUpperCase()))
                 .andReturn();
 
 

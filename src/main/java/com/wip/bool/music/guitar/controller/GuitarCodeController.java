@@ -1,5 +1,6 @@
 package com.wip.bool.music.guitar.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.music.guitar.service.GuitarCodeService;
 import com.wip.bool.music.guitar.dto.GuitarCodeDto;
 import com.wip.bool.security.Permission;
@@ -24,31 +25,34 @@ public class GuitarCodeController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/guitar/code")
-    public ResponseEntity<Long> saveGuitarCode(@Valid @RequestBody GuitarCodeDto.GuitarCodeSaveRequest requestDto,
-                                     Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveGuitarCode(@Valid @RequestBody GuitarCodeDto.GuitarCodeSaveRequest requestDto,
+                                                            @RequestHeader("userId") Long userId,
+                                                            Errors errors,
+                                                            UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = guitarCodeService.saveGuitarCode(requestDto);
+        Long id = guitarCodeService.saveGuitarCode(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/guitar/codes")
-    public ResponseEntity<List<GuitarCodeDto.GuitarCodeResponse>> getGuitarCoeds() {
-        return ResponseEntity.ok(guitarCodeService.getGuitarCodes());
+    public ResponseEntity<ApiResponse<List<GuitarCodeDto.GuitarCodeResponse>>> getGuitarCoeds() {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), guitarCodeService.getGuitarCodes()));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/guitar/code/{guitarCodeId:[\\d]+}")
-    public ResponseEntity<Long> deleteGuitarCode(@PathVariable Long guitarCodeId) {
-        return ResponseEntity.ok(guitarCodeService.deleteGuitarCode(guitarCodeId));
+    public ResponseEntity<ApiResponse<Long>> deleteGuitarCode(@PathVariable Long guitarCodeId,
+                                                              @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), guitarCodeService.deleteGuitarCode(userId, guitarCodeId)));
     }
 
 }

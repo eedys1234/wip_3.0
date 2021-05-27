@@ -1,7 +1,9 @@
 package com.wip.bool.music.sheet.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.bible.domain.WordsMaster;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.bible.WordsMasterFactory;
 import com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory;
 import com.wip.bool.cmmn.music.sheet.SongSheetFactory;
@@ -85,10 +87,11 @@ public class SongSheetControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                     .andExpect(status().isCreated())
-                                                    .andExpect(jsonPath("$").isNumber())
+                                                    .andExpect(jsonPath("$.result").isNumber())
                                                     .andReturn();
 
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(songSheet.getId());
 
         //verify
@@ -110,7 +113,8 @@ public class SongSheetControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify

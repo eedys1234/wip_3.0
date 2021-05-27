@@ -2,6 +2,7 @@ package com.wip.bool.calendar.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.type.ShareType;
+import com.wip.bool.cmmn.util.DateUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,7 +44,7 @@ public class CalendarDto {
         private String content;
 
         @JsonProperty(value = "calendar_date")
-        private LocalDateTime calendarDate;
+        private String calendarDate;
 
         @JsonProperty(value = "share_type")
         private ShareType shareType;
@@ -60,7 +61,7 @@ public class CalendarDto {
             this.calendarId = calendarId;
             this.title = title;
             this.content = content;
-            this.calendarDate = calendarDate;
+            this.calendarDate = calendarDate.format(DateUtils.YYYY_MM_DD_HH_mm());
             this.shareType = shareType;
             this.userEmail = userEmail;
             this.userId = userId;

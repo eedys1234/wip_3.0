@@ -1,5 +1,6 @@
 package com.wip.bool.dept.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.dept.service.DeptService;
 import com.wip.bool.dept.dto.DeptDto;
 import com.wip.bool.security.Permission;
@@ -24,9 +25,10 @@ public class DeptController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/dept")
-    public ResponseEntity<Long> saveDept(@RequestBody @Valid DeptDto.DeptSaveRequest requestDto,
-                                         @RequestHeader("userId") Long userId,
-                                         Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveDept(@RequestBody @Valid DeptDto.DeptSaveRequest requestDto,
+                                                      @RequestHeader("userId") Long userId,
+                                                      Errors errors,
+                                                      UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -36,7 +38,7 @@ public class DeptController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_NORMAL)
@@ -47,24 +49,24 @@ public class DeptController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/dept/{deptId:[\\d]+}")
-    public ResponseEntity<Long> updateDept(@PathVariable Long deptId,
-                                           @RequestHeader("userId") Long userId,
-                                           @RequestBody @Valid DeptDto.DeptUpdateRequest requestDto,
-                                           Errors errors) {
+    public ResponseEntity<ApiResponse<Long>> updateDept(@PathVariable Long deptId,
+                                                        @RequestHeader("userId") Long userId,
+                                                        @RequestBody @Valid DeptDto.DeptUpdateRequest requestDto,
+                                                        Errors errors) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(deptService.updateDept(userId, deptId, requestDto));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), deptService.updateDept(userId, deptId, requestDto)));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/dept/{deptId:[\\d]+}")
-    public ResponseEntity<Long> deleteDept(@PathVariable Long deptId,
+    public ResponseEntity<ApiResponse<Long>> deleteDept(@PathVariable Long deptId,
                                            @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(deptService.deleteDept(userId, deptId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), deptService.deleteDept(userId, deptId)));
     }
 
 }

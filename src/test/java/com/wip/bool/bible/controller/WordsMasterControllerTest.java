@@ -1,9 +1,11 @@
 package com.wip.bool.bible.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.bible.domain.WordsMaster;
 import com.wip.bool.bible.dto.WordsMasterDto;
 import com.wip.bool.bible.service.WordsMasterService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.bible.WordsMasterFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
@@ -71,7 +73,8 @@ public class WordsMasterControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(wordsMaster.getId());
 
         //verify
@@ -93,7 +96,8 @@ public class WordsMasterControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
@@ -118,11 +122,16 @@ public class WordsMasterControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
-                                                .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0]['words_name']").value(wordsMasters.get(0).getWordsName()))
-                                                .andExpect(jsonPath("$[0]['words_master_id']").value(wordsMasters.get(0).getId()))
+                                                .andExpect(jsonPath("$.result").isArray())
+                                                .andExpect(jsonPath("$.result[0]['words_name']").value(wordsMasters.get(0).getWordsName()))
+                                                .andExpect(jsonPath("$.result[0]['words_master_id']").value(wordsMasters.get(0).getId()))
                                                 .andReturn();
 
+        ApiResponse<List<WordsMasterDto.WordsMasterResponse>> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+                new TypeReference<ApiResponse<List<WordsMasterDto.WordsMasterResponse>>>() {});
+
+        List<WordsMasterDto.WordsMasterResponse> values = response.getResult();
+        assertThat(values.size()).isEqualTo(wordsMasters.size());
 
         //verify
         verify(wordsMasterService, times(1)).findAll();

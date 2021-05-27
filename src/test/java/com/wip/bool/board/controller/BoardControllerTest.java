@@ -1,10 +1,12 @@
 package com.wip.bool.board.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.BoardType;
 import com.wip.bool.board.dto.BoardDto;
 import com.wip.bool.board.service.BoardService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.board.BoardFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.user.domain.User;
@@ -94,11 +96,12 @@ public class BoardControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(board.getId());
 
         //verify
-        verify(boardService, times(1)).saveBoard(any(Long.class), any(BoardDto.BoardSaveRequest.class));
+        verify(boardService, times(1)).saveBoard(anyLong(), any(BoardDto.BoardSaveRequest.class));
     }
 
     @DisplayName("게시물 리스트 조회")
@@ -129,9 +132,9 @@ public class BoardControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
-                                                .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0].board_id").value(boards.get(0).getId()))
-                                                .andExpect(jsonPath("$[0].title").value("숨김처리된 게시글입니다."))
+                                                .andExpect(jsonPath("$.result").isArray())
+                                                .andExpect(jsonPath("$.result[0].board_id").value(boards.get(0).getId()))
+                                                .andExpect(jsonPath("$.result[0].title").value("숨김처리된 게시글입니다."))
                                                 .andReturn();
 
         //verify
@@ -153,14 +156,14 @@ public class BoardControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.board_id").value(detailBoards.get(0).getBoardId()))
-                .andExpect(jsonPath("$.title").value(detailBoards.get(0).getTitle()))
-                .andExpect(jsonPath("$.content").value(detailBoards.get(0).getContent()))
-                .andExpect(jsonPath("$.board_type").value(String.valueOf(detailBoards.get(0).getBoardType())))
+                .andExpect(jsonPath("$.result.board_id").value(detailBoards.get(0).getBoardId()))
+                .andExpect(jsonPath("$.result.title").value(detailBoards.get(0).getTitle()))
+                .andExpect(jsonPath("$.result.content").value(detailBoards.get(0).getContent()))
+                .andExpect(jsonPath("$.result.board_type").value(String.valueOf(detailBoards.get(0).getBoardType())))
                 .andReturn();
 
         //verify
-        verify(boardService, times(1)).findDetailBoard(any(Long.class));
+        verify(boardService, times(1)).findDetailBoard(anyLong());
     }
 
     @DisplayName("게시물 삭제")
@@ -180,7 +183,8 @@ public class BoardControllerTest {
                                                 .andExpect(status().isOk())
                                                 .andReturn();
 
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
@@ -206,7 +210,8 @@ public class BoardControllerTest {
                                                 .andExpect(status().isOk())
                                                 .andReturn();
 
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
