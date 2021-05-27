@@ -1,11 +1,13 @@
 package com.wip.bool.reply.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.board.controller.ReplyController;
 import com.wip.bool.board.domain.Board;
 import com.wip.bool.board.domain.Reply;
 import com.wip.bool.board.dto.ReplyDto;
 import com.wip.bool.board.service.ReplyService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.board.BoardFactory;
 import com.wip.bool.cmmn.reply.ReplyFactory;
 import com.wip.bool.cmmn.user.UserFactory;
@@ -50,10 +52,6 @@ public class ReplyControllerTest {
 
     private ObjectMapper objectMapper;
 
-    private List<ReplyDto.ReplyResponse> getRepliesByReplies(Board board, User user) {
-        return ReplyFactory.getRepliesByReplies(board, user);
-    }
-
     @BeforeEach
     public void init() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(replyController).build();
@@ -82,7 +80,8 @@ public class ReplyControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(reply.getId());
 
         //verify
@@ -114,7 +113,8 @@ public class ReplyControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(childReply.getId());
 
         //verify
@@ -151,8 +151,8 @@ public class ReplyControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
-                                                .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0]['reply_id']").value(replies.get(0).getId()))
+                                                .andExpect(jsonPath("$.result").isArray())
+                                                .andExpect(jsonPath("$.result[0]['reply_id']").value(replies.get(0).getId()))
                                                 .andReturn();
 
         //verify
@@ -185,8 +185,8 @@ public class ReplyControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(10))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result.length()").value(10))
                 .andReturn();
 
         //verify
@@ -207,7 +207,8 @@ public class ReplyControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify

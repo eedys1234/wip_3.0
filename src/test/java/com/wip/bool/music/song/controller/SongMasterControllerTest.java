@@ -1,6 +1,8 @@
 package com.wip.bool.music.song.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.music.song.SongMasterFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.music.song.domain.SongMaster;
@@ -60,7 +62,7 @@ public class SongMasterControllerTest {
         SongMaster songMaster = SongMasterFactory.getSongMaster(1L);
         SongMasterDto.SongMasterSaveRequest requestDto = new SongMasterDto.SongMasterSaveRequest();
         ReflectionTestUtils.setField(requestDto, "codeName", SongMasterFactory.getCodeNames().get(0));
-        doReturn(songMaster.getId()).when(songMasterService).saveSongMaster(any(Long.class), any(SongMasterDto.SongMasterSaveRequest.class));
+        doReturn(songMaster.getId()).when(songMasterService).saveSongMaster(anyLong(), any(SongMasterDto.SongMasterSaveRequest.class));
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/music/song-master")
@@ -70,11 +72,12 @@ public class SongMasterControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isEqualTo(songMaster.getId());
 
         //verify
-        verify(songMasterService, times(1)).saveSongMaster(any(Long.class), any(SongMasterDto.SongMasterSaveRequest.class));
+        verify(songMasterService, times(1)).saveSongMaster(anyLong(), any(SongMasterDto.SongMasterSaveRequest.class));
     }
 
     @DisplayName("SongMaster 삭제")
@@ -83,7 +86,7 @@ public class SongMasterControllerTest {
 
         //given
         User user = UserFactory.getAdminUser(1L);
-        doReturn(1L).when(songMasterService).deleteSongMaster(any(Long.class), any(Long.class));
+        doReturn(1L).when(songMasterService).deleteSongMaster(anyLong(), anyLong());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/music/song-master/1")
@@ -92,11 +95,12 @@ public class SongMasterControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(songMasterService, times(1)).deleteSongMaster(any(Long.class), any(Long.class));
+        verify(songMasterService, times(1)).deleteSongMaster(anyLong(), anyLong());
     }
 
     @DisplayName("SongMaster 리스트 조회")
@@ -116,8 +120,8 @@ public class SongMasterControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0]['code_name']").value(songMasters.get(0).getCodeName()))
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]['code_name']").value(songMasters.get(0).getCodeName()))
                 .andReturn();
 
         //verify

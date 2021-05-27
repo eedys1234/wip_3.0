@@ -4,7 +4,7 @@ import com.wip.bool.security.Permission;
 
 import java.util.Objects;
 
-public class AnnotationUtil {
+public final class AnnotationUtils {
 
     public static Permission getPermissionPriority(Permission classAnnotation, Permission methodAnnotation) {
 

@@ -1,5 +1,6 @@
 package com.wip.bool.position.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.position.service.PositionService;
 import com.wip.bool.position.dto.PositionDto;
 import com.wip.bool.security.Permission;
@@ -24,10 +25,10 @@ public class PositionController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/position")
-    public ResponseEntity<Long> add(@RequestBody @Valid PositionDto.PositionSaveRequest requestDto,
-                                    @RequestHeader("userId") Long userId,
-                                    Errors errors,
-                                    UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> savePosition(@RequestBody @Valid PositionDto.PositionSaveRequest requestDto,
+                                                          @RequestHeader("userId") Long userId,
+                                                          Errors errors,
+                                                          UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -36,34 +37,34 @@ public class PositionController {
         Long id = positionService.savePosition(userId, requestDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @PutMapping(value = "/position/{id}")
-    public ResponseEntity<Long> update(@RequestBody @Valid PositionDto.PositionUpdateRequest requestDto,
-                                       @RequestHeader("userId") Long userId,
-                                       @PathVariable("id") Long positionId,
-                                       Errors errors) {
+    public ResponseEntity<ApiResponse<Long>> updatePosition(@RequestBody @Valid PositionDto.PositionUpdateRequest requestDto,
+                                                            @RequestHeader("userId") Long userId,
+                                                            @PathVariable("id") Long positionId,
+                                                            Errors errors) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(positionService.updatePosition(userId, positionId, requestDto));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), positionService.updatePosition(userId, positionId, requestDto)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/positions")
-    public ResponseEntity<List<PositionDto.PositionResponse>> findAll() {
-        return ResponseEntity.ok(positionService.findAll());
+    public ResponseEntity<ApiResponse<List<PositionDto.PositionResponse>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), positionService.findAll()));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/position/{positionId:[\\d]+}")
-    public ResponseEntity<Long> deletePosition(@PathVariable Long positionId,
+    public ResponseEntity<ApiResponse<Long>> deletePosition(@PathVariable Long positionId,
                                                @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(positionService.deletePosition(userId, positionId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), positionService.deletePosition(userId, positionId)));
     }
 }

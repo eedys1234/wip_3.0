@@ -1,6 +1,8 @@
 package com.wip.bool.position.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.position.PositionFactory;
 import com.wip.bool.cmmn.user.UserFactory;
 import com.wip.bool.position.domain.Position;
@@ -51,12 +53,6 @@ public class PositionControllerTest {
         objectMapper = new ObjectMapper();
     }
 
-    private Position getPosition(String positionName, long id) {
-        Position position = PositionFactory.getPosition(positionName);
-        ReflectionTestUtils.setField(position, "id", id);
-        return position;
-    }
-
     @DisplayName("직위 추가")
     @Test
     public void 직위_추가_Controller() throws Exception {
@@ -77,7 +73,8 @@ public class PositionControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isCreated()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isGreaterThan(0L);
         assertThat(id).isEqualTo(position.getId());
 
@@ -105,7 +102,8 @@ public class PositionControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long id = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long id = response.getResult();
         assertThat(id).isGreaterThan(0L);
         assertThat(id).isEqualTo(position.getId());
 
@@ -128,7 +126,8 @@ public class PositionControllerTest {
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
-        Long resValue = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Long.class);
+        ApiResponse<Long> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<Long>>() {});
+        Long resValue = response.getResult();
         assertThat(resValue).isEqualTo(1L);
 
         //verify
@@ -153,8 +152,8 @@ public class PositionControllerTest {
         //then
         final MvcResult mvcResult = resultActions.andDo(print())
                                                 .andExpect(status().isOk())
-                                                .andExpect(jsonPath("$").isArray())
-                                                .andExpect(jsonPath("$[0]['position_name']").value("리더"))
+                                                .andExpect(jsonPath("$.result").isArray())
+                                                .andExpect(jsonPath("$.result[0]['position_name']").value("리더"))
                                                 .andReturn();
 
         //verify

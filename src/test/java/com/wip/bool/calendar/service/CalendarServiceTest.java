@@ -70,7 +70,7 @@ public class CalendarServiceTest {
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(calendar).when(calendarRepository).save(any(Calendar.class));
 
-        Long id = calendarService.save(user.getId(), requestDto);
+        Long id = calendarService.saveCalendar(user.getId(), requestDto);
 
         //then
         assertThat(id).isGreaterThan(0L);
@@ -115,8 +115,8 @@ public class CalendarServiceTest {
         assertThat(values).extracting(CalendarDto.CalendarResponse::getShareType)
                 .noneMatch(share -> share.equals(ShareType.PRIVATE));
 
-        assertThat(values).extracting(v -> Timestamp.valueOf(v.getCalendarDate()).getTime())
-                .containsAll(deptCalendars.stream().map(c -> Timestamp.valueOf(c.getCalendarDate()).getTime()).collect(Collectors.toList()));
+        assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarDate)
+                .containsAll(deptCalendars.stream().map(CalendarDto.CalendarResponse::getCalendarDate).collect(Collectors.toList()));
 
         //verify
         verify(userRepository, times(1)).deptByUser(anyLong());
@@ -170,7 +170,7 @@ public class CalendarServiceTest {
         //when
         doReturn(Optional.ofNullable(calendar)).when(calendarRepository).findByIdAndUserId(anyLong(), anyLong());
         doReturn(1L).when(calendarRepository).delete(any(Calendar.class));
-        Long resValue = calendarService.delete(user.getId(), calendar.getId());
+        Long resValue = calendarService.deleteCalendar(user.getId(), calendar.getId());
 
         //then
         assertThat(resValue).isEqualTo(1L);

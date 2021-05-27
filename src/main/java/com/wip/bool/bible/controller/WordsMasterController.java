@@ -2,6 +2,7 @@ package com.wip.bool.bible.controller;
 
 import com.wip.bool.bible.dto.WordsMasterDto;
 import com.wip.bool.bible.service.WordsMasterService;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.security.Permission;
 import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,10 @@ public class WordsMasterController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/words-master")
-    public ResponseEntity<Long> saveWordsMaster(@Valid @RequestBody WordsMasterDto.WordsMasterSaveRequest requestDto,
-                                                @RequestHeader("userId") Long userId,
-                                                Errors errors,
-                                                UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveWordsMaster(@Valid @RequestBody WordsMasterDto.WordsMasterSaveRequest requestDto,
+                                                            @RequestHeader("userId") Long userId,
+                                                            Errors errors,
+                                                            UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -37,21 +38,21 @@ public class WordsMasterController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/words-master/{wordsMasterId:[\\d]+}")
-    public ResponseEntity<Long> deleteWordsMaster(@PathVariable Long wordsMasterId,
+    public ResponseEntity<ApiResponse<Long>> deleteWordsMaster(@PathVariable Long wordsMasterId,
                                                   @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(wordsMasterService.deleteWordsMaster(userId, wordsMasterId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), wordsMasterService.deleteWordsMaster(userId, wordsMasterId)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/words-masters")
-    public ResponseEntity<List<WordsMasterDto.WordsMasterResponse>> findAll() {
-        return ResponseEntity.ok(wordsMasterService.findAll());
+    public ResponseEntity<ApiResponse<List<WordsMasterDto.WordsMasterResponse>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), wordsMasterService.findAll()));
     }
 }
 

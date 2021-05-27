@@ -27,7 +27,7 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
 
     @Transactional
-    public Long save(Long userId, CalendarDto.CalendarSaveRequest requestDto) {
+    public Long saveCalendar(Long userId, CalendarDto.CalendarSaveRequest requestDto) {
 
         User user = selectUser(userId);
 
@@ -81,7 +81,7 @@ public class CalendarService {
     }
 
     @Transactional
-    public Long delete(Long userId, Long calendarId) {
+    public Long deleteCalendar(Long userId, Long calendarId) {
 
         Calendar calendar = calendarRepository.findByIdAndUserId(userId, calendarId)
                 .orElseThrow(() -> new EntityNotFoundException(calendarId, ErrorCode.NOT_FOUND_CALENDAR));

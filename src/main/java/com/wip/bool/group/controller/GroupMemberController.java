@@ -1,5 +1,6 @@
 package com.wip.bool.group.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.group.dto.GroupMemberDto;
 import com.wip.bool.group.service.GroupMemberService;
 import com.wip.bool.security.Permission;
@@ -24,9 +25,10 @@ public class GroupMemberController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/group/member")
-    public ResponseEntity<Long> saveGroupMember(@RequestBody @Valid GroupMemberDto.GroupMemberSaveRequest requestDto,
-                                                @RequestHeader("userId") Long userId,
-                                                Errors errors, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveGroupMember(@RequestBody @Valid GroupMemberDto.GroupMemberSaveRequest requestDto,
+                                                             @RequestHeader("userId") Long userId,
+                                                             Errors errors,
+                                                             UriComponentsBuilder uriComponentsBuilder) {
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
@@ -35,24 +37,24 @@ public class GroupMemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(),id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/group/member/{groupMemberId:[\\d]+}")
-    public ResponseEntity<Long> deleteGroupMember(@PathVariable Long groupMemberId,
-                                                  @RequestHeader("userId") Long userId) {
+    public ResponseEntity<ApiResponse<Long>> deleteGroupMember(@PathVariable Long groupMemberId,
+                                                               @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(groupMemberService.deleteGroupMember(userId, groupMemberId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), groupMemberService.deleteGroupMember(userId, groupMemberId)));
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @GetMapping(value = "/group/{groupId:[\\d]+}/members")
-    public ResponseEntity<List<GroupMemberDto.GroupMemberResponse>> findAllByGroup(@PathVariable Long groupId,
-                                                                                   @RequestParam String order,
-                                                                                   @RequestParam int size,
-                                                                                   @RequestParam int offset) {
+    public ResponseEntity<ApiResponse<List<GroupMemberDto.GroupMemberResponse>>> findAllByGroup(@PathVariable Long groupId,
+                                                                                                @RequestParam String order,
+                                                                                                @RequestParam int size,
+                                                                                                @RequestParam int offset) {
 
-        return ResponseEntity.ok(groupMemberService.findAllByGroup(groupId, order, size, offset));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), groupMemberService.findAllByGroup(groupId, order, size, offset)));
     }
 }

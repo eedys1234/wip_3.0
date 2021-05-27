@@ -2,6 +2,7 @@ package com.wip.bool.calendar.controller;
 
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.security.Permission;
 import com.wip.bool.user.domain.Role;
 import lombok.RequiredArgsConstructor;
@@ -27,48 +28,46 @@ public class CalendarController {
 
     @Permission(target = Role.ROLE_NORMAL)
     @PostMapping(value = "/calendar")
-    public ResponseEntity<Long> save(@Valid @RequestBody CalendarDto.CalendarSaveRequest requestDto,
-                                    @RequestHeader("userId") Long userId,
-                                    Errors errors, UriComponentsBuilder uriComponentsBuilder)
-    {
+    public ResponseEntity<ApiResponse<Long>> saveCalendar(@Valid @RequestBody CalendarDto.CalendarSaveRequest requestDto,
+                                                          @RequestHeader("userId") Long userId,
+                                                          Errors errors,
+                                                          UriComponentsBuilder uriComponentsBuilder) {
+
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long id = calendarService.save(userId, requestDto);
+        Long id = calendarService.saveCalendar(userId, requestDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-dept")
-    public ResponseEntity<List<CalendarDto.CalendarResponse>> getDeptCalendars(
-            @RequestHeader("userId") @Positive Long userId,
-            @RequestParam("from") @Positive Long from,
-            @RequestParam("to") @Positive Long to) {
+    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getDeptCalendars(@RequestHeader("userId") @Positive Long userId,
+                                                                                            @RequestParam("from") @Positive Long from,
+                                                                                            @RequestParam("to") @Positive Long to) {
 
-        return ResponseEntity.ok(calendarService.getDeptCalendars(userId, from, to));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), calendarService.getDeptCalendars(userId, from, to)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-individual")
-    public ResponseEntity<List<CalendarDto.CalendarResponse>> getIndividualCalendar(
-            @RequestHeader("userId") @Positive Long userId,
-            @RequestParam("from") @Positive Long from,
-            @RequestParam("to") @Positive Long to
-    ) {
+    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getIndividualCalendar(@RequestHeader("userId") @Positive Long userId,
+                                                                                                 @RequestParam("from") @Positive Long from,
+                                                                                                 @RequestParam("to") @Positive Long to) {
 
-        return ResponseEntity.ok(calendarService.getIndividualCalenders(userId, from, to));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), calendarService.getIndividualCalenders(userId, from, to)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @DeleteMapping(value = "/calendar/{calendarId:[\\d]+}")
-    public ResponseEntity<Long> delete(@PathVariable("calendarId") Long calendarId,
-                                       @RequestHeader("userId") Long userId) {
+    public ResponseEntity<ApiResponse<Long>> deleteCalendar(@PathVariable("calendarId") Long calendarId,
+                                                            @RequestHeader("userId") Long userId) {
 
-        return ResponseEntity.ok(calendarService.delete(userId, calendarId));
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(),calendarService.deleteCalendar(userId, calendarId)));
     }
 }

@@ -1,5 +1,6 @@
 package com.wip.bool.music.song.controller;
 
+import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.music.song.service.SongMasterService;
 import com.wip.bool.music.song.dto.SongMasterDto;
 import com.wip.bool.security.Permission;
@@ -24,10 +25,10 @@ public class SongMasterController {
 
     @Permission(target = Role.ROLE_ADMIN)
     @PostMapping(value = "/song-master")
-    public ResponseEntity<Long> saveSongMaster(@Valid @RequestBody SongMasterDto.SongMasterSaveRequest requestDto,
-                                               @RequestHeader("userId") Long userId,
-                                               Errors errors,
-                                               UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ApiResponse<Long>> saveSongMaster(@Valid @RequestBody SongMasterDto.SongMasterSaveRequest requestDto,
+                                                            @RequestHeader("userId") Long userId,
+                                                            Errors errors,
+                                                            UriComponentsBuilder uriComponentsBuilder) {
 
         if(errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -38,19 +39,19 @@ public class SongMasterController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uriComponentsBuilder.path("{id}").buildAndExpand(id).toUri());
 
-        return new ResponseEntity<>(id, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
 
     @Permission(target = Role.ROLE_ADMIN)
     @DeleteMapping(value = "/song-master/{songMasterId:[\\d]+}")
-    public ResponseEntity<Long> deleteSongMaster(@PathVariable Long songMasterId,
-                                                 @RequestHeader("userId") Long userId) {
-        return ResponseEntity.ok(songMasterService.deleteSongMaster(userId, songMasterId));
+    public ResponseEntity<ApiResponse<Long>> deleteSongMaster(@PathVariable Long songMasterId,
+                                                              @RequestHeader("userId") Long userId) {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.CREATED.value(), songMasterService.deleteSongMaster(userId, songMasterId)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/song-masters")
-    public ResponseEntity<List<SongMasterDto.SongMasterResponse>> getsSongMaster() {
-        return ResponseEntity.ok(songMasterService.getsSongMaster());
+    public ResponseEntity<ApiResponse<List<SongMasterDto.SongMasterResponse>>> getsSongMaster() {
+        return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), songMasterService.getsSongMaster()));
     }
 }
