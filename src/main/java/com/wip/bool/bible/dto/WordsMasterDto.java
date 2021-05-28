@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 public class WordsMasterDto {
 
@@ -21,7 +22,7 @@ public class WordsMasterDto {
 
     @Getter
     @NoArgsConstructor
-    public static class WordsMasterResponse {
+    public static class WordsMasterResponse implements Serializable {
 
         @JsonProperty(value = "words_master_id")
         private Long wordsMasterId;

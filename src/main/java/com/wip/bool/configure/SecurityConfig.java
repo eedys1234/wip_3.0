@@ -1,6 +1,6 @@
 package com.wip.bool.configure;
 
-import com.wip.bool.jwt.JwtTokenProvider;
+import com.wip.bool.cmmn.jwt.JwtTokenProvider;
 import com.wip.bool.security.CustomAuthenticationFilter;
 import com.wip.bool.security.CustomAuthenticationProvider;
 import com.wip.bool.security.CustomLoginSuccessHandler;
