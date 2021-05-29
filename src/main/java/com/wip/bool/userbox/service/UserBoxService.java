@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -115,7 +116,10 @@ public class UserBoxService {
         Dept dept = deptRepository.findById(deptId)
                 .orElseThrow(() -> new EntityNotFoundException(deptId, ErrorCode.NOT_FOUND_DEPT));
 
-        if(user.getDept().getId() != dept.getId()) {
+        Dept user_dept = Optional.ofNullable(user.getDept())
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_DEPT));
+
+        if(user_dept.getId() != dept.getId()) {
             throw new AuthorizationException();
         }
 
@@ -137,7 +141,7 @@ public class UserBoxService {
         List<GroupMember> groupMembers = groupMemberRepository.findAllByGroup(groupIds);
 
         //체킹
-        if(!groupMembers.stream().allMatch(groupMember -> groupMember.getUser().getId() == user.getId())) {
+        if(!groupMembers.stream().allMatch(groupMember -> groupMember.getUser() != null && groupMember.getUser().getId() == user.getId())) {
             throw new AuthorizationException();
         }
         

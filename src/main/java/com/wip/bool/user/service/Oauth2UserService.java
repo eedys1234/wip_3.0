@@ -48,7 +48,7 @@ public class Oauth2UserService implements OAuth2UserService<OAuth2UserRequest, O
     }
 
     @Transactional
-    private User saveOrUpdate(OAuthAttributes attributes) {
+    public User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.updateInfo(attributes.getName(), attributes.getProfiles()))
                 .orElse(attributes.toEntity());

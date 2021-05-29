@@ -65,12 +65,11 @@ public class SongDetailRepository {
     public Optional<SongDetail> findById(Long songDetailId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(songDetail)
+                .where(songDetail.id.eq(songDetailId))
                 .fetchOne());
     }
 
     public Optional<SongDetailDto.SongDetailResponse> findById(Long songDetailId, Long userId) {
-        //TODO : BookMark, GuitarCode와 JOIN 해야함
-
         return Optional.ofNullable(
                 queryFactory.select(
                         Projections.constructor(SongDetailDto.SongDetailResponse.class,
@@ -79,7 +78,7 @@ public class SongDetailRepository {
                 .leftJoin(bookMark)
                 .on(bookMark.songDetail.eq(songDetail), bookMark.user.id.eq(userId))
                 .innerJoin(songDetail.guitarCode, guitarCode)
-                .fetchJoin()
+                .where(songDetail.id.eq(songDetailId))
                 .fetchOne());
     }
 

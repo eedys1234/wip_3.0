@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.bookmark.domain.BookMark;
 import com.wip.bool.music.song.domain.SongDetail;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SongDetailDto {
 
     @Getter
@@ -140,7 +142,7 @@ public class SongDetailDto {
 
 
         public SongDetailResponse(SongDetail songDetail) {
-            this.id = songDetail.getId();;
+            this.id = songDetail.getId();
             this.title = songDetail.getTitle();
             this.codeId = songDetail.getSongMaster().getId();
             this.guitarCodeId = songDetail.getGuitarCode().getId();
@@ -149,7 +151,7 @@ public class SongDetailDto {
         }
 
         public SongDetailResponse(SongDetail songDetail, BookMark bookMark) {
-            this.id = songDetail.getId();;
+            this.id = songDetail.getId();
             this.title = songDetail.getTitle();
             this.codeId = songDetail.getSongMaster().getId();
             this.guitarCodeId = songDetail.getGuitarCode().getId();

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.auth.Authority;
 import com.wip.bool.cmmn.auth.Target;
 import com.wip.bool.rights.domain.Rights;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RightDto {
 
     @Getter
@@ -37,9 +39,7 @@ public class RightDto {
         private String rightType;
 
         public Rights toEntity() {
-            Target target = Target.valueOf(this.target);
-            Authority authority = Authority.valueOf(this.authority);
-            return Rights.of(target, targetId, authority, authorityId, this.rightType);
+            return Rights.of(Target.valueOf(this.target), targetId, Authority.valueOf(this.authority), authorityId, this.rightType);
         }
     }
 }

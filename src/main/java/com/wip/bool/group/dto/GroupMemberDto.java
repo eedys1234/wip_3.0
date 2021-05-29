@@ -2,11 +2,13 @@ package com.wip.bool.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.group.domain.GroupMember;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Positive;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GroupMemberDto {
 
     @Getter

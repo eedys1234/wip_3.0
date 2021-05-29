@@ -1,109 +1,178 @@
+com/wip/bool/cmmn/user/UserFactory.java
+ com.wip.bool.cmmn.user.UserFactory
+com/wip/bool/music/guitar/repository/GuitarCodeRepositoryTest.java
+ com.wip.bool.music.guitar.repository.GuitarCodeRepositoryTest
+com/wip/bool/position/repository/PositionRepositoryTest.java
+ com.wip.bool.position.repository.PositionRepositoryTest
+com/wip/bool/cmmn/group/GroupFactory.java
+ com.wip.bool.cmmn.group.GroupFactory
+com/wip/bool/configure/TestConfig.java
+ com.wip.bool.configure.TestConfig
+com/wip/bool/app/controller/AppVersionControllerTest.java
+ com.wip.bool.app.controller.AppVersionControllerTest
+ com.wip.bool.app.controller.AppVersionControllerTest$1
+ com.wip.bool.app.controller.AppVersionControllerTest$2
+ com.wip.bool.app.controller.AppVersionControllerTest$3
+ com.wip.bool.app.controller.AppVersionControllerTest$4
+com/wip/bool/userconfig/repository/UserConfigRepositoryTest.java
+ com.wip.bool.userconfig.repository.UserConfigRepositoryTest
+com/wip/bool/cmmn/bible/WordsMasterFactory.java
+ com.wip.bool.cmmn.bible.WordsMasterFactory
+com/wip/bool/app/repository/AppVersionRepositoryTest.java
+ com.wip.bool.app.repository.AppVersionRepositoryTest
+com/wip/bool/cmmn/group/GroupMemberFactory.java
+ com.wip.bool.cmmn.group.GroupMemberFactory
+com/wip/bool/cmmn/calendar/CalendarFactory.java
+ com.wip.bool.cmmn.calendar.CalendarFactory
+com/wip/bool/cmmn/userconfig/UserConfigFactory.java
+ com.wip.bool.cmmn.userconfig.UserConfigFactory
+com/wip/bool/dept/repository/DeptRepositoryTest.java
+ com.wip.bool.dept.repository.DeptRepositoryTest
+com/wip/bool/app/service/AppVersionServiceTest.java
+ com.wip.bool.app.service.AppVersionServiceTest
+com/wip/bool/file/FileManagerTest.java
+ com.wip.bool.file.FileManagerTest
+com/wip/bool/rights/repository/RightRepositoryTest.java
+ com.wip.bool.rights.repository.RightRepositoryTest
+com/wip/bool/cmmn/music/song/SongMasterFactory.java
+ com.wip.bool.cmmn.music.song.SongMasterFactory
+com/wip/bool/cmmn/board/BoardFactory.java
+ com.wip.bool.cmmn.board.BoardFactory
+com/wip/bool/cmmn/rights/RightsFactory.java
+ com.wip.bool.cmmn.rights.RightsFactory
+com/wip/bool/bible/repository/WordsMaterRepositoryTest.java
+ com.wip.bool.bible.repository.WordsMaterRepositoryTest
+com/wip/bool/cmmn/dept/DeptFactory.java
+ com.wip.bool.cmmn.dept.DeptFactory
+com/wip/bool/cmmn/userbox/UserBoxFactory.java
+ com.wip.bool.cmmn.userbox.UserBoxFactory
+com/wip/bool/cmmn/app/AppFactory.java
+ com.wip.bool.cmmn.app.AppFactory
+com/wip/bool/cmmn/music/guitarcode/GuitarCodeFactory.java
+ com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory
+com/wip/bool/cmmn/position/PositionFactory.java
+ com.wip.bool.cmmn.position.PositionFactory
 com/wip/bool/group/controller/GroupControllerTest.java
  com.wip.bool.group.controller.GroupControllerTest
+ com.wip.bool.group.controller.GroupControllerTest$1
+ com.wip.bool.group.controller.GroupControllerTest$2
+ com.wip.bool.group.controller.GroupControllerTest$3
 com/wip/bool/recent/service/RecentServiceTest.java
  com.wip.bool.recent.service.RecentServiceTest
 com/wip/bool/user/repository/UserRepositoryTest.java
  com.wip.bool.user.repository.UserRepositoryTest
-com/wip/bool/cmmn/group/GroupFactory.java
- com.wip.bool.cmmn.group.GroupFactory
 com/wip/bool/cmmn/music/mp3/SongMP3Factory.java
  com.wip.bool.cmmn.music.mp3.SongMP3Factory
 com/wip/bool/dept/controller/DeptControllerTest.java
  com.wip.bool.dept.controller.DeptControllerTest
+ com.wip.bool.dept.controller.DeptControllerTest$1
+ com.wip.bool.dept.controller.DeptControllerTest$2
+ com.wip.bool.dept.controller.DeptControllerTest$3
 com/wip/bool/userboxsong/service/UserBoxSongServiceTest.java
  com.wip.bool.userboxsong.service.UserBoxSongServiceTest
 com/wip/bool/board/service/BoardServiceTest.java
  com.wip.bool.board.service.BoardServiceTest
 com/wip/bool/recent/controller/RecentControllerTest.java
  com.wip.bool.recent.controller.RecentControllerTest
+ com.wip.bool.recent.controller.RecentControllerTest$1
 com/wip/bool/music/guitar/service/GuitarCodeServiceTest.java
  com.wip.bool.music.guitar.service.GuitarCodeServiceTest
 com/wip/bool/music/mp3/controller/SongMP3ControllerTest.java
  com.wip.bool.music.mp3.controller.SongMP3ControllerTest
-com/wip/bool/app/service/AppVersionServiceTest.java
- com.wip.bool.app.service.AppVersionServiceTest
+ com.wip.bool.music.mp3.controller.SongMP3ControllerTest$1
+ com.wip.bool.music.mp3.controller.SongMP3ControllerTest$2
+com/wip/bool/userconfig/controller/UserConfigControllerTest.java
+ com.wip.bool.userconfig.controller.UserConfigControllerTest
+ com.wip.bool.userconfig.controller.UserConfigControllerTest$1
+ com.wip.bool.userconfig.controller.UserConfigControllerTest$2
 com/wip/bool/cmmn/music/sheet/SongSheetFactory.java
  com.wip.bool.cmmn.music.sheet.SongSheetFactory
 com/wip/bool/reply/controller/ReplyControllerTest.java
  com.wip.bool.reply.controller.ReplyControllerTest
+ com.wip.bool.reply.controller.ReplyControllerTest$1
+ com.wip.bool.reply.controller.ReplyControllerTest$2
+ com.wip.bool.reply.controller.ReplyControllerTest$3
 com/wip/bool/userbox/controller/UserBoxControllerTest.java
  com.wip.bool.userbox.controller.UserBoxControllerTest
-com/wip/bool/cmmn/rights/RightsFactory.java
- com.wip.bool.cmmn.rights.RightsFactory
+ com.wip.bool.userbox.controller.UserBoxControllerTest$1
+ com.wip.bool.userbox.controller.UserBoxControllerTest$2
+ com.wip.bool.userbox.controller.UserBoxControllerTest$3
 com/wip/bool/board/repository/BoardRepositoryTest.java
  com.wip.bool.board.repository.BoardRepositoryTest
 com/wip/bool/group/repository/GroupMemberRepositoryTest.java
  com.wip.bool.group.repository.GroupMemberRepositoryTest
 com/wip/bool/cmmn/recent/RecentFactory.java
  com.wip.bool.cmmn.recent.RecentFactory
-com/wip/bool/cmmn/app/AppFactory.java
- com.wip.bool.cmmn.app.AppFactory
 com/wip/bool/dept/service/DeptServiceTest.java
  com.wip.bool.dept.service.DeptServiceTest
-com/wip/bool/cmmn/position/PositionFactory.java
- com.wip.bool.cmmn.position.PositionFactory
-com/wip/bool/cmmn/user/UserFactory.java
- com.wip.bool.cmmn.user.UserFactory
 com/wip/bool/group/controller/GroupMemberControllerTest.java
  com.wip.bool.group.controller.GroupMemberControllerTest
-com/wip/bool/app/controller/AppVersionControllerTest.java
- com.wip.bool.app.controller.AppVersionControllerTest
+ com.wip.bool.group.controller.GroupMemberControllerTest$1
+ com.wip.bool.group.controller.GroupMemberControllerTest$2
 com/wip/bool/group/repository/GroupRepositoryTest.java
  com.wip.bool.group.repository.GroupRepositoryTest
-com/wip/bool/cmmn/group/GroupMemberFactory.java
- com.wip.bool.cmmn.group.GroupMemberFactory
-com/wip/bool/dept/repository/DeptRepositoryTest.java
- com.wip.bool.dept.repository.DeptRepositoryTest
+com/wip/bool/userconfig/service/UserConfigServiceTest.java
+ com.wip.bool.userconfig.service.UserConfigServiceTest
 com/wip/bool/bible/service/WordsMasterServiceTest.java
  com.wip.bool.bible.service.WordsMasterServiceTest
 com/wip/bool/search/SearchTest.java
  com.wip.bool.search.SearchTest
 com/wip/bool/position/controller/PositionControllerTest.java
  com.wip.bool.position.controller.PositionControllerTest
+ com.wip.bool.position.controller.PositionControllerTest$1
+ com.wip.bool.position.controller.PositionControllerTest$2
+ com.wip.bool.position.controller.PositionControllerTest$3
 com/wip/bool/userbox/repository/UserBoxRepositoryTest.java
  com.wip.bool.userbox.repository.UserBoxRepositoryTest
 com/wip/bool/board/controller/BoardControllerTest.java
  com.wip.bool.board.controller.BoardControllerTest
+ com.wip.bool.board.controller.BoardControllerTest$1
+ com.wip.bool.board.controller.BoardControllerTest$2
+ com.wip.bool.board.controller.BoardControllerTest$3
 com/wip/bool/recent/repository/RecentRepositoryTest.java
  com.wip.bool.recent.repository.RecentRepositoryTest
 com/wip/bool/rights/service/RightServiceTest.java
  com.wip.bool.rights.service.RightServiceTest
 com/wip/bool/userboxsong/controller/UserBoxSongControllerTest.java
  com.wip.bool.userboxsong.controller.UserBoxSongControllerTest
-com/wip/bool/music/MusicControllerTest.java
- com.wip.bool.music.MusicControllerTest
+ com.wip.bool.userboxsong.controller.UserBoxSongControllerTest$1
+ com.wip.bool.userboxsong.controller.UserBoxSongControllerTest$2
 com/wip/bool/calendar/service/CalendarServiceTest.java
  com.wip.bool.calendar.service.CalendarServiceTest
-com/wip/bool/cmmn/userbox/UserBoxFactory.java
- com.wip.bool.cmmn.userbox.UserBoxFactory
 com/wip/bool/cmmn/music/song/SongDetailFactory.java
  com.wip.bool.cmmn.music.song.SongDetailFactory
 com/wip/bool/music/sheet/repository/SongSheetRepositoryTest.java
  com.wip.bool.music.sheet.repository.SongSheetRepositoryTest
-com/wip/bool/rights/repository/RightRepositoryTest.java
- com.wip.bool.rights.repository.RightRepositoryTest
 com/wip/bool/bookmark/repository/BookMarkRepositoryTest.java
  com.wip.bool.bookmark.repository.BookMarkRepositoryTest
-com/wip/bool/app/repository/AppVersionRepositoryTest.java
- com.wip.bool.app.repository.AppVersionRepositoryTest
 com/wip/bool/music/song/service/SongMasterServiceTest.java
  com.wip.bool.music.song.service.SongMasterServiceTest
 com/wip/bool/calendar/controller/CalendarControllerTest.java
  com.wip.bool.calendar.controller.CalendarControllerTest
+ com.wip.bool.calendar.controller.CalendarControllerTest$1
+ com.wip.bool.calendar.controller.CalendarControllerTest$2
+ com.wip.bool.calendar.controller.CalendarControllerTest$3
+ com.wip.bool.calendar.controller.CalendarControllerTest$4
 com/wip/bool/music/song/controller/SongDetailControllerTest.java
  com.wip.bool.music.song.controller.SongDetailControllerTest
+ com.wip.bool.music.song.controller.SongDetailControllerTest$1
+ com.wip.bool.music.song.controller.SongDetailControllerTest$2
+ com.wip.bool.music.song.controller.SongDetailControllerTest$3
 com/wip/bool/cmmn/bookmark/BookMarkFactory.java
  com.wip.bool.cmmn.bookmark.BookMarkFactory
 com/wip/bool/userboxsong/repository/UserBoxSongRepositoryTest.java
  com.wip.bool.userboxsong.repository.UserBoxSongRepositoryTest
 com/wip/bool/cmmn/reply/ReplyFactory.java
  com.wip.bool.cmmn.reply.ReplyFactory
-com/wip/bool/configure/TestConfig.java
- com.wip.bool.configure.TestConfig
 com/wip/bool/rights/controller/RightControllerTest.java
  com.wip.bool.rights.controller.RightControllerTest
+ com.wip.bool.rights.controller.RightControllerTest$1
+ com.wip.bool.rights.controller.RightControllerTest$2
 com/wip/bool/bible/controller/WordsMasterControllerTest.java
  com.wip.bool.bible.controller.WordsMasterControllerTest
+ com.wip.bool.bible.controller.WordsMasterControllerTest$1
+ com.wip.bool.bible.controller.WordsMasterControllerTest$2
+ com.wip.bool.bible.controller.WordsMasterControllerTest$3
 com/wip/bool/music/song/repository/SongDetailRepositoryTest.java
  com.wip.bool.music.song.repository.SongDetailRepositoryTest
 com/wip/bool/music/song/service/SongDetailServiceTest.java
@@ -114,51 +183,48 @@ com/wip/bool/reply/repository/ReplyRepositoryTest.java
  com.wip.bool.reply.repository.ReplyRepositoryTest
 com/wip/bool/music/sheet/service/SongSheetServiceTest.java
  com.wip.bool.music.sheet.service.SongSheetServiceTest
-com/wip/bool/cmmn/dept/DeptFactory.java
- com.wip.bool.cmmn.dept.DeptFactory
-com/wip/bool/bible/repository/WordsMaterRepositoryTest.java
- com.wip.bool.bible.repository.WordsMaterRepositoryTest
-com/wip/bool/cmmn/music/song/SongMasterFactory.java
- com.wip.bool.cmmn.music.song.SongMasterFactory
 com/wip/bool/bookmark/controller/BookMarkControllerTest.java
  com.wip.bool.bookmark.controller.BookMarkControllerTest
-com/wip/bool/file/FileManagerTest.java
- com.wip.bool.file.FileManagerTest
-com/wip/bool/cmmn/calendar/CalendarFactory.java
- com.wip.bool.cmmn.calendar.CalendarFactory
+ com.wip.bool.bookmark.controller.BookMarkControllerTest$1
+ com.wip.bool.bookmark.controller.BookMarkControllerTest$2
+ com.wip.bool.bookmark.controller.BookMarkControllerTest$3
+com/wip/bool/user/controller/UserControllerTest.java
+ com.wip.bool.user.controller.UserControllerTest
+ com.wip.bool.user.controller.UserControllerTest$1
+ com.wip.bool.user.controller.UserControllerTest$2
+ com.wip.bool.user.controller.UserControllerTest$3
+ com.wip.bool.user.controller.UserControllerTest$4
 com/wip/bool/userbox/service/UserBoxServiceTest.java
  com.wip.bool.userbox.service.UserBoxServiceTest
-com/wip/bool/cmmn/music/guitarcode/GuitarCodeFactory.java
- com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory
 com/wip/bool/music/guitar/controller/GuitarCodeControllerTest.java
  com.wip.bool.music.guitar.controller.GuitarCodeControllerTest
+ com.wip.bool.music.guitar.controller.GuitarCodeControllerTest$1
+ com.wip.bool.music.guitar.controller.GuitarCodeControllerTest$2
 com/wip/bool/group/service/GroupServiceTest.java
  com.wip.bool.group.service.GroupServiceTest
-com/wip/bool/cmmn/board/BoardFactory.java
- com.wip.bool.cmmn.board.BoardFactory
+com/wip/bool/user/service/UserServiceTest.java
+ com.wip.bool.user.service.UserServiceTest
 com/wip/bool/cmmn/userboxsong/UserBoxSongFactory.java
  com.wip.bool.cmmn.userboxsong.UserBoxSongFactory
 com/wip/bool/music/sheet/controller/SongSheetControllerTest.java
  com.wip.bool.music.sheet.controller.SongSheetControllerTest
+ com.wip.bool.music.sheet.controller.SongSheetControllerTest$1
+ com.wip.bool.music.sheet.controller.SongSheetControllerTest$2
 com/wip/bool/position/service/PositionServiceTest.java
  com.wip.bool.position.service.PositionServiceTest
 com/wip/bool/reply/service/ReplyServiceTest.java
  com.wip.bool.reply.service.ReplyServiceTest
-com/wip/bool/calendar/repository/CalendarRepositoryTest.java
- com.wip.bool.calendar.repository.CalendarRepositoryTest
 com/wip/bool/music/mp3/service/SongMP3ServiceTest.java
  com.wip.bool.music.mp3.service.SongMP3ServiceTest
 com/wip/bool/bookmark/service/BookMarkServiceTest.java
  com.wip.bool.bookmark.service.BookMarkServiceTest
-com/wip/bool/cmmn/bible/WordsMasterFactory.java
- com.wip.bool.cmmn.bible.WordsMasterFactory
+com/wip/bool/calendar/domain/CalendarRepositoryTest.java
+ com.wip.bool.calendar.domain.CalendarRepositoryTest
 com/wip/bool/group/service/GroupMemberServiceTest.java
  com.wip.bool.group.service.GroupMemberServiceTest
 com/wip/bool/music/song/controller/SongMasterControllerTest.java
  com.wip.bool.music.song.controller.SongMasterControllerTest
-com/wip/bool/position/repository/PositionRepositoryTest.java
- com.wip.bool.position.repository.PositionRepositoryTest
-com/wip/bool/music/guitar/repository/GuitarCodeRepositoryTest.java
- com.wip.bool.music.guitar.repository.GuitarCodeRepositoryTest
+ com.wip.bool.music.song.controller.SongMasterControllerTest$1
+ com.wip.bool.music.song.controller.SongMasterControllerTest$2
 com/wip/bool/music/mp3/repository/SongMP3RepositoryTest.java
  com.wip.bool.music.mp3.repository.SongMP3RepositoryTest

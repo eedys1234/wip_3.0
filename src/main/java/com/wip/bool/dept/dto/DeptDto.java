@@ -3,6 +3,7 @@ package com.wip.bool.dept.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.CodeModel;
 import com.wip.bool.dept.domain.Dept;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeptDto {
 
     @Getter

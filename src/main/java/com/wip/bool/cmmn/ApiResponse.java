@@ -28,17 +28,14 @@ public class ApiResponse <T> {
     }
 
     public static ApiResponse of(int status) {
-        ApiResponse response = new ApiResponse(status);
-        return response;
+        return new ApiResponse(status);
     }
 
     public static <T> ApiResponse of(int status, T result) {
-        ApiResponse response = new ApiResponse(status, "", result);
-        return response;
+        return new ApiResponse(status, "", result);
     }
 
     public static <T> ApiResponse of(int status, String message, T result) {
-        ApiResponse response = new ApiResponse(status, message, result);
-        return response;
+        return new ApiResponse(status, message, result);
     }
 }

@@ -2,12 +2,14 @@ package com.wip.bool.bible.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.bible.domain.WordsMaster;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WordsMasterDto {
 
     @Getter

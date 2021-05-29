@@ -2,9 +2,11 @@ package com.wip.bool.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.user.domain.UserConfig;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserConfigDto {
 
     @Getter
@@ -38,7 +40,7 @@ public class UserConfigDto {
         public UserConfigResponse(UserConfig userConfig) {
             this.fontSize = userConfig.getFontSize();
             this.viewType = userConfig.getViewType();
-            this.recvAlaram = userConfig.getRecvAlaram();;
+            this.recvAlaram = userConfig.getRecvAlaram();
         }
     }
 }

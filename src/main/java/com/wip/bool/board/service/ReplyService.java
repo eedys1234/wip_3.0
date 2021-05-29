@@ -121,7 +121,7 @@ public class ReplyService {
         Reply reply = replyRepository.findById(userId, replyId, role)
                     .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_REPLY));
 
-        if(reply.getChildReply().size() != 0) {
+        if(reply.getChildReply().size() > 0) {
             reply.deleteStatus();
         }
         else {

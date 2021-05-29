@@ -40,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .oauth2Login().userInfoEndpoint().userService(oauth2UserService).and().successHandler(customOauth2SuccessHandler())
         .and()
         .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        ;
     }
 
     /**

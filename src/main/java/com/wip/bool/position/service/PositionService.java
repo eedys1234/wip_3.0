@@ -86,7 +86,7 @@ public class PositionService {
     @Transactional
     public Long deletePosition(Long userId, Long positionId) {
 
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         Position position = positionRepository.findById(positionId)

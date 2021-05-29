@@ -24,7 +24,7 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
         this.status = errorCode.getStatus();
         this.code = errorCode.getCode();
-        this.errors = Collections.EMPTY_LIST;
+        this.errors = Collections.emptyList();
     }
 
     private ErrorResponse(final ErrorCode errorCode, List<ErrorField> errors) {
@@ -54,13 +54,13 @@ public class ErrorResponse {
         private String value;
         private String reason;
 
-        private ErrorField(final String field, final String value, final String reason) {
+        protected ErrorField(final String field, final String value, final String reason) {
             this.field = field;
             this.value = value;
             this.reason = reason;
         }
 
-        private ErrorField(final FieldError fieldError) {
+        protected ErrorField(final FieldError fieldError) {
             this.field = fieldError.getField();
             this.value = fieldError.getRejectedValue() == null ? "" : fieldError.getRejectedValue().toString();
             this.reason = fieldError.getDefaultMessage();

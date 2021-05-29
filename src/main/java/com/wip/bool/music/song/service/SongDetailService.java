@@ -117,7 +117,7 @@ public class SongDetailService {
             searchStore.insert(songDetail.getTitle());
         });
 
-        Optional.ofNullable(requestDto.getLyrics()).ifPresent(lyrics -> songDetail.updateLyrics(lyrics));
+        Optional.ofNullable(requestDto.getLyrics()).ifPresent(songDetail::updateLyrics);
 
         return songDetail.getId();
     }
@@ -145,7 +145,7 @@ public class SongDetailService {
         SongMP3 songMP3 = songMP3Repository.findBySongDetail(songDetailId)
                 .orElseThrow(() -> new EntityNotFoundException(songDetailId, ErrorCode.NOT_FOUND_MP3));
 
-        if(songSheets.size() > 0) {
+        if(!songSheets.isEmpty() && songSheets.size() > 0) {
             isDeleteSheet = songSheets.stream().allMatch(sheet -> sheet.deleteSheetFile(imageFilePath));
             if(!isDeleteSheet) throw new IllegalStateException("악보파일 삭제가 실패했습니다.");
         }

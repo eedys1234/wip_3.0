@@ -3,6 +3,7 @@ package com.wip.bool.calendar.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.cmmn.util.DateUtils;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CalendarDto {
 
     @Getter

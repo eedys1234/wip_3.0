@@ -2,11 +2,13 @@ package com.wip.bool.music.song.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.music.song.domain.SongMaster;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SongMasterDto {
 
     @Getter

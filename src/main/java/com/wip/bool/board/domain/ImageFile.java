@@ -51,7 +51,7 @@ public class ImageFile extends BaseEntity {
     private Reply reply;
 
     @Transient
-    private final int MAX = 5;
+    private static final int MAX = 5;
 
     public static ImageFile createImageFile(String filePath, String orgFileName) {
         ImageFile imageFile = new ImageFile();
@@ -105,8 +105,7 @@ public class ImageFile extends BaseEntity {
             try {
                 byte[] bytes = Files.readAllBytes(FileSystems.getDefault().getPath(tempFilePath));
                 updateSize(bytes.length);
-                boolean isMove = FileManager.move(tempFilePath, String.format("%s/%s", this.filePath, fileDirectory(this.newFileName)));
-                return isMove;
+                return FileManager.move(tempFilePath, String.format("%s/%s", this.filePath, fileDirectory(this.newFileName)));
             } catch (IOException e) {
                 log.error("{} 임시파일을 이동하는데 실패하였습니다. {}", count, tempFilePath);
                 retry.sleep(count * 100);

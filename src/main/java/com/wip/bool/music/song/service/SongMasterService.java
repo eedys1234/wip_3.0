@@ -27,8 +27,6 @@ public class SongMasterService {
 
     private final CodeMapper codeMapper;
 
-    private final String SONG_MASTER = "song_master";
-
     @Transactional
     public Long saveSongMaster(Long userId, SongMasterDto.SongMasterSaveRequest requestDto) {
 

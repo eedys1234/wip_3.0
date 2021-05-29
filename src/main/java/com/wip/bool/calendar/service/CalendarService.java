@@ -105,11 +105,7 @@ public class CalendarService {
         int month = period.getMonths();
         int day = period.getDays();
 
-        if(year >= 1 || (month >= 1 && day >= 1)) {
-            return true;
-        }
-
-        return false;
+        return year >= 1 || (month >= 1 && day >= 1);
     }
 
 }

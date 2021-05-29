@@ -2,14 +2,17 @@ package com.wip.bool.group.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.group.domain.Group;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GroupDto {
 
     @Getter
@@ -51,7 +54,7 @@ public class GroupDto {
             this.groupName = group.getGroupName();
             this.userId = group.getUser().getId();
 
-            if(group.getGroupMembers().size() > 0) {
+            if(!Objects.isNull(group.getGroupMembers()) && group.getGroupMembers().size() > 0) {
                 this.groupMember = group.getGroupMembers()
                         .stream()
                         .map(GroupMemberDto.GroupMemberResponse::new)

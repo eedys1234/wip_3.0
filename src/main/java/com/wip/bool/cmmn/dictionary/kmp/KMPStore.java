@@ -42,7 +42,8 @@ public class KMPStore implements SearchStore {
 
     @Override
     public boolean contains(String words) {
-        return findWords(words).size() > 0;
+        List<String> findWords = findWords(words);
+        return !findWords.isEmpty() &&  findWords.size() > 0;
     }
 
     @Override

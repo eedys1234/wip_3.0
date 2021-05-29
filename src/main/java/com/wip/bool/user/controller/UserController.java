@@ -1,7 +1,5 @@
 package com.wip.bool.user.controller;
 
-//import com.wip.bool.user.service.UserService;
-
 import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.user.service.UserService;
 import com.wip.bool.user.dto.UserDto;
@@ -39,19 +37,6 @@ public class UserController {
 
         return new ResponseEntity<>(ApiResponse.of(HttpStatus.CREATED.value(), id), httpHeaders, HttpStatus.CREATED);
     }
-
-//    @PostMapping(value = "/user/wip-login")
-//    public ResponseEntity<Long> login(@RequestBody @Valid UserDto.UserLoginRequest requestDto,
-//                                      Errors errors) {
-//
-//        if(errors.hasErrors()) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        Long resValue =  userService.login(requestDto);
-//
-//        return new ResponseEntity<>(resValue, HttpStatus.OK);
-//    }
 
     @PutMapping(value = "/user/approval/{userId:[\\d]+}")
     public ResponseEntity<ApiResponse<Long>> approve(@PathVariable Long userId) {

@@ -2,6 +2,7 @@ package com.wip.bool.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.user.domain.User;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDto {
 
     @Getter

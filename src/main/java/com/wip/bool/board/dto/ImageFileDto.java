@@ -2,9 +2,11 @@ package com.wip.bool.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wip.bool.board.domain.ImageFile;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageFileDto {
 
     @Getter

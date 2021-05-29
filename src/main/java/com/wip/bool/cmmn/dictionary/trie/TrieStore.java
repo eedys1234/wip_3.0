@@ -17,10 +17,6 @@ public class TrieStore implements SearchStore {
     private final Trie prefix = new Trie();
     private final Trie suffix = new Trie();
 
-    public TrieStore() {
-
-    }
-
     @Override
     public boolean insert(String words) {
 

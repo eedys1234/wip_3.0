@@ -58,7 +58,7 @@ public class Trie {
             TrieNode node = thisNode.getChildNodes().get(character);
 
             if(Objects.isNull(node)) {
-                return Collections.EMPTY_LIST;
+                return Collections.emptyList();
             }
 
             thisNode = node;
