@@ -22,7 +22,7 @@ public class Group extends BaseEntity {
     @Column(name = "group_id")
     private Long id;
 
-    @Column(name = "group_name", nullable = false)
+    @Column(name = "group_name", length = 30, nullable = false)
     private String groupName;
 
     @OneToOne(fetch = FetchType.LAZY)

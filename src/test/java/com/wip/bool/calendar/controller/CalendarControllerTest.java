@@ -2,7 +2,7 @@ package com.wip.bool.calendar.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
-import com.wip.bool.calendar.repository.Calendar;
+import com.wip.bool.calendar.domain.Calendar;
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.cmmn.calendar.CalendarFactory;
 import com.wip.bool.cmmn.type.ShareType;

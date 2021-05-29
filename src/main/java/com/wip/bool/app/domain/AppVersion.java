@@ -17,10 +17,10 @@ public class AppVersion {
     @Column(name = "app_version_id")
     private Long id;
 
-    @Column(nullable = false, length = 20, unique = true)
+    @Column(name = "app_name", nullable = false, length = 20, unique = true)
     private String name;
 
-    @Column(nullable = false, length = 7)
+    @Column(name = "app_version", nullable = false, length = 7)
     private String version;
 
     public static AppVersion createAppVersion(String name, String version) {

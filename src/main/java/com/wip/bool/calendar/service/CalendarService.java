@@ -1,7 +1,7 @@
 package com.wip.bool.calendar.service;
 
-import com.wip.bool.calendar.repository.Calendar;
-import com.wip.bool.calendar.repository.CalendarRepository;
+import com.wip.bool.calendar.domain.Calendar;
+import com.wip.bool.calendar.domain.CalendarRepository;
 import com.wip.bool.calendar.dto.CalendarDto;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.exception.excp.EntityNotFoundException;

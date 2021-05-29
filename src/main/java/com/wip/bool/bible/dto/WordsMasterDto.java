@@ -17,7 +17,6 @@ public class WordsMasterDto {
         @JsonProperty(value = "words_name")
         @NotBlank
         private String wordsName;
-
     }
 
     @Getter

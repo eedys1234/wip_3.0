@@ -10,7 +10,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "user_config")
+@Table(name = "users_config")
 public class UserConfig {
 
     @Id

@@ -25,10 +25,10 @@ public class SongDetail extends BaseEntity {
     @Column(name = "song_detail_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(name = "song_title", nullable = false, unique = true, length = 30)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "song_lyrics", columnDefinition = "TEXT", nullable = false)
     private String lyrics;
 
     @ManyToOne(fetch = FetchType.LAZY)

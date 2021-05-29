@@ -40,21 +40,23 @@ public class SongMP3 extends BaseEntity {
     @Column(name = "song_mp3_id")
     private Long id;
 
+    @Column(name = "mp3_duration")
     private int duration;
 
+    @Column(name = "mp3_mili_duration")
     private int miliDuration;
 
-    @Column(name = "mp3_file_path", length = 50, nullable = false)
+    @Column(name = "mp3_file_path", length = 150, nullable = false)
     private String mp3FilePath;
 
-    @Column(name = "mp3_org_file_name", length = 20, nullable = false)
+    @Column(name = "mp3_org_file_name", length = 50)
     private String mp3OrgFileName;
 
     @Column(name = "mp3_new_file_name", length = 32, nullable = false)
     private String mp3NewFileName;
 
-    @Column(nullable = false)
-    private long size;
+    @Column(name = "mp3_size", nullable = false)
+    private int size;
 
     @Column(name = "mp3_file_ext", length = 5, nullable = false)
     private String mp3FileExt;

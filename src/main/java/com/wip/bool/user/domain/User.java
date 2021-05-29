@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -48,10 +48,11 @@ public class User extends BaseEntity {
     private UserType userType;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(name = "user_role", nullable = false, length = 15)
     private Role role;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_config_id", nullable = false)
     private UserConfig userConfig;
 
     @OneToMany(cascade = CascadeType.ALL)
