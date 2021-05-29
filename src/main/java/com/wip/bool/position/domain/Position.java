@@ -1,5 +1,6 @@
 package com.wip.bool.position.domain;
 
+import com.wip.bool.cmmn.util.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +12,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "position")
-public class Position {
+@Table(name = "positions")
+public class Position extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

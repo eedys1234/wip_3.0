@@ -1,4 +1,4 @@
-package com.wip.bool.jwt;
+package com.wip.bool.cmmn.jwt;
 
 import com.wip.bool.user.domain.CustomUser;
 import com.wip.bool.user.domain.Role;

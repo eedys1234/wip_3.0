@@ -3,6 +3,7 @@ package com.wip.bool.cmmn.dictionary;
 import com.wip.bool.music.song.domain.SongDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -14,11 +15,12 @@ public class SearchStoreProxy implements SearchStore {
 
     @Resource(name = "kmpStore")
     private SearchStore searchStore;
-    private final SongDetailRepository songDetailRepository;
+
+    private final Helper helper;
 
     @PostConstruct
     private void init() {
-        songDetailRepository.findAllTitle().stream().forEach(title -> searchStore.insert(title));
+        helper.findAllTitle().stream().forEach(title -> searchStore.insert(title));
     }
 
     @Override
@@ -39,5 +41,17 @@ public class SearchStoreProxy implements SearchStore {
     @Override
     public boolean delete(String words) {
         return searchStore.delete(words);
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    public static class Helper {
+
+        private final SongDetailRepository songDetailRepository;
+
+        @Transactional(readOnly = true)
+        public List<String> findAllTitle() {
+            return songDetailRepository.findAllTitle();
+        }
     }
 }

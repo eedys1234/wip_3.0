@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 public class AppVersionDto {
 
@@ -22,7 +23,7 @@ public class AppVersionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class AppVersionResponse {
+    public static class AppVersionResponse implements Serializable {
 
         @JsonProperty(value = "app_version_id")
         private Long appVersionId;

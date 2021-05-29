@@ -22,11 +22,11 @@ public class Reply extends BaseEntity {
     @Column(name = "reply_id")
     private Long id;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "reply_content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "is_delete")
+    @Column(name = "is_delete", length = 15,nullable = false)
     private DeleteStatus isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)

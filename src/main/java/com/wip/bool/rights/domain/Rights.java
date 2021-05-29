@@ -22,17 +22,17 @@ public class Rights extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "target")
+    @Column(name = "target", length = 30, nullable = false)
     private Target target;
 
-    @Column(name = "target_id")
+    @Column(name = "target_id", nullable = false)
     private Long targetId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "authority")
+    @Column(name = "authority", length = 30, nullable = false)
     private Authority authority;
 
-    @Column(name = "authority_id")
+    @Column(name = "authority_id", nullable = false)
     private Long authorityId;
 
     @Column(name = "right_type")

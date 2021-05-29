@@ -27,15 +27,16 @@ public class ImageFile extends BaseEntity {
     @Column(name = "image_file_id")
     private Long id;
 
-    @Column(name = "image_file_path")
+    @Column(name = "image_file_path", length = 150, nullable = false)
     private String filePath;
 
-    @Column(name = "org_file_name")
+    @Column(name = "org_file_name", length = 100)
     private String orgFileName;
 
     @Column(name = "new_file_name", unique = true, length = 32, nullable = false)
     private String newFileName;
 
+    @Column(name = "image_file_size", nullable = false)
     private int size;
 
     @Column(name = "image_file_ext", length = 5, nullable = false)

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 public class PositionDto {
 
@@ -48,7 +49,7 @@ public class PositionDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PositionResponse implements CodeModel {
+    public static class PositionResponse implements CodeModel, Serializable {
 
         @JsonProperty(value = "position_id")
         private Long positionId;

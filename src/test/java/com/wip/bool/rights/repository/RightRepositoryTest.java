@@ -1,18 +1,26 @@
 package com.wip.bool.rights.repository;
 
 import com.wip.bool.cmmn.rights.RightsFactory;
+import com.wip.bool.configure.TestConfig;
 import com.wip.bool.rights.domain.Rights;
 import com.wip.bool.rights.domain.RightsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@SpringBootTest
+@Import(TestConfig.class)
+@ActiveProfiles(TEST)
+@Transactional
 public class RightRepositoryTest {
 
     @Autowired

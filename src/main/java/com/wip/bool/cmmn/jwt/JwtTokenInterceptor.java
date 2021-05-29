@@ -1,4 +1,4 @@
-package com.wip.bool.jwt;
+package com.wip.bool.cmmn.jwt;
 
 import com.wip.bool.cmmn.util.AnnotationUtils;
 import com.wip.bool.exception.excp.AuthorizationException;
