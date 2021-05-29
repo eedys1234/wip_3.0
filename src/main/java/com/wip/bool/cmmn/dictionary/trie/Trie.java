@@ -68,7 +68,7 @@ public class Trie {
             tempList.add(thisNode.getName());
         }
 
-        Stack<TrieNode> stack = new Stack<>();
+        Deque<TrieNode> stack = new ArrayDeque<>();
 
         for(TrieNode node : thisNode.getChildNodes().values()) {
             stack.push(node);

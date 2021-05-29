@@ -81,8 +81,8 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<GroupDto.GroupResponse> findAllByMaster(Long userId, String order, int size, int offset) {
 
-        userRepository.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         OrderType orderType = OrderType.valueOf(order);
         return groupRepository.findAllByMaster(userId, orderType, size, offset)
@@ -97,8 +97,8 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<GroupDto.GroupResponse> findAllByUser(Long userId, String order, int size, int offset) {
 
-        userRepository.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
         OrderType orderType = OrderType.valueOf(order);
         return groupRepository.findAllByUser(userId, orderType, size, offset)

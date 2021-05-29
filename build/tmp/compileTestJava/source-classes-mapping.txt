@@ -30,8 +30,8 @@ com/wip/bool/dept/repository/DeptRepositoryTest.java
  com.wip.bool.dept.repository.DeptRepositoryTest
 com/wip/bool/app/service/AppVersionServiceTest.java
  com.wip.bool.app.service.AppVersionServiceTest
-com/wip/bool/file/FileManagerTest.java
- com.wip.bool.file.FileManagerTest
+com/wip/bool/search/SearchTest.java
+ com.wip.bool.search.SearchTest
 com/wip/bool/rights/repository/RightRepositoryTest.java
  com.wip.bool.rights.repository.RightRepositoryTest
 com/wip/bool/cmmn/music/song/SongMasterFactory.java
@@ -52,6 +52,12 @@ com/wip/bool/cmmn/music/guitarcode/GuitarCodeFactory.java
  com.wip.bool.cmmn.music.guitarcode.GuitarCodeFactory
 com/wip/bool/cmmn/position/PositionFactory.java
  com.wip.bool.cmmn.position.PositionFactory
+com/wip/bool/rights/controller/RightControllerTest.java
+ com.wip.bool.rights.controller.RightControllerTest
+ com.wip.bool.rights.controller.RightControllerTest$1
+ com.wip.bool.rights.controller.RightControllerTest$2
+com/wip/bool/rights/service/RightServiceTest.java
+ com.wip.bool.rights.service.RightServiceTest
 com/wip/bool/group/controller/GroupControllerTest.java
  com.wip.bool.group.controller.GroupControllerTest
  com.wip.bool.group.controller.GroupControllerTest$1
@@ -115,8 +121,6 @@ com/wip/bool/userconfig/service/UserConfigServiceTest.java
  com.wip.bool.userconfig.service.UserConfigServiceTest
 com/wip/bool/bible/service/WordsMasterServiceTest.java
  com.wip.bool.bible.service.WordsMasterServiceTest
-com/wip/bool/search/SearchTest.java
- com.wip.bool.search.SearchTest
 com/wip/bool/position/controller/PositionControllerTest.java
  com.wip.bool.position.controller.PositionControllerTest
  com.wip.bool.position.controller.PositionControllerTest$1
@@ -131,8 +135,6 @@ com/wip/bool/board/controller/BoardControllerTest.java
  com.wip.bool.board.controller.BoardControllerTest$3
 com/wip/bool/recent/repository/RecentRepositoryTest.java
  com.wip.bool.recent.repository.RecentRepositoryTest
-com/wip/bool/rights/service/RightServiceTest.java
- com.wip.bool.rights.service.RightServiceTest
 com/wip/bool/userboxsong/controller/UserBoxSongControllerTest.java
  com.wip.bool.userboxsong.controller.UserBoxSongControllerTest
  com.wip.bool.userboxsong.controller.UserBoxSongControllerTest$1
@@ -164,10 +166,6 @@ com/wip/bool/userboxsong/repository/UserBoxSongRepositoryTest.java
  com.wip.bool.userboxsong.repository.UserBoxSongRepositoryTest
 com/wip/bool/cmmn/reply/ReplyFactory.java
  com.wip.bool.cmmn.reply.ReplyFactory
-com/wip/bool/rights/controller/RightControllerTest.java
- com.wip.bool.rights.controller.RightControllerTest
- com.wip.bool.rights.controller.RightControllerTest$1
- com.wip.bool.rights.controller.RightControllerTest$2
 com/wip/bool/bible/controller/WordsMasterControllerTest.java
  com.wip.bool.bible.controller.WordsMasterControllerTest
  com.wip.bool.bible.controller.WordsMasterControllerTest$1
@@ -188,6 +186,8 @@ com/wip/bool/bookmark/controller/BookMarkControllerTest.java
  com.wip.bool.bookmark.controller.BookMarkControllerTest$1
  com.wip.bool.bookmark.controller.BookMarkControllerTest$2
  com.wip.bool.bookmark.controller.BookMarkControllerTest$3
+com/wip/bool/file/FileManagerTest.java
+ com.wip.bool.file.FileManagerTest
 com/wip/bool/user/controller/UserControllerTest.java
  com.wip.bool.user.controller.UserControllerTest
  com.wip.bool.user.controller.UserControllerTest$1

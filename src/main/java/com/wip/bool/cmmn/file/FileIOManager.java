@@ -37,7 +37,7 @@ public class FileIOManager extends FileManager {
         }
         finally {
             fileManager.close();
-            return true;
         }
+        return true;
     }
 }

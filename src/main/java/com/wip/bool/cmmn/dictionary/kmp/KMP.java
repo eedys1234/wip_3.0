@@ -22,7 +22,7 @@ public class KMP {
 
     protected boolean contains(String keyword) {
         List<Integer> list = search(keyword);
-        return !list.isEmpty() && list.size() > 0;
+        return !list.isEmpty();
     }
 
     protected List<Integer> search(String keyword) {

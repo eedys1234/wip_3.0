@@ -54,7 +54,7 @@ public class GroupDto {
             this.groupName = group.getGroupName();
             this.userId = group.getUser().getId();
 
-            if(!Objects.isNull(group.getGroupMembers()) && group.getGroupMembers().size() > 0) {
+            if(!Objects.isNull(group.getGroupMembers()) && !group.getGroupMembers().isEmpty()) {
                 this.groupMember = group.getGroupMembers()
                         .stream()
                         .map(GroupMemberDto.GroupMemberResponse::new)

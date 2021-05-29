@@ -50,8 +50,8 @@ public class FileNIOManager extends FileManager {
         }
         finally {
             fileManager.close();
-            return true;
         }
+        return true;
     }
 
 }

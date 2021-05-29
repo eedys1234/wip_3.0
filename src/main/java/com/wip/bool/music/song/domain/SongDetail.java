@@ -75,19 +75,19 @@ public class SongDetail extends BaseEntity {
     }
 
     public void updateSongMaster(SongMaster songMaster) {
-        if(this.songMaster.getId() != songMaster.getId()) {
+        if(!this.songMaster.getId().equals(songMaster.getId())) {
             this.songMaster = songMaster;
         }
     }
 
     public void updateGuitarCode(GuitarCode guitarCode) {
-        if(this.guitarCode.getId() != guitarCode.getId()) {
+        if(!this.guitarCode.getId().equals(guitarCode.getId())) {
             this.guitarCode = guitarCode;
         }
     }
 
     public void updateWordsMaster(WordsMaster wordsMaster) {
-        if(this.wordsMaster.getId() != wordsMaster.getId()) {
+        if(!this.wordsMaster.getId().equals(wordsMaster.getId())) {
             this.wordsMaster = wordsMaster;
         }
     }

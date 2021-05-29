@@ -29,6 +29,7 @@ public class Retry {
             Thread.sleep(millisecond);
         } catch (InterruptedException e) {
             log.error("sleep 실패");
+            Thread.currentThread().interrupt();
         }
     }
 

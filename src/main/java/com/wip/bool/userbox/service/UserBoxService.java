@@ -119,7 +119,7 @@ public class UserBoxService {
         Dept user_dept = Optional.ofNullable(user.getDept())
                 .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_DEPT));
 
-        if(user_dept.getId() != dept.getId()) {
+        if(!user_dept.getId().equals(dept.getId())) {
             throw new AuthorizationException();
         }
 
@@ -141,7 +141,7 @@ public class UserBoxService {
         List<GroupMember> groupMembers = groupMemberRepository.findAllByGroup(groupIds);
 
         //체킹
-        if(!groupMembers.stream().allMatch(groupMember -> groupMember.getUser() != null && groupMember.getUser().getId() == user.getId())) {
+        if(!groupMembers.stream().allMatch(groupMember -> groupMember.getUser() != null && groupMember.getUser().getId().equals(user.getId()))) {
             throw new AuthorizationException();
         }
         

@@ -53,7 +53,7 @@ public class UserBoxSongService {
         List<Group> groups = groupRepository.findAllByUser(userId);
 
         List<Long> authorityIds = groups.stream()
-                                        .map(group -> group.getId())
+                                        .map(Group::getId)
                                         .collect(Collectors.toList());
 
         if(Objects.isNull(authorityIds)) {
@@ -89,7 +89,7 @@ public class UserBoxSongService {
         List<Group> groups = groupRepository.findAllByUser(userId);
 
         List<Long> authorityIds = groups.stream()
-                .map(group -> group.getId())
+                .map(Group::getId)
                 .collect(Collectors.toList());
 
         if(Objects.isNull(authorityIds)) {
@@ -124,7 +124,7 @@ public class UserBoxSongService {
         List<Group> groups = groupRepository.findAllByUser(userId);
 
         List<Long> authorityIds = groups.stream()
-                .map(group -> group.getId())
+                .map(Group::getId)
                 .collect(Collectors.toList());
 
         if(Objects.isNull(authorityIds)) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -29,16 +30,18 @@ public abstract class FileManager {
     protected abstract void connect() throws IOException;
 
     protected void createParentDirectory() throws IOException {
-        int index = this.fileAbsolutePath.lastIndexOf("/");
+        int index = this.fileAbsolutePath.lastIndexOf('/');
 
-        if(index > -1 && !Files.exists(Paths.get(this.fileAbsolutePath.substring(0, index)))) {
-            Files.createDirectories(Paths.get(this.fileAbsolutePath.substring(0, index)));
+        Path path = Paths.get(this.fileAbsolutePath.substring(0, index));
+        if(index > -1 && !path.toFile().exists()) {
+            Files.createDirectories(path);
         }
     }
 
     public static boolean delete(String filePath, String fileName) throws IOException {
-        if(Files.exists(Paths.get(filePath, fileName))) {
-            return Files.deleteIfExists(Paths.get(filePath, fileName));
+        Path path = Paths.get(filePath, fileName);
+        if(path.toFile().exists()) {
+            return Files.deleteIfExists(path);
         }
         return true;
     }
@@ -61,7 +64,7 @@ public abstract class FileManager {
     }
 
     @FunctionalInterface
-    public interface FileInterface<T extends FileManager, V extends Throwable> {
-        void accept(T t) throws IOException;
+    public interface FileInterface <T extends FileManager, V extends Throwable> {
+        void accept(T t) throws V;
     }
 }

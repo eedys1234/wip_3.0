@@ -44,11 +44,7 @@ public class JwtTokenProvider {
 
     public boolean isValidateToken(String token) {
         String sub = String.valueOf(getBodyFromToken(token).get("sub"));
-        if(!StringUtils.isEmpty(sub)) {
-            return true;
-        }
-
-        return false;
+        return !StringUtils.isEmpty(sub);
     }
 
     public boolean isExpireToken(String token) {
@@ -101,7 +97,7 @@ public class JwtTokenProvider {
             id = Long.parseLong(String.valueOf(user.getAttributes().get("id")));
             role = user.getAuthorities().stream().findFirst()
                     .map(auth -> Role.valueOf(auth.getAuthority()))
-                    .orElseThrow(()-> new IllegalArgumentException());
+                    .orElseThrow(IllegalArgumentException::new);
 
         }
 
