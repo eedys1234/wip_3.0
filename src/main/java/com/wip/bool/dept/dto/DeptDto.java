@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 public class DeptDto {
 
@@ -47,7 +48,7 @@ public class DeptDto {
 
     @Getter
     @NoArgsConstructor
-    public static class DeptResponse implements CodeModel {
+    public static class DeptResponse implements CodeModel, Serializable {
 
         @JsonProperty(value = "dept_id")
         private Long deptId;

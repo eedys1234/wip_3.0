@@ -10,6 +10,8 @@ import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class PositionService {
 
     private final UserRepository userRepository;
 
+    @CacheEvict(value = "meta_data", key = "position")
     @Transactional
     public Long savePosition(Long userId, PositionDto.PositionSaveRequest requestDto) {
 
@@ -41,6 +44,7 @@ public class PositionService {
 
     }
 
+    @CacheEvict(value = "meta_data", key = "position")
     @Transactional
     public Long updatePosition(Long userId, Long positionId, PositionDto.PositionUpdateRequest requestDto) {
 
@@ -62,6 +66,7 @@ public class PositionService {
 
     }
 
+    @Cacheable(value = "meta_data", key = "position")
     @Transactional(readOnly = true)
     public List<PositionDto.PositionResponse> findAll() {
        return positionRepository.findAll().stream()
@@ -77,6 +82,8 @@ public class PositionService {
         return new PositionDto.PositionResponse(position);
     }
 
+    @CacheEvict(value = "meta_data", key = "position")
+    @Transactional
     public Long deletePosition(Long userId, Long positionId) {
 
         userRepository.findById(userId)

@@ -1,7 +1,7 @@
 package com.wip.bool.board.domain;
 
-import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.status.DeleteStatus;
+import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,22 +23,24 @@ public class Board extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "board_type", nullable = false, length = 15)
     private BoardType boardType;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "board_title", nullable = false, length = 50)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "board_content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "is_delete")
+    @Column(name = "is_delete", nullable = false, length = 10)
     private DeleteStatus isDeleted;
 
     @OneToMany(mappedBy = "board")
     private List<ImageFile> imageFiles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "board")

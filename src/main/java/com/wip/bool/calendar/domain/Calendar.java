@@ -1,4 +1,4 @@
-package com.wip.bool.calendar.repository;
+package com.wip.bool.calendar.domain;
 
 import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.cmmn.type.ShareType;
@@ -22,13 +22,13 @@ public class Calendar extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "share_type")
+    @Column(name = "share_type", length = 20, nullable = false)
     private ShareType shareType;
 
     @Column(name = "calendar_date", nullable = false)
     private LocalDateTime calendarDate;
 
-    @Column(length = 30, nullable = false)
+    @Column(name = "calendar_title", length = 30, nullable = false)
     private String title;
 
     @Column(name = "calendar_content", length = 150, nullable = false)

@@ -10,6 +10,8 @@ import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class DeptService {
 
     private final UserRepository userRepository;
 
+    @CacheEvict(value = "meta_data", key = "dept")
     @Transactional
     public Long saveDept(Long userId, DeptDto.DeptSaveRequest requestDto) {
 
@@ -39,6 +42,7 @@ public class DeptService {
 
     }
 
+    @CacheEvict(value = "meta_data", key = "dept")
     @Transactional
     public Long updateDept(Long userId, Long deptId, DeptDto.DeptUpdateRequest requestDto) {
 
@@ -59,6 +63,7 @@ public class DeptService {
         throw new AuthorizationException();
     }
 
+    @Cacheable(value = "meta_date", key = "dept")
     @Transactional(readOnly = true)
     public List<DeptDto.DeptResponse> findAll() {
 
@@ -76,6 +81,7 @@ public class DeptService {
         return new DeptDto.DeptResponse(dept);
     }
 
+    @CacheEvict(value = "meta_data", key = "dept")
     @Transactional
     public Long deleteDept(Long userId, Long deptId) {
 

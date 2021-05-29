@@ -1,5 +1,6 @@
 package com.wip.bool.music.guitar.domain;
 
+import com.wip.bool.cmmn.util.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "guitar_codes")
-public class GuitarCode {
+public class GuitarCode extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

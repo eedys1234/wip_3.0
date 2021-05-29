@@ -1,5 +1,6 @@
 package com.wip.bool.dept.domain;
 
+import com.wip.bool.cmmn.util.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +11,14 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Dept {
+public class Dept extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dept_id")
     private Long id;
 
-    @Column(name = "dept_name", nullable = false, length = 2)
+    @Column(name = "dept_name", nullable = false, length = 2, unique = true)
     private String deptName;
 
     @Builder
