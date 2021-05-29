@@ -34,6 +34,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -167,20 +169,22 @@ public class SongDetailServiceTest {
 
         //given
         String byteString = "TEST";
+        byte[] mp3FileBytes = Files.readAllBytes(FileSystems.getDefault().getPath("src/test/resources/mp3", SongMP3Factory.orgFileName));
+
         User user = UserFactory.getAdminUser(1L);
         SongMaster songMaster = SongMasterFactory.getSongMaster(1L);
         GuitarCode guitarCode = GuitarCodeFactory.getGuitarCode(1L);
         WordsMaster wordsMaster = WordsMasterFactory.getWordsMaster(1L);
         SongDetail songDetail = SongDetailFactory.getSongDetail(songMaster, guitarCode, wordsMaster, 1L);
         List<SongSheet> songSheets = SongSheetFactory.getSongSheets(songDetail, sheetFilePath, "test.PNG", byteString.getBytes());
-        SongMP3 songMP3 = SongMP3Factory.getSongMP3(songDetail, mp3FilePath, "test.MP4", byteString.getBytes(), 1L);
+        SongMP3 songMP3 = SongMP3Factory.getSongMP3(songDetail, mp3FilePath, SongMP3Factory.orgFileName, mp3FileBytes, 1L);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
         doReturn(Optional.ofNullable(songDetail)).when(songDetailRepository).findById(anyLong());
         doReturn(1L).when(songDetailRepository).delete(any(SongDetail.class));
         doReturn(songSheets).when(songSheetRepository).findBySongDetail(anyLong());
-        doReturn(songMP3).when(songMP3Repository).findBySongDetail(anyLong());
+        doReturn(Optional.ofNullable(songMP3)).when(songMP3Repository).findBySongDetail(anyLong());
         Long resValue = songDetailService.deleteSong(user.getId(), songDetail.getId());
 
         //then

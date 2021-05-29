@@ -52,7 +52,7 @@ public class User extends BaseEntity {
     private Role role;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_config_id", nullable = false)
+    @JoinColumn(name = "user_config_id")
     private UserConfig userConfig;
 
     @OneToMany(cascade = CascadeType.ALL)

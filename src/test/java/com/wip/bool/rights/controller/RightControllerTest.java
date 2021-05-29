@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,6 +63,7 @@ public class RightControllerTest {
         ReflectionTestUtils.setField(requestDto, "targetId", 1L);
         ReflectionTestUtils.setField(requestDto, "authority", "GROUP");
         ReflectionTestUtils.setField(requestDto, "authorityId", 1L);
+        ReflectionTestUtils.setField(requestDto, "rightType", Rights.RightType.READ.name());
 
         doReturn(right.getId()).when(rightService).saveRight(any(RightDto.RightSaveRequest.class));
 
@@ -84,11 +87,15 @@ public class RightControllerTest {
     public void 권한_삭제_Controller() throws Exception {
 
         //given
-        doReturn(1L).when(rightService).deleteRight(any(Long.class), anyString());
+        doReturn(1L).when(rightService).deleteRight(anyLong(), anyString());
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("right_type", Rights.RightType.READ.name());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/right/1")
-        .contentType(MediaType.APPLICATION_JSON));
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
@@ -96,6 +103,6 @@ public class RightControllerTest {
         assertThat(resValue).isEqualTo(1L);
 
         //verify
-        verify(rightService, times(1)).deleteRight(any(Long.class), anyString());
+        verify(rightService, times(1)).deleteRight(anyLong(), anyString());
     }
 }
