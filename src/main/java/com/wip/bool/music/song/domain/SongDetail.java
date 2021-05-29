@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,31 +64,46 @@ public class SongDetail extends BaseEntity {
     }
 
     public void updateTitle(String title) {
-        if(!StringUtils.isEmpty(title) && !this.title.equals(title)) {
+        if(!StringUtils.isEmpty(this.title) && !this.title.equals(title)) {
+            this.title = title;
+        }
+        else if(StringUtils.isEmpty(this.title)) {
             this.title = title;
         }
     }
 
     public void updateLyrics(String lyrics) {
-        if(this.lyrics.equals(lyrics)) {
+        if(!StringUtils.isEmpty(this.lyrics) && !this.lyrics.equals(lyrics)) {
+            this.lyrics = lyrics;
+        }
+        else if(StringUtils.isEmpty(this.lyrics)) {
             this.lyrics = lyrics;
         }
     }
 
     public void updateSongMaster(SongMaster songMaster) {
-        if(!this.songMaster.getId().equals(songMaster.getId())) {
+        if (Objects.isNull(this.songMaster)) {
+            this.songMaster = songMaster;
+        }
+        else if(!this.songMaster.getId().equals(songMaster.getId())) {
             this.songMaster = songMaster;
         }
     }
 
     public void updateGuitarCode(GuitarCode guitarCode) {
-        if(!this.guitarCode.getId().equals(guitarCode.getId())) {
+        if (Objects.isNull(this.guitarCode)) {
+            this.guitarCode = guitarCode;
+        }
+        else if(!this.guitarCode.getId().equals(guitarCode.getId())) {
             this.guitarCode = guitarCode;
         }
     }
 
     public void updateWordsMaster(WordsMaster wordsMaster) {
-        if(!this.wordsMaster.getId().equals(wordsMaster.getId())) {
+        if (Objects.isNull(this.wordsMaster)) {
+            this.wordsMaster = wordsMaster;
+        }
+        else if(!this.wordsMaster.getId().equals(wordsMaster.getId())) {
             this.wordsMaster = wordsMaster;
         }
     }

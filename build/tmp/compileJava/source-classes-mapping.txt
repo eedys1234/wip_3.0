@@ -28,13 +28,11 @@ com/wip/bool/app/domain/AppVersionRepository.java
  com.wip.bool.app.domain.AppVersionRepository
 com/wip/bool/bible/service/WordsMasterService.java
  com.wip.bool.bible.service.WordsMasterService
-com/wip/bool/userbox/dto/UserBoxDto.java
- com.wip.bool.userbox.dto.UserBoxDto
- com.wip.bool.userbox.dto.UserBoxDto$UserBoxResponse
- com.wip.bool.userbox.dto.UserBoxDto$UserBoxSaveRequest
- com.wip.bool.userbox.dto.UserBoxDto$UserBoxUpdateRequest
-com/wip/bool/music/song/domain/QSongMaster.java
- com.wip.bool.music.song.domain.QSongMaster
+com/wip/bool/group/service/GroupService.java
+ com.wip.bool.group.service.GroupService
+com/wip/bool/cmmn/file/FileManager.java
+ com.wip.bool.cmmn.file.FileManager
+ com.wip.bool.cmmn.file.FileManager$FileInterface
 com/wip/bool/calendar/controller/CalendarController.java
  com.wip.bool.calendar.controller.CalendarController
 com/wip/bool/cmmn/type/ShareType.java
@@ -64,8 +62,8 @@ com/wip/bool/position/domain/Position.java
  com.wip.bool.position.domain.Position$PositionBuilder
 com/wip/bool/configure/WebMvcConfig.java
  com.wip.bool.configure.WebMvcConfig
-com/wip/bool/music/sheet/service/SongSheetService.java
- com.wip.bool.music.sheet.service.SongSheetService
+com/wip/bool/cmmn/dictionary/kmp/KMP.java
+ com.wip.bool.cmmn.dictionary.kmp.KMP
 com/wip/bool/calendar/domain/CalendarRepository.java
  com.wip.bool.calendar.domain.CalendarRepository
 com/wip/bool/user/domain/QUser.java
@@ -150,8 +148,8 @@ com/wip/bool/music/guitar/domain/GuitarCode.java
  com.wip.bool.music.guitar.domain.GuitarCode
 com/wip/bool/cmmn/dictionary/standard/Standard.java
  com.wip.bool.cmmn.dictionary.standard.Standard
-com/wip/bool/userbox/domain/UserBoxSong.java
- com.wip.bool.userbox.domain.UserBoxSong
+com/wip/bool/cmmn/file/FileIOManager.java
+ com.wip.bool.cmmn.file.FileIOManager
 com/wip/bool/group/domain/Group.java
  com.wip.bool.group.domain.Group
 com/wip/bool/Application.java
@@ -196,8 +194,8 @@ com/wip/bool/cmmn/auth/Target.java
  com.wip.bool.cmmn.auth.Target
 com/wip/bool/cmmn/dictionary/standard/Initializer.java
  com.wip.bool.cmmn.dictionary.standard.Initializer
-com/wip/bool/recent/domain/Recent.java
- com.wip.bool.recent.domain.Recent
+com/wip/bool/cmmn/jwt/JwtTokenProvider.java
+ com.wip.bool.cmmn.jwt.JwtTokenProvider
 com/wip/bool/cmmn/ApiResponse.java
  com.wip.bool.cmmn.ApiResponse
 com/wip/bool/dept/domain/QDept.java
@@ -272,8 +270,11 @@ com/wip/bool/dept/dto/DeptDto.java
  com.wip.bool.dept.dto.DeptDto$DeptSaveRequest$DeptSaveRequestBuilder
  com.wip.bool.dept.dto.DeptDto$DeptUpdateRequest
  com.wip.bool.dept.dto.DeptDto$DeptUpdateRequest$DeptUpdateRequestBuilder
-com/wip/bool/music/song/service/SongDetailService.java
- com.wip.bool.music.song.service.SongDetailService
+com/wip/bool/group/dto/GroupDto.java
+ com.wip.bool.group.dto.GroupDto
+ com.wip.bool.group.dto.GroupDto$GroupResponse
+ com.wip.bool.group.dto.GroupDto$GroupSaveRequest
+ com.wip.bool.group.dto.GroupDto$GroupUpdateRequest
 com/wip/bool/board/domain/QImageFile.java
  com.wip.bool.board.domain.QImageFile
 com/wip/bool/exception/ErrorResponse.java
@@ -281,8 +282,8 @@ com/wip/bool/exception/ErrorResponse.java
  com.wip.bool.exception.ErrorResponse$ErrorField
 com/wip/bool/group/domain/GroupMemberRepository.java
  com.wip.bool.group.domain.GroupMemberRepository
-com/wip/bool/userbox/domain/UserBoxRepository.java
- com.wip.bool.userbox.domain.UserBoxRepository
+com/wip/bool/cmmn/dictionary/trie/TrieStore.java
+ com.wip.bool.cmmn.dictionary.trie.TrieStore
 com/wip/bool/user/service/UserService.java
  com.wip.bool.user.service.UserService
 com/wip/bool/rights/dto/RightDto.java
@@ -295,21 +296,22 @@ com/wip/bool/user/controller/UserConfigController.java
 com/wip/bool/board/dto/ImageFileDto.java
  com.wip.bool.board.dto.ImageFileDto
  com.wip.bool.board.dto.ImageFileDto$ImageFileResponse
-com/wip/bool/userbox/service/UserBoxService.java
- com.wip.bool.userbox.service.UserBoxService
+com/wip/bool/userbox/dto/UserBoxSongDto.java
+ com.wip.bool.userbox.dto.UserBoxSongDto
+ com.wip.bool.userbox.dto.UserBoxSongDto$UserBoxSongResponse
+ com.wip.bool.userbox.dto.UserBoxSongDto$UserBoxSongSaveRequest
 com/wip/bool/board/domain/BoardRepository.java
  com.wip.bool.board.domain.BoardRepository
-com/wip/bool/cmmn/dictionary/SearchStoreProxy.java
- com.wip.bool.cmmn.dictionary.SearchStoreProxy
- com.wip.bool.cmmn.dictionary.SearchStoreProxy$Helper
+com/wip/bool/board/domain/ImageFile.java
+ com.wip.bool.board.domain.ImageFile
 com/wip/bool/user/controller/UserController.java
  com.wip.bool.user.controller.UserController
-com/wip/bool/bookmark/domain/BookMarkRepository.java
- com.wip.bool.bookmark.domain.BookMarkRepository
+com/wip/bool/group/controller/GroupController.java
+ com.wip.bool.group.controller.GroupController
 com/wip/bool/board/domain/ReplyRepository.java
  com.wip.bool.board.domain.ReplyRepository
-com/wip/bool/bookmark/service/BookMarkService.java
- com.wip.bool.bookmark.service.BookMarkService
+com/wip/bool/music/song/controller/SongDetailController.java
+ com.wip.bool.music.song.controller.SongDetailController
 com/wip/bool/position/controller/PositionController.java
  com.wip.bool.position.controller.PositionController
 com/wip/bool/group/controller/GroupMemberController.java
@@ -320,8 +322,8 @@ com/wip/bool/cmmn/util/RoleUtils.java
  com.wip.bool.cmmn.util.RoleUtils
 com/wip/bool/music/song/controller/SongMasterController.java
  com.wip.bool.music.song.controller.SongMasterController
-com/wip/bool/recent/domain/RecentRepository.java
- com.wip.bool.recent.domain.RecentRepository
+com/wip/bool/cmmn/dictionary/trie/Trie.java
+ com.wip.bool.cmmn.dictionary.trie.Trie
 com/wip/bool/user/dto/UserConfigDto.java
  com.wip.bool.user.dto.UserConfigDto
  com.wip.bool.user.dto.UserConfigDto$UserConfigResponse
@@ -344,8 +346,8 @@ com/wip/bool/music/song/dto/SongMasterDto.java
  com.wip.bool.music.song.dto.SongMasterDto$SongMasterUpdateRequest
 com/wip/bool/board/service/BoardService.java
  com.wip.bool.board.service.BoardService
-com/wip/bool/music/song/domain/QSongDetail.java
- com.wip.bool.music.song.domain.QSongDetail
+com/wip/bool/board/controller/ReplyController.java
+ com.wip.bool.board.controller.ReplyController
 com/wip/bool/bookmark/controller/BookMarkController.java
  com.wip.bool.bookmark.controller.BookMarkController
 com/wip/bool/cmmn/auth/AuthInterceptor.java
@@ -356,8 +358,8 @@ com/wip/bool/security/CustomAuthenticationFilter.java
  com.wip.bool.security.CustomAuthenticationFilter
 com/wip/bool/dept/service/DeptService.java
  com.wip.bool.dept.service.DeptService
-com/wip/bool/music/song/domain/SongDetail.java
- com.wip.bool.music.song.domain.SongDetail
+com/wip/bool/cmmn/file/FileNIOManager.java
+ com.wip.bool.cmmn.file.FileNIOManager
 com/wip/bool/board/dto/BoardDto.java
  com.wip.bool.board.dto.BoardDto
  com.wip.bool.board.dto.BoardDto$BoardResponse
@@ -371,8 +373,8 @@ com/wip/bool/music/guitar/controller/GuitarCodeController.java
  com.wip.bool.music.guitar.controller.GuitarCodeController
 com/wip/bool/user/service/Oauth2UserService.java
  com.wip.bool.user.service.Oauth2UserService
-com/wip/bool/bookmark/domain/BookMark.java
- com.wip.bool.bookmark.domain.BookMark
+com/wip/bool/userbox/controller/UserBoxSongController.java
+ com.wip.bool.userbox.controller.UserBoxSongController
 com/wip/bool/music/mp3/service/SongMP3Service.java
  com.wip.bool.music.mp3.service.SongMP3Service
 com/wip/bool/music/sheet/domain/SongSheetRepository.java
@@ -386,55 +388,53 @@ com/wip/bool/music/song/dto/SongDetailDto.java
  com.wip.bool.music.song.dto.SongDetailDto$SongDetailUpdateRequest
  com.wip.bool.music.song.dto.SongDetailDto$SongDetailUpdateRequest$SongDetailUpdateRequestBuilder
  com.wip.bool.music.song.dto.SongDetailDto$SongDetailsRequest
-com/wip/bool/recent/service/RecentService.java
- com.wip.bool.recent.service.RecentService
-com/wip/bool/userbox/controller/UserBoxController.java
- com.wip.bool.userbox.controller.UserBoxController
-com/wip/bool/music/mp3/domain/SongMP3Repository.java
- com.wip.bool.music.mp3.domain.SongMP3Repository
-com/wip/bool/music/song/domain/SongDetailRepository.java
- com.wip.bool.music.song.domain.SongDetailRepository
-com/wip/bool/userbox/dto/UserBoxSongDto.java
- com.wip.bool.userbox.dto.UserBoxSongDto
- com.wip.bool.userbox.dto.UserBoxSongDto$UserBoxSongResponse
- com.wip.bool.userbox.dto.UserBoxSongDto$UserBoxSongSaveRequest
-com/wip/bool/music/song/controller/SongDetailController.java
- com.wip.bool.music.song.controller.SongDetailController
-com/wip/bool/group/controller/GroupController.java
- com.wip.bool.group.controller.GroupController
-com/wip/bool/group/dto/GroupDto.java
- com.wip.bool.group.dto.GroupDto
- com.wip.bool.group.dto.GroupDto$GroupResponse
- com.wip.bool.group.dto.GroupDto$GroupSaveRequest
- com.wip.bool.group.dto.GroupDto$GroupUpdateRequest
-com/wip/bool/cmmn/dictionary/trie/Trie.java
- com.wip.bool.cmmn.dictionary.trie.Trie
-com/wip/bool/userbox/domain/UserBoxSongRepository.java
- com.wip.bool.userbox.domain.UserBoxSongRepository
-com/wip/bool/cmmn/dictionary/trie/TrieStore.java
- com.wip.bool.cmmn.dictionary.trie.TrieStore
-com/wip/bool/cmmn/dictionary/kmp/KMP.java
- com.wip.bool.cmmn.dictionary.kmp.KMP
-com/wip/bool/board/controller/ReplyController.java
- com.wip.bool.board.controller.ReplyController
-com/wip/bool/group/service/GroupService.java
- com.wip.bool.group.service.GroupService
-com/wip/bool/cmmn/jwt/JwtTokenProvider.java
- com.wip.bool.cmmn.jwt.JwtTokenProvider
-com/wip/bool/cmmn/file/FileManager.java
- com.wip.bool.cmmn.file.FileManager
- com.wip.bool.cmmn.file.FileManager$FileInterface
-com/wip/bool/music/mp3/domain/SongMP3.java
- com.wip.bool.music.mp3.domain.SongMP3
-com/wip/bool/music/sheet/domain/SongSheet.java
- com.wip.bool.music.sheet.domain.SongSheet
-com/wip/bool/cmmn/file/FileNIOManager.java
- com.wip.bool.cmmn.file.FileNIOManager
-com/wip/bool/cmmn/file/FileIOManager.java
- com.wip.bool.cmmn.file.FileIOManager
-com/wip/bool/userbox/controller/UserBoxSongController.java
- com.wip.bool.userbox.controller.UserBoxSongController
-com/wip/bool/board/domain/ImageFile.java
- com.wip.bool.board.domain.ImageFile
 com/wip/bool/userbox/service/UserBoxSongService.java
  com.wip.bool.userbox.service.UserBoxSongService
+com/wip/bool/userbox/controller/UserBoxController.java
+ com.wip.bool.userbox.controller.UserBoxController
+com/wip/bool/music/mp3/domain/SongMP3.java
+ com.wip.bool.music.mp3.domain.SongMP3
+com/wip/bool/music/song/service/SongDetailService.java
+ com.wip.bool.music.song.service.SongDetailService
+com/wip/bool/music/song/domain/QSongMaster.java
+ com.wip.bool.music.song.domain.QSongMaster
+com/wip/bool/recent/domain/Recent.java
+ com.wip.bool.recent.domain.Recent
+com/wip/bool/userbox/dto/UserBoxDto.java
+ com.wip.bool.userbox.dto.UserBoxDto
+ com.wip.bool.userbox.dto.UserBoxDto$UserBoxResponse
+ com.wip.bool.userbox.dto.UserBoxDto$UserBoxSaveRequest
+ com.wip.bool.userbox.dto.UserBoxDto$UserBoxUpdateRequest
+com/wip/bool/music/song/domain/QSongDetail.java
+ com.wip.bool.music.song.domain.QSongDetail
+com/wip/bool/music/sheet/service/SongSheetService.java
+ com.wip.bool.music.sheet.service.SongSheetService
+com/wip/bool/userbox/domain/UserBoxRepository.java
+ com.wip.bool.userbox.domain.UserBoxRepository
+com/wip/bool/bookmark/service/BookMarkService.java
+ com.wip.bool.bookmark.service.BookMarkService
+com/wip/bool/music/song/domain/SongDetailRepository.java
+ com.wip.bool.music.song.domain.SongDetailRepository
+com/wip/bool/music/sheet/domain/SongSheet.java
+ com.wip.bool.music.sheet.domain.SongSheet
+com/wip/bool/music/mp3/domain/SongMP3Repository.java
+ com.wip.bool.music.mp3.domain.SongMP3Repository
+com/wip/bool/userbox/domain/UserBoxSongRepository.java
+ com.wip.bool.userbox.domain.UserBoxSongRepository
+com/wip/bool/userbox/service/UserBoxService.java
+ com.wip.bool.userbox.service.UserBoxService
+com/wip/bool/recent/service/RecentService.java
+ com.wip.bool.recent.service.RecentService
+com/wip/bool/bookmark/domain/BookMarkRepository.java
+ com.wip.bool.bookmark.domain.BookMarkRepository
+com/wip/bool/music/song/domain/SongDetail.java
+ com.wip.bool.music.song.domain.SongDetail
+com/wip/bool/recent/domain/RecentRepository.java
+ com.wip.bool.recent.domain.RecentRepository
+com/wip/bool/bookmark/domain/BookMark.java
+ com.wip.bool.bookmark.domain.BookMark
+com/wip/bool/cmmn/dictionary/SearchStoreProxy.java
+ com.wip.bool.cmmn.dictionary.SearchStoreProxy
+ com.wip.bool.cmmn.dictionary.SearchStoreProxy$Helper
+com/wip/bool/userbox/domain/UserBoxSong.java
+ com.wip.bool.userbox.domain.UserBoxSong

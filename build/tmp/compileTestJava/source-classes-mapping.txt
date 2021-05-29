@@ -58,6 +58,10 @@ com/wip/bool/rights/controller/RightControllerTest.java
  com.wip.bool.rights.controller.RightControllerTest$2
 com/wip/bool/rights/service/RightServiceTest.java
  com.wip.bool.rights.service.RightServiceTest
+com/wip/bool/cmmn/reply/ReplyFactory.java
+ com.wip.bool.cmmn.reply.ReplyFactory
+com/wip/bool/file/FileManagerTest.java
+ com.wip.bool.file.FileManagerTest
 com/wip/bool/group/controller/GroupControllerTest.java
  com.wip.bool.group.controller.GroupControllerTest
  com.wip.bool.group.controller.GroupControllerTest$1
@@ -164,8 +168,6 @@ com/wip/bool/cmmn/bookmark/BookMarkFactory.java
  com.wip.bool.cmmn.bookmark.BookMarkFactory
 com/wip/bool/userboxsong/repository/UserBoxSongRepositoryTest.java
  com.wip.bool.userboxsong.repository.UserBoxSongRepositoryTest
-com/wip/bool/cmmn/reply/ReplyFactory.java
- com.wip.bool.cmmn.reply.ReplyFactory
 com/wip/bool/bible/controller/WordsMasterControllerTest.java
  com.wip.bool.bible.controller.WordsMasterControllerTest
  com.wip.bool.bible.controller.WordsMasterControllerTest$1
@@ -186,8 +188,6 @@ com/wip/bool/bookmark/controller/BookMarkControllerTest.java
  com.wip.bool.bookmark.controller.BookMarkControllerTest$1
  com.wip.bool.bookmark.controller.BookMarkControllerTest$2
  com.wip.bool.bookmark.controller.BookMarkControllerTest$3
-com/wip/bool/file/FileManagerTest.java
- com.wip.bool.file.FileManagerTest
 com/wip/bool/user/controller/UserControllerTest.java
  com.wip.bool.user.controller.UserControllerTest
  com.wip.bool.user.controller.UserControllerTest$1
