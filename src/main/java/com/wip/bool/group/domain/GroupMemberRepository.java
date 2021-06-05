@@ -47,6 +47,13 @@ public class GroupMemberRepository {
         );
     }
 
+    public List<GroupMember> findAllByUser(Long userId) {
+        return queryFactory.select(groupMember)
+                .from(groupMember)
+                .where(groupMember.user.id.eq(userId))
+                .fetch();
+    }
+
     public List<GroupMember> findAllByGroup(Long groupId, OrderType orderType, int size, int offset) {
         return queryFactory.selectFrom(groupMember)
                 .innerJoin(groupMember.user, user)

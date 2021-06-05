@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BoardDto {
@@ -62,9 +61,17 @@ public class BoardDto {
         @JsonProperty(value = "board_id")
         private Long boardId;
 
+        @JsonProperty(value = "board_title")
         private String title;
 
+        @JsonProperty(value = "board_content")
         private String content;
+
+        @JsonProperty(value = "user_name")
+        private String userName;
+
+        @JsonProperty(value = "user_email")
+        private String userEmail;
 
         @JsonProperty(value = "board_type")
         private BoardType boardType;
@@ -77,11 +84,12 @@ public class BoardDto {
             this.content = board.getContent();
             this.boardType = board.getBoardType();
 
-            if(!Objects.isNull(board.getImageFiles())) {
-                this.images = board.getImageFiles().stream()
-                                        .map(ImageFileDto.ImageFileResponse::new)
-                                        .collect(Collectors.toList());
-            }
+            this.images = board.getImageFiles().stream()
+                                    .map(ImageFileDto.ImageFileResponse::new)
+                                    .collect(Collectors.toList());
+
+            this.userName = board.getUser().getName();
+            this.userEmail = board.getUser().getEmail();
         }
     }
 }

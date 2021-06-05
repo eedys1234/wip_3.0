@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.wip.bool.board.domain.QBoard.board;
-import static com.wip.bool.board.domain.QImageFile.imageFile;
 import static com.wip.bool.cmmn.util.RoleUtils.isRoleAdmin;
+import static com.wip.bool.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -62,8 +62,7 @@ public class BoardRepository {
         Board boardEntity = queryFactory
                             .select(board)
                             .from(board)
-                            .leftJoin(board.imageFiles, imageFile)
-                            .fetchJoin()
+                            .innerJoin(board.user, user)
                             .where(board.id.eq(boardId))
                             .fetchOne();
 

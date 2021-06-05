@@ -65,11 +65,7 @@ public class RightControllerTest {
         ReflectionTestUtils.setField(requestDto, "targetId", 1L);
         ReflectionTestUtils.setField(requestDto, "authority", "GROUP");
         ReflectionTestUtils.setField(requestDto, "authorityId", 1L);
-<<<<<<< HEAD
         ReflectionTestUtils.setField(requestDto, "rightType", String.join(Rights.RightType.WRITE.name(), Rights.RightType.READ.name()));
-=======
-        ReflectionTestUtils.setField(requestDto, "rightType", Rights.RightType.READ.name());
->>>>>>> feature
 
         doReturn(right.getId()).when(rightService).saveRight(any(RightDto.RightSaveRequest.class));
 
@@ -96,22 +92,13 @@ public class RightControllerTest {
         //given
         doReturn(1L).when(rightService).deleteRight(anyLong(), anyString());
 
-<<<<<<< HEAD
-        MultiValueMap params = new LinkedMultiValueMap();
-=======
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
->>>>>>> feature
         params.add("right_type", Rights.RightType.READ.name());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/right/1")
-<<<<<<< HEAD
-        .params(params)
-        .contentType(MediaType.APPLICATION_JSON));
-=======
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .params(params));
->>>>>>> feature
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();

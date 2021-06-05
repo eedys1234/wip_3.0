@@ -35,7 +35,7 @@ public class Rights extends BaseEntity {
     @Column(name = "authority_id", nullable = false)
     private Long authorityId;
 
-    @Column(name = "right_type")
+    @Column(name = "right_type", nullable = false)
     private Long rightType;
 
     public enum RightType {

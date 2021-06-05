@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,17 +149,18 @@ public class GroupServiceTest {
     public void 그룹_리스트_조회_byUser_Service() throws Exception {
 
         //given
-        int cnt = 10;
         int size = 10;
         int offset = 0;
         String order = "ASC";
 
         User user = UserFactory.getNormalUser(1L);
         List<Group> groups = GroupFactory.getGroupsWithId(user);
+        List<GroupMember> groupMembers = GroupMemberFactory.getGroupMembersWithId(groups.get(0), Arrays.asList(user));
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(groups).when(groupRepository).findAllByUser(anyLong(), any(OrderType.class), anyInt(), anyInt());
+        doReturn(groupMembers).when(groupMemberRepository).findAllByUser(anyLong());
+        doReturn(groups).when(groupRepository).findAllByUser(any(List.class), any(OrderType.class), anyInt(), anyInt());
         List<GroupDto.GroupResponse> values = groupService.findAllByUser(user.getId(), order, size, offset);
 
         //then
@@ -167,6 +169,7 @@ public class GroupServiceTest {
 
         //verify
         verify(userRepository, times(1)).findById(anyLong());
-        verify(groupRepository, times(1)).findAllByUser(anyLong(), any(OrderType.class), anyInt(), anyInt());
+        verify(groupMemberRepository, times(1)).findAllByUser(anyLong());
+        verify(groupRepository, times(1)).findAllByUser(any(List.class), any(OrderType.class), anyInt(), anyInt());
     }
 }

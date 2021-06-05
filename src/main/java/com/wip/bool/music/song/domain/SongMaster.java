@@ -27,7 +27,7 @@ public class SongMaster extends BaseEntity {
     @Column(name = "code_name", length = 20, nullable = false)
     private String codeName;
 
-    @Column(name = "code_order", nullable = false)
+    @Column(name = "code_order", nullable = false, unique = true)
     private int codeOrder;
 
     @OneToMany(mappedBy = "songMaster")

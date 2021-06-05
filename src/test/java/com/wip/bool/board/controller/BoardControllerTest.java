@@ -157,8 +157,8 @@ public class BoardControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.board_id").value(detailBoards.get(0).getBoardId()))
-                .andExpect(jsonPath("$.result.title").value(detailBoards.get(0).getTitle()))
-                .andExpect(jsonPath("$.result.content").value(detailBoards.get(0).getContent()))
+                .andExpect(jsonPath("$.result.board_title").value(detailBoards.get(0).getTitle()))
+                .andExpect(jsonPath("$.result.board_content").value(detailBoards.get(0).getContent()))
                 .andExpect(jsonPath("$.result.board_type").value(String.valueOf(detailBoards.get(0).getBoardType())))
                 .andReturn();
 

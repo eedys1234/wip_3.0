@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wip.bool.cmmn.auth.Target;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.user.domain.Role;
 import com.wip.bool.userbox.dto.UserBoxDto;
@@ -48,7 +49,7 @@ public class UserBoxRepository {
                 userBox, rights.rightType))
                 .from(userBox)
                 .innerJoin(rights)
-                .on(userBox.id.eq(rights.targetId), rights.authorityId.eq(authorityId))
+                .on(userBox.id.eq(rights.targetId), rights.target.eq(Target.USERBOX), rights.authorityId.eq(authorityId))
                 .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)
@@ -60,8 +61,7 @@ public class UserBoxRepository {
                 userBox, rights.rightType))
                 .from(userBox)
                 .innerJoin(rights)
-                .on(userBox.id.eq(rights.targetId))
-                .where(rights.authorityId.in(authorityId))
+                .on(userBox.id.eq(rights.targetId), rights.target.eq(Target.USERBOX), rights.authorityId.in(authorityId))
                 .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)

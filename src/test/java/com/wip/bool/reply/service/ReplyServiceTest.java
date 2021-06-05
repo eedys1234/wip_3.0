@@ -116,7 +116,7 @@ public class ReplyServiceTest {
 
         //when
         doReturn(replies.stream()
-        .map(reply -> new ReplyDto.ReplyResponse(reply, null))
+        .map(reply -> new ReplyDto.ReplyResponse(reply))
         .collect(Collectors.toList())).when(replyRepository).findAllByBoard(anyLong(), anyInt(), anyInt());
 
         List<ReplyDto.ReplyResponse> values = replyService.getsByBoard(board.getId(), size, offset);

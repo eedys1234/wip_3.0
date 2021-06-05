@@ -135,7 +135,7 @@ public class ReplyControllerTest {
         List<Reply> replies = ReplyFactory.getRepliesWithId(board, user);
 
         doReturn(replies.stream()
-        .map(reply -> new ReplyDto.ReplyResponse(reply, null))
+        .map(reply -> new ReplyDto.ReplyResponse(reply))
         .collect(Collectors.toList())).when(replyService).getsByBoard(any(Long.class), any(Integer.class), any(Integer.class));
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
