@@ -1,5 +1,6 @@
 package com.wip.bool.user.domain;
 
+import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.cmmn.util.BaseEntity;
 import com.wip.bool.dept.domain.Dept;
 import com.wip.bool.position.domain.Position;
@@ -55,8 +56,11 @@ public class User extends BaseEntity {
     @JoinColumn(name = "user_config_id")
     private UserConfig userConfig;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserBox> musicBoxes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Calendar> calendars = new ArrayList<>();
 
     public static User createUser(String email, String name, String profile, UserType userType, Role role) {
         User user = new User();

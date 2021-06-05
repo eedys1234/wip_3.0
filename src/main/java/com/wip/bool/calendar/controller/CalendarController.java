@@ -1,7 +1,7 @@
 package com.wip.bool.calendar.controller;
 
-import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.calendar.dto.CalendarDto;
+import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.security.Permission;
 import com.wip.bool.user.domain.Role;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -47,18 +46,18 @@ public class CalendarController {
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-dept")
-    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getDeptCalendars(@RequestHeader("userId") @Positive Long userId,
-                                                                                            @RequestParam("from") @Positive Long from,
-                                                                                            @RequestParam("to") @Positive Long to) {
+    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getDeptCalendars(@RequestHeader("userId") Long userId,
+                                                                                            @RequestParam Long from,
+                                                                                            @RequestParam Long to) {
 
         return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), calendarService.getDeptCalendars(userId, from, to)));
     }
 
     @Permission(target = Role.ROLE_NORMAL)
     @GetMapping(value = "/calendar-individual")
-    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getIndividualCalendar(@RequestHeader("userId") @Positive Long userId,
-                                                                                                 @RequestParam("from") @Positive Long from,
-                                                                                                 @RequestParam("to") @Positive Long to) {
+    public ResponseEntity<ApiResponse<List<CalendarDto.CalendarResponse>>> getIndividualCalendar(@RequestHeader("userId") Long userId,
+                                                                                                 @RequestParam Long from,
+                                                                                                 @RequestParam Long to) {
 
         return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK.value(), calendarService.getIndividualCalenders(userId, from, to)));
     }

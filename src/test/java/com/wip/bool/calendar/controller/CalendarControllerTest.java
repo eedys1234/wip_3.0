@@ -3,7 +3,7 @@ package com.wip.bool.calendar.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wip.bool.calendar.dto.CalendarDto;
-import com.wip.bool.calendar.domain.Calendar;
+import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.calendar.service.CalendarService;
 import com.wip.bool.cmmn.ApiResponse;
 import com.wip.bool.cmmn.calendar.CalendarFactory;
@@ -30,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -102,11 +103,15 @@ public class CalendarControllerTest {
 
         //given
         User user = UserFactory.getNormalUser(1L);
-        List<CalendarDto.CalendarResponse> deptCalendars = CalendarFactory.getDeptCalendars();
+        List<Calendar> deptCalendars = CalendarFactory.getDeptCalendars(user);
 
-        doReturn(deptCalendars).when(calendarService).getDeptCalendars(anyLong(), anyLong(), anyLong());
-        Long from = Timestamp.valueOf(LocalDateTime.of(2021, 05, 01, 00, 00, 00)).getTime();
-        Long to = Timestamp.valueOf(LocalDateTime.of(2021, 05, 31, 23, 59, 59)).getTime();
+        doReturn(deptCalendars.stream()
+                .map(CalendarDto.CalendarResponse::new)
+                .collect(Collectors.toList())).when(calendarService).getDeptCalendars(anyLong(), anyLong(), anyLong());
+
+        LocalDateTime now = LocalDateTime.now();
+        long from = Timestamp.valueOf(now.minusMonths(1)).getTime();
+        long to = Timestamp.valueOf(now.plusMonths(1)).getTime();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("from", String.valueOf(from));
@@ -122,6 +127,7 @@ public class CalendarControllerTest {
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();
         ApiResponse<List<CalendarDto.CalendarResponse>> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<ApiResponse<List<CalendarDto.CalendarResponse>>>() {});
         List<CalendarDto.CalendarResponse> values = response.getResult();
+
         assertThat(values.size()).isEqualTo(deptCalendars.size());
 
         //verify
@@ -134,11 +140,16 @@ public class CalendarControllerTest {
 
         //given
         User user = UserFactory.getNormalUser(1L);
-        List<CalendarDto.CalendarResponse> individualCalendars = CalendarFactory.getIndividualCalendars();
+        List<Calendar> individualCalendars = CalendarFactory.getIndividualCalendars(user);
 
-        doReturn(individualCalendars).when(calendarService).getIndividualCalenders(anyLong(), anyLong(), anyLong());
-        Long from = Timestamp.valueOf(LocalDateTime.of(2021, 05, 01, 00, 00, 00)).getTime();
-        Long to = Timestamp.valueOf(LocalDateTime.of(2021, 05, 31, 23, 59, 59)).getTime();
+        doReturn(individualCalendars.stream()
+                .map(CalendarDto.CalendarResponse::new)
+                .collect(Collectors.toList())).when(calendarService).getIndividualCalenders(anyLong(), anyLong(), anyLong());
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Long from = Timestamp.valueOf(now.minusMonths(1)).getTime();
+        Long to = Timestamp.valueOf(now.plusMonths(1)).getTime();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("from", String.valueOf(from));
@@ -147,6 +158,7 @@ public class CalendarControllerTest {
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/calendar-individual")
                 .header("userId", user.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .params(params));
 
         //then

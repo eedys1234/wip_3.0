@@ -1,7 +1,6 @@
 package com.wip.bool.cmmn.calendar;
 
-import com.wip.bool.calendar.dto.CalendarDto;
-import com.wip.bool.calendar.domain.Calendar;
+import com.wip.bool.calendar.repository.Calendar;
 import com.wip.bool.cmmn.type.ShareType;
 import com.wip.bool.user.domain.User;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -12,32 +11,22 @@ import java.util.List;
 
 public class CalendarFactory {
 
-    public static List<CalendarDto.CalendarResponse> getDeptCalendars() {
+    public static List<Calendar> getDeptCalendars(User user) {
 
-        List<CalendarDto.CalendarResponse> deptCalendars = Arrays.asList(
-                new CalendarDto.CalendarResponse(1L, "OO부서 회의", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 01, 14, 00, 00),
-                        ShareType.DEPT, "test@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(2L, "OO부서 회의 - 1", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 02, 14, 00, 00),
-                        ShareType.PUBLIC, "test2@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
-                        ShareType.DEPT, "test2@gmail.com", 1L)
+        return Arrays.asList(
+                getDeptCalendar(user, "OO부서 회의", "모니터링 시스템 검토", 1L),
+                getDeptCalendar(user, "OO부서 회의 - 1", "모니터링 시스템 검토", 2L),
+                getDeptCalendar(user, "OO부서 회의 - 2", "모니터링 시스템 검토", 3L)
         );
-
-        return deptCalendars;
     }
 
-    public static List<CalendarDto.CalendarResponse> getIndividualCalendars() {
+    public static List<Calendar> getIndividualCalendars(User user) {
 
-        List<CalendarDto.CalendarResponse> deptCalendars = Arrays.asList(
-                new CalendarDto.CalendarResponse(1L, "OO부서 회의", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 01, 14, 00, 00),
-                        ShareType.PRIVATE, "test@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(2L, "OO부서 회의 - 1", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 02, 14, 00, 00),
-                        ShareType.PRIVATE, "test2@gmail.com", 1L),
-                new CalendarDto.CalendarResponse(3L, "OO부서 회의 - 2", "모니터링 시스템 검토", LocalDateTime.of(2021, 05, 03, 14, 00, 00),
-                        ShareType.PRIVATE, "test2@gmail.com", 1L)
+        return Arrays.asList(
+                getPrivateCalendar(user,"OO부서 회의", "모니터링 시스템 검토", 1L),
+                getPrivateCalendar(user,"OO부서 회의 - 1", "모니터링 시스템 검토", 2L),
+                getPrivateCalendar(user,"OO부서 회의 - 2", "모니터링 시스템 검토", 3L)
         );
-
-        return deptCalendars;
     }
 
     public static Calendar getPublicCalendar(User user) {
@@ -45,11 +34,12 @@ public class CalendarFactory {
         String title = "일정 추가!";
         String content = "네트워크 일정";
         ShareType shareType = ShareType.PUBLIC;
-        LocalDateTime date = LocalDateTime.of(2021, 05, 02, 16, 00, 00);
+        LocalDateTime date = LocalDateTime.now().minusDays(1);
 
         Calendar calendar = Calendar.createCalender(title, content, date, shareType, user);
         return calendar;
     }
+
 
     public static Calendar getPublicCalendar(User user, long id) {
         Calendar calendar = getPublicCalendar(user);
@@ -57,4 +47,33 @@ public class CalendarFactory {
         return calendar;
     }
 
+    public static Calendar getDeptCalendar(User user, String title, String content) {
+
+        ShareType shareType = ShareType.DEPT;
+        LocalDateTime date = LocalDateTime.now();
+
+        Calendar calendar = Calendar.createCalender(title, content, date, shareType, user);
+        return calendar;
+    }
+
+    public static Calendar getDeptCalendar(User user, String title, String content, long id) {
+        Calendar deptCalendar = getDeptCalendar(user, title, content);
+        ReflectionTestUtils.setField(deptCalendar, "id", id);
+        return deptCalendar;
+    }
+
+    public static Calendar getPrivateCalendar(User user, String title, String content) {
+
+        ShareType shareType = ShareType.PRIVATE;
+        LocalDateTime date = LocalDateTime.now();
+
+        Calendar calendar = Calendar.createCalender(title, content, date, shareType, user);
+        return calendar;
+    }
+
+    public static Calendar getPrivateCalendar(User user, String title, String content, long id) {
+        Calendar privateCalendar = getPrivateCalendar(user, title, content);
+        ReflectionTestUtils.setField(privateCalendar, "id", id);
+        return privateCalendar;
+    }
 }

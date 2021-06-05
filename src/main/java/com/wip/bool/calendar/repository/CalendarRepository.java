@@ -1,4 +1,4 @@
-package com.wip.bool.calendar.domain;
+package com.wip.bool.calendar.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wip.bool.calendar.domain.QCalendar.calendar;
+import static com.wip.bool.calendar.repository.QCalendar.calendar;
 import static com.wip.bool.user.domain.QUser.user;
 
 @Repository
@@ -41,20 +41,20 @@ public class CalendarRepository {
 
     public List<CalendarDto.CalendarResponse> deptCalendars(List<Long> userIds, LocalDateTime fromDate, LocalDateTime toDate) {
 
-        return queryFactory.select(Projections.constructor(CalendarDto.CalendarResponse.class,
-                calendar.id, calendar.title, calendar.content, calendar.calendarDate, calendar.shareType, user.email, user.id))
+        return queryFactory.select(Projections.constructor(CalendarDto.CalendarResponse.class, calendar))
                 .from(calendar)
-                .where(calendar.user.id.in(userIds), calendar.calendarDate.between(fromDate, toDate))
+                .innerJoin(calendar.user, user)
+                .fetchJoin()
+                .where(user.id.in(userIds), calendar.calendarDate.between(fromDate, toDate))
                 .fetch();
     }
 
     public List<CalendarDto.CalendarResponse> individualCalendars(Long userId, LocalDateTime fromDate, LocalDateTime toDate) {
 
-        return queryFactory.select(Projections.constructor(CalendarDto.CalendarResponse.class,
-                calendar.id, calendar.title, calendar.content, calendar.calendarDate, calendar.shareType, user.email, user.id))
+        return queryFactory.select(Projections.constructor(CalendarDto.CalendarResponse.class, calendar))
                 .from(calendar)
-                .innerJoin(user)
-                .on(calendar.user.eq(user))
+                .innerJoin(calendar.user, user)
+                .fetchJoin()
                 .where(calendar.user.id.eq(userId), calendar.calendarDate.between(fromDate, toDate))
                 .fetch();
     }
