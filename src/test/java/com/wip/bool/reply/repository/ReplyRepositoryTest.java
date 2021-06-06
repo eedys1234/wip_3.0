@@ -97,12 +97,12 @@ public class ReplyRepositoryTest {
         int offset = 0;
 
         User user = UserFactory.getNormalUser();
-        userRepository.save(user);
+        User addUser = userRepository.save(user);
 
         Board board = BoardFactory.getBoard(user);
         boardRepository.save(board);
 
-        List<Reply> replies = ReplyFactory.getReplies(board, user);
+        List<Reply> replies = ReplyFactory.getReplies(board, addUser);
 
         for(Reply reply : replies) {
             replyRepository.save(reply);
@@ -131,7 +131,7 @@ public class ReplyRepositoryTest {
         int offset = 0;
 
         User user = UserFactory.getNormalUser();
-        userRepository.save(user);
+        User addUser = userRepository.save(user);
 
         Board board = BoardFactory.getBoard(user);
         boardRepository.save(board);
@@ -139,7 +139,7 @@ public class ReplyRepositoryTest {
         Reply parentReply = ReplyFactory.getReply(board, user);
         Reply addParentReply = replyRepository.save(parentReply);
 
-        List<Reply> replies = ReplyFactory.getReplies(board, user);
+        List<Reply> replies = ReplyFactory.getReplies(board, addUser);
 
         for(Reply reply : replies)
         {

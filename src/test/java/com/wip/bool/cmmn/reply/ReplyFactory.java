@@ -54,7 +54,7 @@ public class ReplyFactory {
           replies.get(9).updateParentReply(replies.get(6));
 
           return replies.stream()
-                  .map(reply -> new ReplyDto.ReplyResponse(reply, null))
+                  .map(reply -> new ReplyDto.ReplyResponse(reply))
                   .collect(Collectors.toList());
 
     }

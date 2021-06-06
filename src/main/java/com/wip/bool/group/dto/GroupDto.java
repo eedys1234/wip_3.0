@@ -43,6 +43,12 @@ public class GroupDto {
         @JsonProperty(value = "group_master_id")
         private Long userId;
 
+        @JsonProperty(value = "group_master_name")
+        private String userName;
+
+        @JsonProperty(value = "group_master_email")
+        private String userEmail;
+
         @JsonProperty(value = "group_members")
         private List<GroupMemberDto.GroupMemberResponse> groupMember = new ArrayList<>();
 
@@ -51,12 +57,13 @@ public class GroupDto {
             this.groupName = group.getGroupName();
             this.userId = group.getUser().getId();
 
-            if(group.getGroupMembers().size() > 0) {
-                this.groupMember = group.getGroupMembers()
-                        .stream()
-                        .map(GroupMemberDto.GroupMemberResponse::new)
-                        .collect(Collectors.toList());
-            }
+            this.groupMember = group.getGroupMembers()
+                    .stream()
+                    .map(GroupMemberDto.GroupMemberResponse::new)
+                    .collect(Collectors.toList());
+
+            this.userName = group.getUser().getName();
+            this.userEmail = group.getUser().getEmail();
         }
     }
 }

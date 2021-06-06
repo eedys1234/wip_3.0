@@ -100,8 +100,11 @@ public class GroupService {
         userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException(userId, ErrorCode.NOT_FOUND_USER));
 
+        List<GroupMember> groupMembers = groupMemberRepository.findAllByUser(userId);
+        List<Long> groupIds = groupMembers.stream().map(groupMember -> groupMember.getGroup().getId()).collect(Collectors.toList());
         OrderType orderType = OrderType.valueOf(order);
-        return groupRepository.findAllByUser(userId, orderType, size, offset)
+
+        return groupRepository.findAllByUser(groupIds, orderType, size, offset)
                 .stream()
                 .map(GroupDto.GroupResponse::new)
                 .collect(Collectors.toList());

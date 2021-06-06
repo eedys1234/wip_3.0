@@ -44,7 +44,7 @@ public class GroupRepository {
 
     public List<Group> findAllByMaster(Long userId, OrderType orderType, int size, int offset) {
         return queryFactory.selectFrom(group)
-                .leftJoin(group.groupMembers, groupMember)
+                .innerJoin(group.user, user)
                 .fetchJoin()
                 .where(group.user.id.eq(userId))
                 .orderBy(getOrder(orderType))
@@ -53,14 +53,12 @@ public class GroupRepository {
                 .fetch();
     }
 
-    public List<Group> findAllByUser(Long userId, OrderType orderType, int size, int offset) {
+    public List<Group> findAllByUser(List<Long> groupIds, OrderType orderType, int size, int offset) {
         return queryFactory.select(group)
                 .from(group)
-                .innerJoin(group.groupMembers, groupMember)
-                .fetchJoin()
                 .innerJoin(group.user, user)
                 .fetchJoin()
-                .where(groupMember.user.id.eq(userId))
+                .where(group.id.in(groupIds))
                 .orderBy(getOrder(orderType))
                 .offset(offset)
                 .limit(size)

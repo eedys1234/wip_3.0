@@ -1,7 +1,6 @@
 package com.wip.bool.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wip.bool.board.domain.ImageFile;
 import com.wip.bool.board.domain.Reply;
 import com.wip.bool.cmmn.status.DeleteStatus;
 import lombok.Getter;
@@ -60,11 +59,17 @@ public class ReplyDto {
         @JsonProperty(value = "parent_id")
         private Long parentId;
 
+        @JsonProperty(value = "user_name")
+        private String userName;
+
+        @JsonProperty(value = "user_email")
+        private String userEmail;
+
         private List<ImageFileDto.ImageFileResponse> images;
 
         private List<ReplyResponse> nodes = new ArrayList<>();
 
-        public ReplyResponse(Reply reply, List<ImageFile> imageFiles) {
+        public ReplyResponse(Reply reply) {
 
             this.replyId = reply.getId();
             this.content = reply.getIsDeleted() == DeleteStatus.DELETE ? "삭제된 댓글입니다." : reply.getContent();
@@ -73,12 +78,12 @@ public class ReplyDto {
                 this.parentId = reply.getParentReply().getId();
             }
 
-            if(!Objects.isNull(imageFiles)) {
-                this.images = imageFiles.stream()
-                        .map(ImageFileDto.ImageFileResponse::new)
-                        .collect(Collectors.toList());
-            }
-        }
+            this.images = reply.getImageFiles().stream()
+                    .map(ImageFileDto.ImageFileResponse::new)
+                    .collect(Collectors.toList());
 
+            this.userName = reply.getUser().getName();
+            this.userEmail = reply.getUser().getEmail();
+        }
     }
 }

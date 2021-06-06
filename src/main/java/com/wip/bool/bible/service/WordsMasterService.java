@@ -10,6 +10,8 @@ import com.wip.bool.user.domain.Role;
 import com.wip.bool.user.domain.User;
 import com.wip.bool.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class WordsMasterService {
     private final UserRepository userRepository;
     private final WordsMasterRepository wordsMasterRepository;
 
+    @CacheEvict(value = "meta_data", key = "words_master")
     @Transactional
     public Long saveWordsMaster(Long userId, WordsMasterDto.WordsMasterSaveRequest requestDto) {
 
@@ -41,6 +44,7 @@ public class WordsMasterService {
         return wordsMasterRepository.save(wordsMaster).getId();
     }
 
+    @CacheEvict(value = "meta_data", key = "words_master")
     @Transactional
     public Long deleteWordsMaster(Long userId, Long wordsMasterId) {
 
@@ -59,6 +63,7 @@ public class WordsMasterService {
         return wordsMasterRepository.delete(wordsMaster);
     }
 
+    @Cacheable(value = "meta_data", key = "words_master")
     @Transactional(readOnly = true)
     public List<WordsMasterDto.WordsMasterResponse> findAll() {
         return wordsMasterRepository.findAll()

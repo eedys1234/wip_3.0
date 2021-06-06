@@ -38,7 +38,9 @@ dependencies {
     compile 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
     compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
     compile 'io.jsonwebtoken:jjwt:0.9.1'
-
+    compile 'org.ehcache:ehcache'
+    compile 'javax.cache:cache-api'
+    compile 'org.springframework.boot:spring-boot-starter-cache'
     annotationProcessor 'org.projectlombok:lombok'
     testCompile ('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
@@ -91,4 +93,3 @@ configurations {
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
-

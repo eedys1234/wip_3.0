@@ -28,18 +28,19 @@ public class SongSheet extends BaseEntity {
     @Column(name = "song_sheet_id")
     private Long id;
 
-    @Column(name = "sheet_file_path", length = 50, nullable = false, unique = true)
+    @Column(name = "sheet_file_path", length = 100, nullable = false, unique = true)
     private String sheetFilePath;
 
-    @Column(name = "sheet_org_file_name", length = 20, nullable = false)
+    @Column(name = "sheet_org_file_name", length = 50, nullable = false)
     private String sheetOrgFileName;
 
     @Column(name = "sheet_new_file_name", length = 32, nullable = false)
     private String sheetNewFileName;
 
-    @Column(name = "sheet_order", nullable = false, unique = true)
+    @Column(name = "sheet_order", nullable = false)
     private Integer sheetOrder;
 
+    @Column(name = "sheet_size", nullable = false)
     private Integer size;
 
     @Column(name = "sheet_file_ext", length = 6, nullable = false)

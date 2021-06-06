@@ -92,13 +92,13 @@ public class RightControllerTest {
         //given
         doReturn(1L).when(rightService).deleteRight(anyLong(), anyString());
 
-        MultiValueMap params = new LinkedMultiValueMap();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("right_type", Rights.RightType.READ.name());
 
         //when
         final ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/right/1")
-        .params(params)
-        .contentType(MediaType.APPLICATION_JSON));
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .params(params));
 
         //then
         final MvcResult mvcResult = resultActions.andDo(print()).andExpect(status().isOk()).andReturn();

@@ -1,5 +1,6 @@
 package com.wip.bool.music.song.domain;
 
+import com.wip.bool.cmmn.util.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "song_master")
-public class SongMaster {
+public class SongMaster extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,7 @@ public class SongMaster {
     @Column(name = "code_name", length = 20, nullable = false)
     private String codeName;
 
-    @Column(name = "code_order", nullable = false)
+    @Column(name = "code_order", nullable = false, unique = true)
     private int codeOrder;
 
     @OneToMany(mappedBy = "songMaster")

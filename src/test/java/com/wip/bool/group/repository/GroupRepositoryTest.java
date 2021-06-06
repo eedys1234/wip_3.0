@@ -5,7 +5,6 @@ import com.wip.bool.cmmn.group.GroupFactory;
 import com.wip.bool.cmmn.group.GroupMemberFactory;
 import com.wip.bool.cmmn.type.OrderType;
 import com.wip.bool.cmmn.user.UserFactory;
-import com.wip.bool.cmmn.util.WIPProperty;
 import com.wip.bool.configure.TestConfig;
 import com.wip.bool.group.domain.Group;
 import com.wip.bool.group.domain.GroupMember;
@@ -22,12 +21,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.wip.bool.cmmn.util.WIPProperty.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import(TestConfig.class)
-@ActiveProfiles(value = WIPProperty.TEST)
+@ActiveProfiles(value = TEST)
 @Transactional
 public class GroupRepositoryTest {
 
@@ -143,8 +144,10 @@ public class GroupRepositoryTest {
             groupMemberRepository.save(groupMember);
         }
 
+        List<Long> groupIds = groups.stream().map(Group::getId).collect(Collectors.toList());
+
         //when
-        List<Group> values = groupRepository.findAllByUser(user.getId(), OrderType.ASC, size, offset);
+        List<Group> values = groupRepository.findAllByUser(groupIds, OrderType.ASC, size, offset);
 
         //then
         assertThat(values.size()).isEqualTo(groups.size());

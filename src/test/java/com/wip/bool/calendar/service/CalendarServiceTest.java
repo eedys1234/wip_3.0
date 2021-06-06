@@ -92,12 +92,14 @@ public class CalendarServiceTest {
 
         List<Long> userIds = Arrays.asList(1L, 2L, 3L);
 
-        List<CalendarDto.CalendarResponse> deptCalendars = CalendarFactory.getDeptCalendars();
+        List<Calendar> deptCalendars = CalendarFactory.getDeptCalendars(user);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).deptByUser(anyLong());
         doReturn(userIds).when(userRepository).usersByDept(anyLong());
-        doReturn(deptCalendars).when(calendarRepository).deptCalendars(any(List.class), any(LocalDateTime.class), any(LocalDateTime.class));
+        doReturn(deptCalendars.stream()
+                .map(CalendarDto.CalendarResponse::new)
+                .collect(Collectors.toList())).when(calendarRepository).deptCalendars(any(List.class), any(LocalDateTime.class), any(LocalDateTime.class));
 
         LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
         LocalDateTime toDate = LocalDateTime.of(2021, 05, 31, 23, 59, 59);
@@ -107,7 +109,10 @@ public class CalendarServiceTest {
         //then
         assertThat(values.size()).isEqualTo(deptCalendars.size());
         assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarId)
-                .containsAll(deptCalendars.stream().map(CalendarDto.CalendarResponse::getCalendarId).collect(Collectors.toList()));
+                .containsAll(deptCalendars.stream()
+                        .map(CalendarDto.CalendarResponse::new)
+                        .map(CalendarDto.CalendarResponse::getCalendarId)
+                        .collect(Collectors.toList()));
 
         assertThat(values).extracting(CalendarDto.CalendarResponse::getUserId)
                 .allMatch(u -> u == user.getId());
@@ -116,7 +121,10 @@ public class CalendarServiceTest {
                 .noneMatch(share -> share.equals(ShareType.PRIVATE));
 
         assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarDate)
-                .containsAll(deptCalendars.stream().map(CalendarDto.CalendarResponse::getCalendarDate).collect(Collectors.toList()));
+                .containsAll(deptCalendars.stream()
+                        .map(CalendarDto.CalendarResponse::new)
+                        .map(CalendarDto.CalendarResponse::getCalendarDate)
+                        .collect(Collectors.toList()));
 
         //verify
         verify(userRepository, times(1)).deptByUser(anyLong());
@@ -132,14 +140,16 @@ public class CalendarServiceTest {
         Dept dept = DeptFactory.getDept(1L);
         User user = UserFactory.getNormalUser(dept, 1L);
 
-        List<CalendarDto.CalendarResponse> individualCalendars = CalendarFactory.getIndividualCalendars();
+        List<Calendar> individualCalendars = CalendarFactory.getIndividualCalendars(user);
 
         //when
         doReturn(Optional.ofNullable(user)).when(userRepository).findById(anyLong());
-        doReturn(individualCalendars).when(calendarRepository).individualCalendars(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class));
+        doReturn(individualCalendars.stream()
+                .map(CalendarDto.CalendarResponse::new)
+                .collect(Collectors.toList())).when(calendarRepository).individualCalendars(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class));
 
-        LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
-        LocalDateTime toDate = LocalDateTime.of(2021, 05, 31, 23, 59, 59);
+        LocalDateTime fromDate = LocalDateTime.now().minusDays(1);
+        LocalDateTime toDate = LocalDateTime.now().plusDays(1);
 
         List<CalendarDto.CalendarResponse> values = calendarService.getIndividualCalenders(1L, Timestamp.valueOf(fromDate).getTime(), Timestamp.valueOf(toDate).getTime());
 
@@ -149,7 +159,8 @@ public class CalendarServiceTest {
                 .allMatch(shareType -> shareType.equals(ShareType.PRIVATE));
 
         assertThat(values).extracting(CalendarDto.CalendarResponse::getCalendarId)
-                .containsAll(individualCalendars.stream().map(calendar -> calendar.getCalendarId()).collect(Collectors.toList()));
+                .containsAll(individualCalendars.stream()
+                        .map(Calendar::getId).collect(Collectors.toList()));
 
         assertThat(values).extracting(CalendarDto.CalendarResponse::getUserId)
                 .allMatch(u -> u == user.getId());

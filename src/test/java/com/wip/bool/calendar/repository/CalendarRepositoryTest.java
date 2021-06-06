@@ -70,7 +70,6 @@ public class CalendarRepositoryTest {
 
         List<User> users = userRepository.findAll();
         User user = users.get(0);
-
         Calendar calendar = Calendar.createCalender(title, content, now, shareType, user);
 
         //when
@@ -103,8 +102,8 @@ public class CalendarRepositoryTest {
         Calendar calendar = Calendar.createCalender(title, content, now, ShareType.PUBLIC, users.get(0));
         calendarRepository.save(calendar);
 
-        LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
-        LocalDateTime toDate = LocalDateTime.of(2021, 05, 31, 00, 00, 00);
+        LocalDateTime fromDate = now.minusMonths(1);
+        LocalDateTime toDate = now.plusMonths(1);
 
         List<Long> userIds = userRepository.usersByDept(users.get(0).getDept().getId());
 
@@ -137,8 +136,8 @@ public class CalendarRepositoryTest {
         Calendar calendar = Calendar.createCalender(title, content, now, shareType, users.get(0));
         Calendar addCalendar = calendarRepository.save(calendar);
 
-        LocalDateTime fromDate = LocalDateTime.of(2021, 05, 01, 00, 00, 00);
-        LocalDateTime toDate = LocalDateTime.of(2021, 05, 31, 00, 00, 00);
+        LocalDateTime fromDate = now.minusMonths(1);
+        LocalDateTime toDate = now.plusMonths(1);
 
         //when
         List<CalendarDto.CalendarResponse> calendars = calendarRepository.individualCalendars(users.get(0).getId(), fromDate, toDate);

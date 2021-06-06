@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,10 +26,10 @@ public class SongDetail extends BaseEntity {
     @Column(name = "song_detail_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(name = "song_title", nullable = false, unique = true, length = 30)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "song_lyrics", columnDefinition = "TEXT", nullable = false)
     private String lyrics;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,31 +64,46 @@ public class SongDetail extends BaseEntity {
     }
 
     public void updateTitle(String title) {
-        if(!StringUtils.isEmpty(title) && this.title != title) {
+        if(!StringUtils.isEmpty(this.title) && !this.title.equals(title)) {
+            this.title = title;
+        }
+        else if(StringUtils.isEmpty(this.title)) {
             this.title = title;
         }
     }
 
     public void updateLyrics(String lyrics) {
-        if(this.lyrics != lyrics) {
+        if(!StringUtils.isEmpty(this.lyrics) && !this.lyrics.equals(lyrics)) {
+            this.lyrics = lyrics;
+        }
+        else if(StringUtils.isEmpty(this.lyrics)) {
             this.lyrics = lyrics;
         }
     }
 
     public void updateSongMaster(SongMaster songMaster) {
-        if(this.songMaster != songMaster) {
+        if (Objects.isNull(this.songMaster)) {
+            this.songMaster = songMaster;
+        }
+        else if(!this.songMaster.getId().equals(songMaster.getId())) {
             this.songMaster = songMaster;
         }
     }
 
     public void updateGuitarCode(GuitarCode guitarCode) {
-        if(this.guitarCode != guitarCode) {
+        if (Objects.isNull(this.guitarCode)) {
+            this.guitarCode = guitarCode;
+        }
+        else if(!this.guitarCode.getId().equals(guitarCode.getId())) {
             this.guitarCode = guitarCode;
         }
     }
 
     public void updateWordsMaster(WordsMaster wordsMaster) {
-        if(this.wordsMaster != wordsMaster) {
+        if (Objects.isNull(this.wordsMaster)) {
+            this.wordsMaster = wordsMaster;
+        }
+        else if(!this.wordsMaster.getId().equals(wordsMaster.getId())) {
             this.wordsMaster = wordsMaster;
         }
     }

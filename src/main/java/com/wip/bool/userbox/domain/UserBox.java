@@ -26,7 +26,7 @@ public class UserBox extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "user_box_name", nullable = false, length = 25)
+    @Column(name = "user_box_name", nullable = false, length = 25, unique = true)
     private String userBoxName;
 
     @OneToMany(mappedBy = "userBox")
