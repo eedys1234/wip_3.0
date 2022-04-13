@@ -4,15 +4,15 @@
 
 기술 스택
 ---------------------
-+ language : java
-+ jdk version : java 8
-+ framework : spring mvc spring security, spring data jpa, spring cache
++ Language : java
++ JDK Version : java 8
++ Framework : Spring mvc, Spring security, Spring data jpa, Spring cache
 + library : queryDSL
 + build tool : gradle 6.7.1
-+ ci/cd : jenkins
-+ test framework : junit5, mockito
-+ code quality : sonarqube
-+ dbms : maria db
++ CI/CD : jenkins
++ Test framework : junit5, mockito
++ Code Quality : sonarqube, jacoco
++ DBMS : Maria db
 
 
 개발 시 고려사항
@@ -26,6 +26,7 @@
 - [ ] 테스트 자동화, 빌드 자동화를 구현하였는가?
 - [ ] 외부 리소스에 대한 클린업이 제대로 되었는가?
 - [ ] 외래키가 설정되었는가?
+- [ ] Docker를 통해 손쉽게 구성이 가능한가?
 
 
 시스템 아키텍처 
